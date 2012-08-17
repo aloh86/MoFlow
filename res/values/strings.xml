@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoFlow</string>
+    <string name="about_info">MoFlow created by Alex Oh\n\nFor user 
+    manual and support see www.wolfpup.com</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+</resources>

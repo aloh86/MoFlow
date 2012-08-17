@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainRlayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+<ImageView 
+	android:src="@drawable/moflow_main_screen_2"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:layout_alignParentBottom="true"
+	/>
+
+<TextView 
+	android:id="@+id/txtMoflow"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_centerHorizontal="true"
+	android:layout_centerVertical="true"
+	android:layout_above="@+id/initCapsText"
+	android:text="MoFlow"
+	android:textSize="40sp"
+	android:textColor="#FA3248"
+	android:typeface="serif" />
+<TextView
+	android:id="@+id/initCapsText"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_centerHorizontal="true"
+	android:layout_centerVertical="true"
+	android:layout_above="@+id/startBtn"
+	android:text="INITIATIVE TRACKER"
+	android:textSize="16sp"
+	android:textColor="#FFFFFF" />
+<Button
+		android:id="@+id/startBtn" 
+		android:layout_width="120dp"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="40dp"
+		android:layout_above="@+id/manageBtn"
+		android:text="Start Initiative" />
+<Button
+		android:id="@+id/manageBtn" 
+		android:layout_width="120dp"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+		android:text="Management" />
+<Button
+		android:id="@+id/optionsBtn" 
+		android:layout_width="120dp"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/manageBtn"
+		android:text="Options" />
+<Button
+		android:id="@+id/aboutBtn" 
+		android:layout_width="120dp"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/optionsBtn"
+		android:text="About" />
+<Button
+		android:id="@+id/quitBtn" 
+		android:layout_width="120dp"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/aboutBtn"
+		android:text="Quit" />
+</RelativeLayout>

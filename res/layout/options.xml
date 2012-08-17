@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:layout_marginTop="10dp" >
+  
+  <TextView
+  	android:layout_width="wrap_content"
+  	android:layout_height="wrap_content"
+  	android:text="Effects Messages"
+  	android:textSize="18sp" />
+  <RadioGroup
+  	android:id="@+id/fxOptionGroup"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:orientation="horizontal" >
+  		<RadioButton 
+  			android:id="@+id/fxBtnToast"
+  			android:layout_height="wrap_content"
+  			android:text="Brief  " />
+  		<RadioButton 
+  			android:id="@+id/fxBtnConfirm"
+  			android:layout_height="wrap_content"
+  			android:text="Confirm  " />
+  		<RadioButton 
+  			android:id="@+id/fxBtnOff"
+  			android:layout_height="wrap_content"
+  			android:text="Off  " />
+  </RadioGroup>
+  <LinearLayout
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal" >
+	  <TextView 
+	  	android:layout_width="wrap_content"
+	  	android:layout_height="wrap_content"
+	  	android:text="Auto Roll Initiative  "
+	  	android:textSize="18sp" />
+	  <CheckBox
+	  	android:id="@+id/autoRollCheckBox"
+	  	android:layout_width="wrap_content"
+	  	android:layout_height="wrap_content" />
+  </LinearLayout>
+</LinearLayout>

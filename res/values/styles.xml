@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="statEntry">
+    	<item name="android:layout_width">40dp</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:layout_marginRight">5dp</item>
+    	<item name="android:numeric">integer|decimal</item>
+    	<item name="android:maxLength">2</item>
+    	<item name="android:singleLine">true</item>
+    	<item name="android:text">0</item>
+    	<item name="android:selectAllOnFocus">true</item>
+    </style>
+</resources>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/addPCLayout"
+  android:orientation="vertical"
+  android:layout_width="fill_parent" 
+  android:layout_height="fill_parent" >
+    <LinearLayout
+    	android:id="@+id/pcNameLayout" 
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical" >
+	    <TextView 
+	    	android:id="@+id/pcNameLabel"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_marginLeft="5dp"
+	    	android:text="Character Name"
+	    	android:textSize="16sp" />
+	    <EditText 
+	    	android:id="@+id/pcNameEditText"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_below="@+id/pcNameLabel"
+	    	android:layout_marginLeft="5dp"
+	    	android:layout_marginRight="5dp"
+	    	android:singleLine="true"
+	    	android:nextFocusDown="@+id/armorClassValue"
+	    	android:selectAllOnFocus="true" />
+    </LinearLayout>
+    <TextView 
+    	android:id="@+id/defenseLabel"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_below="@+id/pcNameLayout"
+    	android:layout_marginLeft="5dp"
+    	android:text="Defenses/Saving Throws"
+    	android:textSize="16sp"
+    	android:layout_marginTop="5dp" />
+    <LinearLayout
+    	android:id="@+id/defenseLayout"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_below="@+id/defenseLabel"
+    	android:layout_marginTop="5dp" >
+    		<TextView 
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:layout_marginRight="5dp"
+    			android:layout_marginLeft="5dp"
+    			android:text="AC"
+    			android:textSize="11sp" />
+    		<EditText
+    			android:id="@+id/armorClassValue"
+    			android:nextFocusDown="@+id/fortitudeValue"
+    			style="@style/statEntry" />
+    		<TextView 
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:layout_marginRight="5dp"
+    			android:text="FORT"
+    			android:textSize="11sp" />
+    		<EditText
+    			android:id="@+id/fortitudeValue"
+    			android:nextFocusDown="@+id/reflexValue"
+    			style="@style/statEntry" />
+    		<TextView 
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:layout_marginRight="5dp"
+    			android:text="REF"
+    			android:textSize="11sp" />
+    		<EditText
+    			android:id="@+id/reflexValue"
+    			android:nextFocusDown="@+id/willValue"
+    			style="@style/statEntry" />
+    		<TextView 
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:layout_marginRight="5dp"
+    			android:text="WILL"
+    			android:textSize="11sp" />
+    		<EditText
+    			android:id="@+id/willValue"
+    			android:nextFocusDown="@+id/initModValue"
+    			style="@style/statEntry" />
+    </LinearLayout>
+    
+    <LinearLayout
+    	android:id="@+id/init_hp_layout"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_below="@+id/defenseLayout"
+    	android:layout_marginTop="20dp" >
+    		<TextView 
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:layout_marginLeft="5dp"
+    			android:text="Initiative Mod + " />
+    		<EditText 
+    			android:id="@+id/initModValue"
+    			android:nextFocusDown="@+id/maxHPValue"
+    			style="@style/statEntry" />
+    		<TextView 
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:text="Max Hit Points " />
+    		<EditText 
+    			android:id="@+id/maxHPValue"
+    			android:layout_width="40dp"
+    			android:layout_height="wrap_content"
+    			android:layout_marginRight="5dp"
+    			android:numeric="integer|decimal"
+    			android:singleLine="true"
+    			android:text="0"
+    			android:selectAllOnFocus="true"
+    			android:nextFocusDown="@+id/createPCDone" />
+    </LinearLayout>
+    <LinearLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_below="@+id/init_hp_layout"
+    	android:orientation="horizontal">
+	    <Button
+	    	android:id="@+id/createPCDone"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"
+	    	android:layout_alignParentBottom="true"
+	    	android:layout_alignParentLeft="true"
+	    	android:text="Done" />
+	    <Button
+	    	android:id="@+id/createPCCancel"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"
+	    	android:layout_alignParentBottom="true"
+	    	android:layout_alignParentRight="true"
+	    	android:text="Cancel" />
+	</LinearLayout>
+</RelativeLayout>
