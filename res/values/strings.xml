@@ -6,4 +6,6 @@
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="logoTextA">MoFlow</string>
+    <string name="logoTextB">Initiative Tracker</string>
 </resources>
