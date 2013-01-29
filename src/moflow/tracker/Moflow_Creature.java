@@ -249,8 +249,6 @@ public class Moflow_Creature implements Parcelable
 		return creatureName + "\n" +
 		"Hit Points: " + hitPoints + "\n" +
 		"AC: " + armorClass +
-		"  Fort: " + fortitude + 
-		"  Ref: " +  reflex +
-		"  Will: " + will;
+		"  Init Bonus: " + initMod;
 	}
 }

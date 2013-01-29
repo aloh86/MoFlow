@@ -18,7 +18,8 @@ import moflow.adapters.*;
 
 public class MainMenu extends Activity implements OnItemClickListener {
 	
-	GridView grid;
+	private enum Position { PC_MANAGER, ENC_MANAGER, CREATURE, INIT, OPTIONS, MANUAL };
+	private GridView grid;
 	
 	
 	@Override
@@ -35,8 +36,8 @@ public class MainMenu extends Activity implements OnItemClickListener {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
-		
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id ) {
+		if ( position == Position.PC_MANAGER.ordinal() )
+			startActivity( new Intent( "moflow.tracker.PCM_PartyList" ) );
 	}
 }

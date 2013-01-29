@@ -44,19 +44,19 @@ public class PCM_PartyList extends ListActivity implements OnClickListener
 	{
 		super.onCreate( savedInstanceState );
 		requestWindowFeature( Window.FEATURE_NO_TITLE );
-		setContentView( R.layout.aed_list );
+		setContentView( R.layout.grouplist );
 		
 		party = null;
 		
-		addPartyBtn = ( Button ) findViewById( R.id.leftButton );
+		addPartyBtn = ( Button ) findViewById( R.id.leftBtn );
 		addPartyBtn.setText( "Add" );
 		addPartyBtn.setOnClickListener( this );
 		
-		editPartyBtn = ( Button ) findViewById( R.id.middleButton );
+		editPartyBtn = ( Button ) findViewById( R.id.middleBtn );
 		editPartyBtn.setText( "Edit" );
 		editPartyBtn.setOnClickListener( this );
 
-		deletePartyBtn = ( Button ) findViewById( R.id.rightButton );
+		deletePartyBtn = ( Button ) findViewById( R.id.rightBtn );
 		deletePartyBtn.setText( "Delete" );
 		deletePartyBtn.setOnClickListener( this );
 		

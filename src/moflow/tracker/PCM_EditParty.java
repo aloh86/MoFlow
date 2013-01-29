@@ -30,8 +30,6 @@ public class PCM_EditParty extends ListActivity
 	Button deletePCBtn;
 	Button editDoneBtn;
 	
-	TextView partyName;
-	
 	EditText partyNameField;
 	
 	ArrayList<Moflow_PC> pc_arrayList;
@@ -39,7 +37,6 @@ public class PCM_EditParty extends ListActivity
 	
 	Dialog addDialog;
 	Dialog editDialog;
-	
 	
 	Moflow_Party party = null;
 	Moflow_PC character = null;
@@ -74,9 +71,7 @@ public class PCM_EditParty extends ListActivity
 		getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
 		
 		partyNameField = ( EditText ) findViewById( R.id.groupNameEditText );
-		
-		partyName = ( TextView ) findViewById( R.id.groupNameTextView );
-		partyName.setText( "Party Name " );
+		partyNameField.setHint( "Group Name" );
 		
 		addPCBtn = ( Button ) findViewById( R.id.addBtn );
 		addPCBtn.setText( "Add PC" );
@@ -173,20 +168,14 @@ public class PCM_EditParty extends ListActivity
 	private void prepAddPCDialog( Dialog dialog ) {
 		EditText field;
 		
-		field = ( EditText ) dialog.findViewById( R.id.armorClassValue );
+		field = ( EditText ) dialog.findViewById( R.id.acEditText );
 		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.fortitudeValue );
+		field = ( EditText ) dialog.findViewById( R.id.initEditText );
 		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.reflexValue );
+		field = ( EditText ) dialog.findViewById( R.id.hpEditText );
 		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.willValue );
-		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.initModValue );
-		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.maxHPValue );
-		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.pcNameEditText );
-		field.setText( "" );
+		field = ( EditText ) dialog.findViewById( R.id.nameEditText );
+		field.setHint( "I need a name!" );
 		field.requestFocus();
 	}
 	
@@ -197,19 +186,13 @@ public class PCM_EditParty extends ListActivity
 	{
 		EditText field;
 		
-		field = ( EditText ) dialog.findViewById( R.id.armorClassValue );
+		field = ( EditText ) dialog.findViewById( R.id.acEditText );
 		field.setText( String.valueOf( character.getAC() ) );
-		field = ( EditText ) dialog.findViewById( R.id.fortitudeValue );
-		field.setText( String.valueOf( character.getFortitude() ) );
-		field = ( EditText ) dialog.findViewById( R.id.reflexValue );
-		field.setText( String.valueOf( character.getReflex() ) );
-		field = ( EditText ) dialog.findViewById( R.id.willValue );
-		field.setText( String.valueOf( character.getWill() ) );
-		field = ( EditText ) dialog.findViewById( R.id.initModValue );
+		field = ( EditText ) dialog.findViewById( R.id.initEditText );
 		field.setText( String.valueOf( character.getInitMod() ) );
-		field = ( EditText ) dialog.findViewById( R.id.maxHPValue );
+		field = ( EditText ) dialog.findViewById( R.id.hpEditText );
 		field.setText( String.valueOf( character.getMaxHitPoints() ) );
-		field = ( EditText ) dialog.findViewById( R.id.pcNameEditText );
+		field = ( EditText ) dialog.findViewById( R.id.nameEditText );
 		field.setText( character.getCharName() );
 		field.requestFocus();
 	}
@@ -243,13 +226,13 @@ public class PCM_EditParty extends ListActivity
 		
 		addDialog = new Dialog( this );
 		
-		addDialog.setContentView( R.layout.party_createpc );
+		addDialog.setContentView( R.layout.groupitem );
 		addDialog.setTitle( "Add PC" );
 		
 		Button createDoneBtn = 
-			( Button ) addDialog.findViewById( R.id.createPCDone );
+			( Button ) addDialog.findViewById( R.id.doneGroupItemButton );
 		Button cancelCreateBtn = 
-			( Button ) addDialog.findViewById( R.id.createPCCancel );
+			( Button ) addDialog.findViewById( R.id.cancelGroupItemButton );
 		
 		createDoneBtn.setOnClickListener(
 				new View.OnClickListener() {	
@@ -279,19 +262,19 @@ public class PCM_EditParty extends ListActivity
 	}
 	
 	/**-----------------------------------------------------------------------
-	 * Initializes the Add PC dialog.
+	 * Initializes the Edit PC dialog.
 	 */
 	private Dialog editPCDialog() {
 		
 		editDialog = new Dialog( this );
 		
-		editDialog.setContentView( R.layout.party_createpc );
+		editDialog.setContentView( R.layout.groupitem );
 		editDialog.setTitle( "Edit PC" );
 		
 		Button createDoneBtn = 
-			( Button ) editDialog.findViewById( R.id.createPCDone );
+			( Button ) editDialog.findViewById( R.id.doneGroupItemButton );
 		Button cancelCreateBtn = 
-			( Button ) editDialog.findViewById( R.id.createPCCancel );
+			( Button ) editDialog.findViewById( R.id.cancelGroupItemButton );
 		
 		createDoneBtn.setOnClickListener(
 				new View.OnClickListener() {	
@@ -299,6 +282,8 @@ public class PCM_EditParty extends ListActivity
 					public void onClick(View v) {
 						setPCStats( true, editDialog );
 						
+						// remove the edited PC from the list and reinsert it
+						// back in with the changed values.
 						party.RemovePC( character );
 						party.addMember( character );
 						
@@ -361,28 +346,16 @@ public class PCM_EditParty extends ListActivity
 		
 		EditText textField;
 		
-		// set name
-		textField = ( EditText ) diag.findViewById( R.id.pcNameEditText );
+		textField = ( EditText ) diag.findViewById( R.id.nameEditText );
 		character.setName( textField.getText().toString().trim() );
 		
-		// set defense, saving throws
-		textField = ( EditText ) diag.findViewById( R.id.armorClassValue );
+		textField = ( EditText ) diag.findViewById( R.id.acEditText );
 		character.setArmorClass( Integer.parseInt( textField.getText().toString() ) );
 		
-		textField = ( EditText ) diag.findViewById( R.id.fortitudeValue );
-		character.setFortitude( Integer.parseInt( textField.getText().toString() ) );
-		
-		textField = ( EditText ) diag.findViewById( R.id.reflexValue );
-		character.setReflex( Integer.parseInt( textField.getText().toString() ) );
-		
-		textField = ( EditText ) diag.findViewById( R.id.willValue );
-		character.setWill( Integer.parseInt( textField.getText().toString() ) );
-		
-		// set initiative and hit points
-		textField = ( EditText ) diag.findViewById( R.id.initModValue );
+		textField = ( EditText ) diag.findViewById( R.id.initEditText );
 		character.setInitMod( Integer.parseInt( textField.getText().toString() ) );
 		
-		textField = ( EditText ) diag.findViewById( R.id.maxHPValue );
+		textField = ( EditText ) diag.findViewById( R.id.hpEditText );
 		character.setHitPoints( Integer.parseInt( textField.getText().toString() ) );
 	}
 	
@@ -394,12 +367,9 @@ public class PCM_EditParty extends ListActivity
 	{
 		ArrayList< EditText > field = new ArrayList< EditText >();
 
-		field.add( ( EditText ) dialog.findViewById( R.id.armorClassValue ) );
-		field.add( ( EditText ) dialog.findViewById( R.id.fortitudeValue ) );
-		field.add( ( EditText ) dialog.findViewById( R.id.reflexValue ) );
-		field.add( ( EditText ) dialog.findViewById( R.id.willValue ) );
-		field.add( ( EditText ) dialog.findViewById( R.id.initModValue ) );
-		field.add( ( EditText ) dialog.findViewById( R.id.maxHPValue ) );
+		field.add( ( EditText ) dialog.findViewById( R.id.acEditText ) );
+		field.add( ( EditText ) dialog.findViewById( R.id.initEditText ) );
+		field.add( ( EditText ) dialog.findViewById( R.id.hpEditText ) );
 		
 		for ( int i = 0; i < field.size(); i++ )
 		{
@@ -408,7 +378,7 @@ public class PCM_EditParty extends ListActivity
 		}
 		
 		EditText nameField = 
-			( EditText ) dialog.findViewById( R.id.pcNameEditText );
+			( EditText ) dialog.findViewById( R.id.nameEditText );
 		
 		if ( nameField.getText().toString().trim().equals( "" ) )
 			nameField.setText( "Nameless One" );
