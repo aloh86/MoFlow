@@ -39,36 +39,19 @@
 			android:id="@+id/pcAddEditBtns"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
+			android:orientation="horizontal"
 			android:layout_alignParentBottom="true" >
-			    <TableLayout
-			    	android:id="@+id/buttonTableLayout"
-			    	android:layout_width="fill_parent"
-			    	android:layout_height="wrap_content" >
-			    	<TableRow>
-			    		<Button
-			    			android:id="@+id/addBtn"
-			    			android:layout_width="wrap_content"
-			    			android:layout_height="wrap_content" 
-			    			android:layout_weight="1" />
-			    		<Button
-			    			android:id="@+id/editBtn"
-			    			android:layout_width="wrap_content"
-			    			android:layout_height="wrap_content" 
-			    			android:layout_weight="1" />
-			    	</TableRow>
-			    	<TableRow>
-			    		<Button
-			    			android:id="@+id/delBtn"
-			    			android:layout_width="wrap_content"
-			    			android:layout_height="wrap_content" 
-			    			android:layout_weight="1" />
-			    		<Button
-			    			android:id="@+id/doneBtn"
-			    			android:layout_width="wrap_content"
-			    			android:layout_height="wrap_content" 
-			    			android:layout_weight="1" />
-			    	</TableRow>
-			    </TableLayout>
+	    		<Button
+	    			android:id="@+id/addBtn"
+	    			android:layout_width="wrap_content"
+	    			android:layout_height="wrap_content" 
+	    			android:layout_weight="1" />
+
+	    		<Button
+	    			android:id="@+id/saveBtn"
+	    			android:layout_width="wrap_content"
+	    			android:layout_height="wrap_content"
+	    			android:layout_weight="1" />
 		</LinearLayout>
 	</RelativeLayout>
 </RelativeLayout>
