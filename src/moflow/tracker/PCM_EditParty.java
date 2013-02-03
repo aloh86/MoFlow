@@ -4,14 +4,24 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,12 +36,14 @@ Alex Oh
 Activity shows the current list of parties.
 ===============================================================================
 */
-public class PCM_EditParty extends ListActivity implements OnClickListener, android.content.DialogInterface.OnClickListener
+public class PCM_EditParty extends ListActivity implements OnClickListener, android.content.DialogInterface.OnClickListener, OnItemLongClickListener
 {
 	Button addPCBtn;
 	Button saveBtn;
 	
 	EditText partyNameField;
+	
+	ListView editDelList;
 	
 	ArrayList<Moflow_PC> pc_arrayList;
 	ArrayAdapter<Moflow_PC> adapter;
@@ -40,13 +52,11 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	AlertDialog editPCDialog;
 	AlertDialog deletePCDialog;
 	
-	Dialog addDialog;
-	Dialog editDialog;
-	
 	Moflow_Party party = null;
 	Moflow_PC character = null;
 	
-	View dialogView;
+	View addPCView;
+	View editPCView;
 	
 	final int DIALOG_CREATEPC = 0;	// for onCreateDialog switch statement
 	final int DIALOG_EDITPC = 1;	// for onCreateDialog switch statement
@@ -87,18 +97,48 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 		saveBtn.setText( "Save" );
 		saveBtn.setOnClickListener( this );
 		
+		this.getListView().setOnItemLongClickListener( this );
+		
 		loadParty();
+		initDialogsMenus();
 	}
 	
-	private void initDialogs()
+	@Override
+	public void onCreateContextMenu( ContextMenu menu, View v, ContextMenuInfo menuInfo ) {
+		super.onCreateContextMenu( menu, v, menuInfo );
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate( R.menu.edit_del_prompt, menu );
+	}
+	
+	private void initDialogsMenus()
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder( this );
 		LayoutInflater inflater = this.getLayoutInflater();
-		dialogView = inflater.inflate( R.layout.groupitem, null );
-		builder.setView( dialogView );
+		
+		// setup the dialog for adding PCs to a group
+		addPCView = inflater.inflate( R.layout.groupitem, null );
+		builder.setView( addPCView );
 		builder.setPositiveButton( "OK", this );
 		builder.setNegativeButton( "Cancel", this );
 		createPCDialog = builder.create();
+		
+		// setup the dialog for editing PCs.
+		builder = new AlertDialog.Builder( this );
+		editPCView = inflater.inflate( R.layout.groupitem, null );
+		builder.setView( editPCView );
+		builder.setPositiveButton( "OK", this );
+		builder.setNegativeButton( "Cancel", this );
+		editPCDialog = builder.create();
+		
+		// setup the dialog for PC deletion
+		builder = new AlertDialog.Builder( this );
+		builder.setMessage( "Delete this PC?" );
+		builder.setPositiveButton( "Yes", this );
+		builder.setNegativeButton( "No", this );
+		deletePCDialog = builder.create();
+		
+		// setup the edit-delete context menu
+		this.registerForContextMenu( this.getListView() );
 	}
 	
 	/**-----------------------------------------------------------------------
@@ -106,11 +146,13 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	 */
 	@Override
 	public void onClick( View view ) {
-		if ( view == addPCBtn )
+		if ( view == addPCBtn ) {
+			prepAddPCDialog();
 			createPCDialog.show();
+		}
 		if ( view == saveBtn ) {
-			onSaveButtonClick();
-			finish();
+			if ( onSaveButtonClick() )
+				finish();
 		}
 	}
 
@@ -121,6 +163,36 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	public void onClick( DialogInterface dialog, int which ) {
 		if ( dialog == createPCDialog )
 			createPCChoice( dialog, which );
+		else if ( dialog == editPCDialog )
+			editPCChoice( dialog, which );
+		else if ( dialog == deletePCDialog )
+			deletePCChoice( dialog, which );
+	}
+	
+	/**-----------------------------------------------------------------------
+	 * Event handler for long clicks
+	 */
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id ) {
+		character = adapter.getItem( position );
+		return false;
+	}
+	
+	@Override
+	public boolean onContextItemSelected( MenuItem item ) {
+		AdapterContextMenuInfo info = ( AdapterContextMenuInfo ) item.getMenuInfo();
+		switch( item.getItemId() ) {
+			case R.id.cmenuEdit:
+				prepEditPCDialog();
+				editPCDialog.show();
+				break;
+			case R.id.cmenuDelete:
+				deletePCDialog.show();
+				break;
+			default:
+				return super.onContextItemSelected( item );
+		}
+		return false;
 	}
 	
 	/**-----------------------------------------------------------------------
@@ -130,10 +202,10 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 		
 		switch ( id ) {
 			case DIALOG_CREATEPC:
-				prepAddPCDialog( dialog );
+				prepAddPCDialog(  );
 				break;
 			case DIALOG_EDITPC:
-				prepEditPCDialog( dialog );
+				prepEditPCDialog();
 				break;
 		}
 	}
@@ -141,16 +213,17 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	/**-----------------------------------------------------------------------
 	 * Prepare Add PC dialog
 	 */
-	private void prepAddPCDialog( Dialog dialog ) {
+	private void prepAddPCDialog( ) {
 		EditText field;
 		
-		field = ( EditText ) dialog.findViewById( R.id.acEditText );
+		field = ( EditText ) addPCView.findViewById( R.id.acEditText );
 		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.initEditText );
+		field = ( EditText ) addPCView.findViewById( R.id.initEditText );
 		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.hpEditText );
+		field = ( EditText ) addPCView.findViewById( R.id.hpEditText );
 		field.setText( "0" );
-		field = ( EditText ) dialog.findViewById( R.id.nameEditText );
+		field = ( EditText ) addPCView.findViewById( R.id.nameEditText );
+		field.setText( "" );
 		field.setHint( "I need a name!" );
 		field.requestFocus();
 	}
@@ -158,139 +231,44 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	/**-----------------------------------------------------------------------
 	 * Prepare Edit PC dialog
 	 */
-	private void prepEditPCDialog( Dialog dialog )
+	private void prepEditPCDialog( )
 	{
 		EditText field;
 		
-		field = ( EditText ) dialog.findViewById( R.id.acEditText );
+		field = ( EditText ) editPCView.findViewById( R.id.acEditText );
 		field.setText( String.valueOf( character.getAC() ) );
-		field = ( EditText ) dialog.findViewById( R.id.initEditText );
+		field = ( EditText ) editPCView.findViewById( R.id.initEditText );
 		field.setText( String.valueOf( character.getInitMod() ) );
-		field = ( EditText ) dialog.findViewById( R.id.hpEditText );
+		field = ( EditText ) editPCView.findViewById( R.id.hpEditText );
 		field.setText( String.valueOf( character.getMaxHitPoints() ) );
-		field = ( EditText ) dialog.findViewById( R.id.nameEditText );
+		field = ( EditText ) editPCView.findViewById( R.id.nameEditText );
 		field.setText( character.getCharName() );
 		field.requestFocus();
-	}
-	
-	/**-----------------------------------------------------------------------
-	 * Show dialog specified by the parameter value
-	 */
-	@Override
-	protected Dialog onCreateDialog( int id ) {
-		Dialog dialog = null;
-		switch( id ) {
-			case DIALOG_CREATEPC:
-				//dialog = addPCDialog();
-				break;
-			case DIALOG_EDITPC:
-				dialog = editPCDialog();
-				break;
-			case DIALOG_DELETEPC:
-				dialog = deletePCDialog();
-				break;
-			default:
-				dialog = null;
-		}
-		return dialog;
-	}
-	
-	
-	/**-----------------------------------------------------------------------
-	 * Initializes the Edit PC dialog.
-	 */
-	private Dialog editPCDialog() {
-		
-		editDialog = new Dialog( this );
-		
-		editDialog.setContentView( R.layout.groupitem );
-		editDialog.setTitle( "Edit PC" );
-		
-		Button createDoneBtn = 
-			( Button ) editDialog.findViewById( 1 );
-		Button cancelCreateBtn = 
-			( Button ) editDialog.findViewById( 1 );
-		
-		createDoneBtn.setOnClickListener(
-				new View.OnClickListener() {	
-					@Override
-					public void onClick(View v) {
-						setPCStats( true, editDialog );
-						
-						// remove the edited PC from the list and reinsert it
-						// back in with the changed values.
-						party.RemovePC( character );
-						party.addMember( character );
-						
-						editDialog.dismiss();
-						adapter.notifyDataSetChanged();
-						
-						character = null;
-					}
-				});
-		
-		cancelCreateBtn.setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View v) { 
-						editDialog.dismiss();
-						character = null;
-					}
-				});
-		return editDialog;
-	}
-	
-	/**-----------------------------------------------------------------------
-	 * Confirm deletion of a PC from the list view
-	 */
-	private AlertDialog deletePCDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-		builder.setMessage( "Delete this character?" );
-		builder.setCancelable( false );
-		builder.setPositiveButton( "Yes", 
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						adapter.remove( character );
-						party.RemovePC( character );
-					}
-				});
-		
-		builder.setNegativeButton( "No", 
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-						character = null;
-					}
-				});
-		
-		return builder.create();
 	}
 	
 	/**-----------------------------------------------------------------------
 	 * Set all the stats of the PC. This function should only be called
 	 * when the user clicks the "Done" button in the Add PC dialog.
 	 */
-	private void setPCStats( boolean editExistingPC, Dialog diag )
+	private void setPCStats( boolean editExistingPC, View view )
 	{
 		if ( !editExistingPC )
 			character = new Moflow_PC();
 		
-		setFieldsToZero( diag );
+		setFieldsToZero( view );
 		
 		EditText textField;
 		
-		textField = ( EditText ) dialogView.findViewById( R.id.nameEditText );
+		textField = ( EditText ) view.findViewById( R.id.nameEditText );
 		character.setName( textField.getText().toString().trim() );
 		
-		textField = ( EditText ) dialogView.findViewById( R.id.acEditText );
+		textField = ( EditText ) view.findViewById( R.id.acEditText );
 		character.setArmorClass( Integer.parseInt( textField.getText().toString() ) );
 		
-		textField = ( EditText ) dialogView.findViewById( R.id.initEditText );
+		textField = ( EditText ) view.findViewById( R.id.initEditText );
 		character.setInitMod( Integer.parseInt( textField.getText().toString() ) );
 		
-		textField = ( EditText ) dialogView.findViewById( R.id.hpEditText );
+		textField = ( EditText ) view.findViewById( R.id.hpEditText );
 		character.setHitPoints( Integer.parseInt( textField.getText().toString() ) );
 	}
 	
@@ -298,13 +276,13 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	 * Sets all numerical value EditText fields to 0 so that Integer.parseInt
 	 * in setPCStats() does not throw an invalid value exception.
 	 */
-	private void setFieldsToZero( Dialog dialog )
+	private void setFieldsToZero( View view )
 	{
 		ArrayList< EditText > field = new ArrayList< EditText >();
 
-		field.add( ( EditText ) dialogView.findViewById( R.id.acEditText ) );
-		field.add( ( EditText ) dialogView.findViewById( R.id.initEditText ) );
-		field.add( ( EditText ) dialogView.findViewById( R.id.hpEditText ) );
+		field.add( ( EditText ) view.findViewById( R.id.acEditText ) );
+		field.add( ( EditText ) view.findViewById( R.id.initEditText ) );
+		field.add( ( EditText ) view.findViewById( R.id.hpEditText ) );
 		
 		for ( int i = 0; i < field.size(); i++ )
 		{
@@ -313,7 +291,7 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 		}
 		
 		EditText nameField = 
-			( EditText ) dialogView.findViewById( R.id.nameEditText );
+			( EditText ) view.findViewById( R.id.nameEditText );
 		
 		if ( nameField.getText().toString().trim().equals( "" ) )
 			nameField.setText( "Nameless One" );
@@ -369,16 +347,38 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	
 	private void createPCChoice( DialogInterface dialog, int button ) {
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
-			setPCStats( false, addDialog );
+			setPCStats( false, addPCView );
 			party.addMember( character );
 			adapter.add( character );	
 			adapter.notifyDataSetChanged();
-			character = null;
 			dialog.dismiss();
 		}
-		else if ( button == DialogInterface.BUTTON_NEGATIVE ) {
-			character = null;
+		else if ( button == DialogInterface.BUTTON_NEGATIVE )
 			dialog.dismiss();
+		
+		character = null;
+	}
+	
+	private void editPCChoice( DialogInterface dialog, int button ) {
+		if ( button == DialogInterface.BUTTON_POSITIVE ) {
+			setPCStats( true, editPCView );
+			party.RemovePC( character );
+			party.addMember( character );
+			dialog.dismiss();
+			adapter.notifyDataSetChanged();
 		}
+		else if ( button == DialogInterface.BUTTON_NEGATIVE )
+			dialog.dismiss();
+		
+		character = null;
+	}
+	
+	private void deletePCChoice( DialogInterface dialog, int button ) {
+		if ( button == DialogInterface.BUTTON_POSITIVE ) {
+			adapter.remove( character );
+			party.RemovePC( character );
+		}
+		else if ( button == DialogInterface.BUTTON_NEGATIVE )
+			dialog.dismiss();
 	}
 }

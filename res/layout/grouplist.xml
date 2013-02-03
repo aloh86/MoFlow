@@ -10,7 +10,8 @@
     	android:id="@android:id/list"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:layout_above="@+id/groupListButtonLayout" />
+    	android:layout_above="@+id/groupListButtonLayout"
+    	android:choiceMode="singleChoice"/>"
     
     <LinearLayout
     	android:id="@+id/groupListButtonLayout"
@@ -22,21 +23,18 @@
 	    	android:id="@+id/leftBtn" 
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content"
-	    	android:layout_weight="1"
-	    	android:onClick="onClick" />
+	    	android:layout_weight="1" />
 	    <Button
 	    	android:id="@+id/middleBtn" 
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content"
 	    	android:layout_weight="1"
 	    	android:layout_alignParentBottom="true"
-	    	android:layout_centerHorizontal="true"
-	    	android:onClick="onClick" />
+	    	android:layout_centerHorizontal="true" />
 	    <Button
 	    	android:id="@+id/rightBtn" 
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content"
-	    	android:layout_weight="1"
-	    	android:onClick="onClick" />
+	    	android:layout_weight="1" />
 	</LinearLayout>
 </RelativeLayout>

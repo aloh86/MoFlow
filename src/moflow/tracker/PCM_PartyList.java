@@ -3,6 +3,8 @@ package moflow.tracker;
 import java.util.ArrayList;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -10,10 +12,12 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import moflow.database.MoFlowDB;
+import moflow.runnables.PartyListRunnable;
 /*
 ===============================================================================
 PCM_PartyList.java
-Alex Oh
 
 Activity shows the current list of parties.
 ===============================================================================
@@ -29,6 +33,8 @@ public class PCM_PartyList extends ListActivity implements OnClickListener
 	final int RC_EDITEXISTING = 2;
 	
 	Moflow_Party party;
+	
+	MoFlowDB database;
 	
 	ArrayList<Moflow_Party> partyList;
 	ArrayAdapter<Moflow_Party> adapter;
@@ -66,6 +72,8 @@ public class PCM_PartyList extends ListActivity implements OnClickListener
 				partyList );
 		setListAdapter( adapter );
 		getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
+		
+		initDatabase();
 	}
 
 	
@@ -143,5 +151,16 @@ public class PCM_PartyList extends ListActivity implements OnClickListener
 			
 			getListView().setItemChecked( checkedItemPosition, false );
 		}
+	}
+	
+	
+	public void initDatabase() {
+		PartyListRunnable runnable = new PartyListRunnable( 
+				this.getBaseContext(),
+				database,
+				partyList,
+				adapter );
+		Thread t = new Thread( runnable );
+		t.start();
 	}
 }
