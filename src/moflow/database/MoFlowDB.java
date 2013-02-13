@@ -80,7 +80,7 @@ public class MoFlowDB {
 	 * @return Cursor to all party tuples.
 	 */
 	public Cursor getAllParties() {
-		String [] columns = new String [] { "GroupName" };
+		String [] columns = new String [] { Parties_Table.COL_PartyName };
 		return db.query(
 				Parties_Table.TABLE_NAME, 
 				columns, 
@@ -97,13 +97,18 @@ public class MoFlowDB {
 	 * @return Cursor to the queried tuples.
 	 */
 	public Cursor getPCForGroup( String groupName ) {
-		String [] columns = { "GroupName", "PCName", "InitBonus", "ArmorClass",
-				"MaxHP" };
+		String [] columns = { 
+				Players_Table.COL_PartyName, 
+				Players_Table.COL_PCName, 
+				Players_Table.COL_InitBonus,
+				Players_Table.COL_ArmorClass,
+				Players_Table.COL_MaxHP 
+				};
 		String [] selectionArgs = { groupName };
 		return db.query(
 				Players_Table.TABLE_NAME, 
 				columns, 
-				"GroupName = ?", 
+				"PartyName = ?", 
 				selectionArgs, 
 				null, 
 				null, 

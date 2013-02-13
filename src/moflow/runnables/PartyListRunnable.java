@@ -1,7 +1,5 @@
 package moflow.runnables;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -11,17 +9,14 @@ import moflow.database.MoFlowDB;
 import moflow.tracker.Moflow_Party;
 
 public class PartyListRunnable implements Runnable {
-	Context context;
-	MoFlowDB db;
-	ArrayList<Moflow_Party> partyList;
-	ArrayAdapter<Moflow_Party> adapter;
+	private Context context;
+	private MoFlowDB db;
+	private ArrayAdapter<Moflow_Party> adapter;
 	
 	public PartyListRunnable( Context ctx, MoFlowDB database, 
-			ArrayList<Moflow_Party> list, 
 			ArrayAdapter<Moflow_Party> adap ) {
 		context = ctx;
 		db = database;
-		partyList = list;
 		adapter = adap;
 	}
 	@Override
@@ -30,17 +25,31 @@ public class PartyListRunnable implements Runnable {
 		
 		try {
 			db = new MoFlowDB( context );
+			db.open();
 		} catch ( SQLException e ) {
 		}
 		
 		cur = db.getAllParties();
 		
+		// if the database is empty, just return
+		if ( cur.getCount() == 0 ) {
+			cur.close();
+			db.close();
+			return;
+		}
+		
+		// else, load the party names
 		if ( cur.moveToFirst() ) {
 			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
 				String colValue = cur.getString( i );
-				
+				Moflow_Party party = new Moflow_Party();
+				party.setPartyName( colValue );
+				adapter.add( party );
 			}
+			cur.moveToNext();
 		}
+		adapter.notifyDataSetChanged();
+		cur.close();
+		db.close();
 	}
-
 }

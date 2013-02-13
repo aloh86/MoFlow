@@ -21,7 +21,7 @@ public class Moflow_Party implements Parcelable
 	/**
 	 * Default constructor
 	 */
-	Moflow_Party()
+	public Moflow_Party()
 	{
 		party = new ArrayList< Moflow_PC >();
 		partyName = "";

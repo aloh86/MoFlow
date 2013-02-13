@@ -16,7 +16,7 @@ public class Encounters_Table {
 	
 	public static final String DB_CREATE = 
 			"CREATE TABLE " + TABLE_NAME + " ( " +
-			COL_Encounter + " VARCHAR(20) NOT NULL " +
+			COL_Encounter + " VARCHAR(20) NOT NULL, " +
 			"PRIMARY KEY (" + COL_Encounter + ") " +
 			");";
 }

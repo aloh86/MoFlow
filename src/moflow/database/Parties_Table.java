@@ -19,7 +19,7 @@ public abstract class Parties_Table implements BaseColumns {
 	
 	public static final String DB_CREATE =
 			"CREATE TABLE " + TABLE_NAME + " ( " +
-			COL_PartyName   + " VARCHAR(20) NOT NULL " +
+			COL_PartyName   + " VARCHAR(20) NOT NULL, " +
 			"PRIMARY KEY (" + COL_PartyName + ") " +
 			");";
 }

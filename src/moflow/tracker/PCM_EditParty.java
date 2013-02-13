@@ -2,10 +2,7 @@ package moflow.tracker;
 
 import java.util.ArrayList;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,17 +13,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 /*
 ===============================================================================
@@ -38,34 +30,28 @@ Activity shows the current list of parties.
 */
 public class PCM_EditParty extends ListActivity implements OnClickListener, android.content.DialogInterface.OnClickListener, OnItemLongClickListener
 {
-	Button addPCBtn;
-	Button saveBtn;
+	private Button addPCBtn;
+	private Button saveBtn;
 	
-	EditText partyNameField;
+	private EditText partyNameField;
 	
-	ListView editDelList;
+	private ArrayList<Moflow_PC> pc_arrayList;
+	private ArrayAdapter<Moflow_PC> adapter;
 	
-	ArrayList<Moflow_PC> pc_arrayList;
-	ArrayAdapter<Moflow_PC> adapter;
+	private AlertDialog createPCDialog;
+	private AlertDialog editPCDialog;
+	private AlertDialog deletePCDialog;
 	
-	AlertDialog createPCDialog;
-	AlertDialog editPCDialog;
-	AlertDialog deletePCDialog;
+	private Moflow_Party party = null;
+	private Moflow_PC character = null;
 	
-	Moflow_Party party = null;
-	Moflow_PC character = null;
+	private View addPCView;
+	private View editPCView;
 	
-	View addPCView;
-	View editPCView;
+	private final int RC_DONE = 1;	// result code returned when "Done" clicked
+	private final int RC_EXISTING_EDIT = 2;	// result code for editing existing party
 	
-	final int DIALOG_CREATEPC = 0;	// for onCreateDialog switch statement
-	final int DIALOG_EDITPC = 1;	// for onCreateDialog switch statement
-	final int DIALOG_DELETEPC = 2;	// for onCreateDialog switch statement
-	
-	final int RC_DONE = 1;	// result code returned when "Done" clicked
-	final int RC_EXISTING_EDIT = 2;	// result code for editing existing party
-	
-	boolean existingParty = false;
+	private boolean existingParty = false;
 	
 	/**-----------------------------------------------------------------------
 	 * Initializes View and View properties.
@@ -173,14 +159,13 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	 * Event handler for long clicks
 	 */
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id ) {
+	public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id ) {
 		character = adapter.getItem( position );
 		return false;
 	}
 	
 	@Override
 	public boolean onContextItemSelected( MenuItem item ) {
-		AdapterContextMenuInfo info = ( AdapterContextMenuInfo ) item.getMenuInfo();
 		switch( item.getItemId() ) {
 			case R.id.cmenuEdit:
 				prepEditPCDialog();
@@ -193,21 +178,6 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 				return super.onContextItemSelected( item );
 		}
 		return false;
-	}
-	
-	/**-----------------------------------------------------------------------
-	 * Prepare dialog
-	 */
-	protected void onPrepareDialog( int id, Dialog dialog, Bundle args ) {
-		
-		switch ( id ) {
-			case DIALOG_CREATEPC:
-				prepAddPCDialog(  );
-				break;
-			case DIALOG_EDITPC:
-				prepEditPCDialog();
-				break;
-		}
 	}
 	
 	/**-----------------------------------------------------------------------
@@ -302,6 +272,7 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 	 */
 	private boolean onSaveButtonClick()
 	{
+		// prompt the user for a party name if none is provided
 		if ( !partyNameField.getText().toString().trim().equals("") )
 			partyNameField.setText( partyNameField.getText().toString() );
 		else
@@ -312,6 +283,16 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 			return false;
 		}
 		
+		// if there are no members in the party, prompt user to add a member
+		if ( party.getPartySize() == 0 ) {
+			Toast.makeText( PCM_EditParty.this, 
+					"You need at least 1 party member", 
+					Toast.LENGTH_SHORT ).show();
+			
+			return false;
+		}
+		
+		// package the party into bundle
 		party.setPartyName( partyNameField.getText().toString().trim() );
 		Intent i = new Intent();
 		Bundle extras = new Bundle();
@@ -345,9 +326,28 @@ public class PCM_EditParty extends ListActivity implements OnClickListener, andr
 		}
 	}
 	
+	/**
+	 * Ensure the uniqueness of member names.
+	 */
+	private void checkResolveNameConflict() {
+		String charName = character.getCharName();
+		boolean nameConflict = true;
+		while ( nameConflict ) {
+			for ( int i = 0; i < party.getPartySize(); i++ ) {
+				String memberName = party.getMember( i ).getCharName();
+				
+				if ( charName == memberName )
+					charName = charName + ' ' + String.valueOf( i + 1 );
+				else
+					nameConflict = false;
+			}
+		}
+	}
+	
 	private void createPCChoice( DialogInterface dialog, int button ) {
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
 			setPCStats( false, addPCView );
+			checkResolveNameConflict();
 			party.addMember( character );
 			adapter.add( character );	
 			adapter.notifyDataSetChanged();
