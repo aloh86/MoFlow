@@ -20,59 +20,50 @@
    		<TableRow
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-			    <LinearLayout
-			        android:layout_width="fill_parent"
-			        android:layout_height="wrap_content" >
 			        <TextView
 			            android:layout_width="130dp"
 			            android:layout_height="wrap_content"
-			            android:textSize="18sp"
-			            android:text="Init Bonus:"/>
+			            android:textSize="12sp"
+			            android:text="@string/groupItemInitText"/>
 			        <EditText
 			            android:id="@+id/initEditText"
 			            android:layout_width="50dp"
 			            android:layout_height="wrap_content"
 			            android:inputType="number"
-			            android:maxLength="3"/>
-			    </LinearLayout>
+			            android:maxLength="3"
+			            android:selectAllOnFocus="true"/>
 		</TableRow>
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-			    <LinearLayout
-			        android:layout_width="fill_parent"
-			        android:layout_height="wrap_content" >
 			        <TextView
 			            android:layout_width="130dp"
 			            android:layout_height="wrap_content"
-			            android:textSize="18sp"
-			            android:text="Armor Class:"/>
+			            android:textSize="12sp"
+			            android:text="@string/groupItemACText"/>
 			        <EditText
 			            android:id="@+id/acEditText"
 			            android:layout_width="50dp"
 			            android:layout_height="wrap_content"
 			            android:inputType="number"
-			            android:maxLength="3"/>
-			    </LinearLayout>
+			            android:maxLength="3"
+			            android:selectAllOnFocus="true"/>
 		</TableRow>
 		<TableRow
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-			    <LinearLayout
-			        android:layout_width="fill_parent"
-			        android:layout_height="wrap_content" >
 			        <TextView
 			            android:layout_width="130dp"
 			            android:layout_height="wrap_content"
-			            android:textSize="18sp"
-			            android:text="Max Hit Points:"/>
+			            android:textSize="12sp"
+			            android:text="@string/groupItemHPText"/>
 			        <EditText
 			            android:id="@+id/hpEditText"
 			            android:layout_width="50dp"
 			            android:layout_height="wrap_content"
 			            android:inputType="number"
-			            android:maxLength="10"/>
-			    </LinearLayout>
+			            android:maxLength="10"
+			            android:selectAllOnFocus="true"/>
 		</TableRow>
 	</TableLayout>
 	

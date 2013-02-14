@@ -27,7 +27,8 @@ PCM_PartyList.java
 Activity shows the current list of parties.
 ===============================================================================
 */
-public class PCM_PartyList extends ListActivity implements OnClickListener, OnItemLongClickListener, android.content.DialogInterface.OnClickListener
+public class PCM_PartyList extends ListActivity 
+implements OnClickListener, OnItemLongClickListener, android.content.DialogInterface.OnClickListener
 {
 	private Button addPartyBtn;
 	
@@ -59,7 +60,7 @@ public class PCM_PartyList extends ListActivity implements OnClickListener, OnIt
 		
 		party = null;
 		
-		addPartyBtn = ( Button ) findViewById( R.id.loneBtn );
+		addPartyBtn = ( Button ) findViewById( R.id.addGroupButton );
 		addPartyBtn.setText( "Create New Party" );
 		addPartyBtn.setOnClickListener( this );
 		

@@ -22,6 +22,7 @@ public final class R {
     public static final class id {
         public static final int acEditText=0x7f070004;
         public static final int addBtn=0x7f070014;
+        public static final int addGroupButton=0x7f070007;
         public static final int autoRollCheckBox=0x7f07001a;
         public static final int cmenuDelete=0x7f07001e;
         public static final int cmenuEdit=0x7f07001d;
@@ -39,7 +40,6 @@ public final class R {
         public static final int listHeader=0x7f07001b;
         public static final int listViewLayout=0x7f070012;
         public static final int logoCenterLayout=0x7f07000a;
-        public static final int loneBtn=0x7f070007;
         public static final int mainRlayout=0x7f070008;
         public static final int menuGridView=0x7f07000e;
         public static final int moflowTextA=0x7f07000b;
@@ -72,6 +72,9 @@ public final class R {
         public static final int app_name=0x7f040000;
         public static final int delete=0x7f040004;
         public static final int edit=0x7f040003;
+        public static final int groupItemACText=0x7f040008;
+        public static final int groupItemHPText=0x7f040009;
+        public static final int groupItemInitText=0x7f040007;
         public static final int logoTextA=0x7f040005;
         public static final int logoTextB=0x7f040006;
     }

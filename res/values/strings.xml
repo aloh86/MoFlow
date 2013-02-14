@@ -8,4 +8,7 @@
     <string name="delete">Delete</string>
     <string name="logoTextA">MoFlow</string>
     <string name="logoTextB">Initiative Tracker</string>
+    <string name="groupItemInitText">Init Bonus:</string>
+    <string name="groupItemACText">Armor Class:</string>
+    <string name="groupItemHPText">Max Hit Points:</string>
 </resources>

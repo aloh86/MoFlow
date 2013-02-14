@@ -10,13 +10,13 @@
     	android:id="@android:id/list"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:layout_above="@+id/loneBtn"
-    	android:choiceMode="singleChoice"/>"
+    	android:layout_above="@+id/addGroupButton"
+    	android:choiceMode="singleChoice"/>
     
     <Button
-    	android:id="@+id/loneBtn" 
-    	android:layout_width="wrap_content"
+    	android:id="@+id/addGroupButton" 
+    	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
     	android:layout_centerInParent="true"
-    	android:layout_alignParentBottom="true" />"
+    	android:layout_alignParentBottom="true" />
 </RelativeLayout>
