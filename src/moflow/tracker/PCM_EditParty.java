@@ -1,6 +1,7 @@
 package moflow.tracker;
 
 import java.util.ArrayList;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -11,21 +12,17 @@ import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 /*
 ===============================================================================
@@ -176,7 +173,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 			prepAddPCDialog();
 			addingNewItem = true;
 			itemDialog.show();
-			//itemDialog.getButton( AlertDialog.BUTTON1 ).setEnabled( false );
+			itemDialog.getButton( AlertDialog.BUTTON1 ).setEnabled( false );
 		}
 		if ( view == saveBtn ) {
 			if ( onSaveButtonClick() )
@@ -230,9 +227,8 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	 * TextWatcher methods
 	 */
 	@Override
-	public void afterTextChanged(Editable arg0) {
-		// TODO Auto-generated method stub
-		
+	public void afterTextChanged( Editable arg0 ) {
+
 	}
 
 	@Override
@@ -242,10 +238,15 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		
 	}
 
+	@SuppressLint("ShowToast")
 	@Override
-	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-		boolean unique = true;
-		
+	public void onTextChanged( CharSequence s, int start, int before, int count ) {
+		if ( itemDialog.isShowing() ) {
+			if ( !pcNameIsUnique( s.toString() ) ) {
+				itemDialog.getButton( AlertDialog.BUTTON1 ).setEnabled( false );
+			} else
+				itemDialog.getButton( AlertDialog.BUTTON1 ).setEnabled( true );
+		}
 	}
 	
 	
@@ -346,17 +347,21 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 			partyNameField.setText( partyNameField.getText().toString() );
 		else
 		{
-			Toast.makeText( PCM_EditParty.this, "Unique Party Name Needed", 
-					Toast.LENGTH_SHORT ).show();
+			Toast toast = Toast.makeText( PCM_EditParty.this, "Unique Party Name Needed", 
+					Toast.LENGTH_LONG );
+			toast.setGravity( Gravity.TOP, 0, 0 );
+			toast.show();
 			
 			return false;
 		}
 		
 		// if there are no members in the party, prompt user to add a member
 		if ( party.getPartySize() == 0 ) {
-			Toast.makeText( PCM_EditParty.this, 
+			Toast toast = Toast.makeText( PCM_EditParty.this, 
 					"You need at least 1 party member", 
-					Toast.LENGTH_SHORT ).show();
+					Toast.LENGTH_LONG );
+			toast.setGravity( Gravity.TOP, 0, 0 );
+			toast.show();
 			
 			return false;
 		}
@@ -400,15 +405,8 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	 * @param view the add or edit pc dialog view
 	 * @return true if name is unique or party is empty, false otherwise or if empty
 	 */
-	private boolean pcNameIsUnique( View view ) {
-		Toast.makeText( this, "inOnKey", Toast.LENGTH_SHORT ).show();
-		if ( party.getPartySize() == 0 )
-			return true;
-		
-		EditText nameField = ( EditText )view.findViewById( R.id.nameEditText );
-		String charName = nameField.getText().toString();
-		
-		if ( charName.equals( "" ) )
+	private boolean pcNameIsUnique( String charName ) {		
+		if ( charName.equals( "" ) || itemNameField.getText().toString().trim().equals( "" ) )
 			return false;
 		
 		boolean unique = true;
@@ -419,6 +417,10 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 			
 			if ( charName.equals( memberName ) ) {
 				unique = false;
+				Toast toast = Toast.makeText( getApplicationContext(), 
+						"Cannot have duplicate names", Toast.LENGTH_LONG );
+				toast.setGravity( Gravity.TOP, 0, 0 );
+				toast.show();
 				break;
 			}
 		}
