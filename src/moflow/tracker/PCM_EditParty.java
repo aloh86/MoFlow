@@ -1,11 +1,15 @@
 package moflow.tracker;
 
 import java.util.ArrayList;
+
+import moflow.database.MoFlowDB;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,6 +52,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	private AlertDialog deletePCDialog;
 	
 	private Moflow_Party party = null;
+	private Moflow_Party partyEdited = null;
 	private Moflow_PC character = null;
 	
 	private View itemView;
@@ -60,6 +65,16 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	private boolean existingParty = false;
 	private boolean editingItem = false;
 	private boolean addingNewItem = false;
+	
+	
+	
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////
+	// ACTIVITY OVERRIDES
+	//////////////////////////////////////////////////////////////////////////
 	
 	/**-----------------------------------------------------------------------
 	 * Initializes View and View properties.
@@ -132,37 +147,15 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		inflater.inflate( R.menu.edit_del_prompt, menu );
 	}
 	
-	/**-----------------------------------------------------------------------
-	 * Initialize dialog menus.
-	 */
-	private void initDialogsMenus()
-	{	
-		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-		LayoutInflater inflater = this.getLayoutInflater();
-		
-		// setup the dialog for adding PCs to a group
-		itemView = inflater.inflate( R.layout.groupitem, null );
-		builder.setView( itemView );
-		builder.setMessage( "Create Party Member" );
-		builder.setPositiveButton( "OK", this );
-		builder.setNegativeButton( "Cancel", this );
-		itemDialog = builder.create();
-		
-		// setup Views for addPCView dialog
-		itemNameField = ( EditText ) itemView.findViewById( R.id.nameEditText );
-		itemNameField.addTextChangedListener( this );
-		
-		// setup the dialog for PC deletion
-		builder = new AlertDialog.Builder( this );
-		builder.setMessage( "Delete this PC?" );
-		builder.setPositiveButton( "Yes", this );
-		builder.setNegativeButton( "No", this );
-		deletePCDialog = builder.create();
-		
-		// setup the edit-delete context menu
-		this.registerForContextMenu( this.getListView() );
-	}
 	
+	
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////
+	// IMPLEMENTS
+	//////////////////////////////////////////////////////////////////////////
 	
 	/**-----------------------------------------------------------------------
 	 * Event handler for buttons.
@@ -249,6 +242,46 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		}
 	}
 	
+	
+	
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////
+	// PRIVATE METHODS,HELPERS
+	//////////////////////////////////////////////////////////////////////////
+	
+	/**-----------------------------------------------------------------------
+	 * Initialize dialog menus.
+	 */
+	private void initDialogsMenus()
+	{	
+		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		LayoutInflater inflater = this.getLayoutInflater();
+		
+		// setup the dialog for adding PCs to a group
+		itemView = inflater.inflate( R.layout.groupitem, null );
+		builder.setView( itemView );
+		builder.setMessage( "Create Party Member" );
+		builder.setPositiveButton( "OK", this );
+		builder.setNegativeButton( "Cancel", this );
+		itemDialog = builder.create();
+		
+		// setup Views for addPCView dialog
+		itemNameField = ( EditText ) itemView.findViewById( R.id.nameEditText );
+		itemNameField.addTextChangedListener( this );
+		
+		// setup the dialog for PC deletion
+		builder = new AlertDialog.Builder( this );
+		builder.setMessage( "Delete this PC?" );
+		builder.setPositiveButton( "Yes", this );
+		builder.setNegativeButton( "No", this );
+		deletePCDialog = builder.create();
+		
+		// setup the edit-delete context menu
+		this.registerForContextMenu( this.getListView() );
+	}
 	
 	/**-----------------------------------------------------------------------
 	 * Prepare Add PC dialog
@@ -366,6 +399,15 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 			return false;
 		}
 		
+		// check if party name is unique
+		if ( !partyNameIsUnique( partyNameField.getText().toString().trim() ) ) {
+			Toast toast = Toast.makeText( PCM_EditParty.this, 
+					"Duplicate party names are not allowed.", 
+					Toast.LENGTH_LONG );
+			toast.setGravity( Gravity.TOP, 0, 0 );
+			toast.show();
+		}
+		
 		// package the party into bundle
 		party.setPartyName( partyNameField.getText().toString().trim() );
 		Intent i = new Intent();
@@ -406,7 +448,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	 * @return true if name is unique or party is empty, false otherwise or if empty
 	 */
 	private boolean pcNameIsUnique( String charName ) {		
-		if ( charName.equals( "" ) || itemNameField.getText().toString().trim().equals( "" ) )
+		if ( charName.trim().equals( "" ) )
 			return false;
 		
 		boolean unique = true;
@@ -415,7 +457,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		for ( int i = 0; i < party.getPartySize(); i++ ) {
 			String memberName = party.getMember( i ).getCharName();
 			
-			if ( charName.equals( memberName ) ) {
+			if ( charName.trim().equalsIgnoreCase( memberName ) ) {
 				unique = false;
 				Toast toast = Toast.makeText( getApplicationContext(), 
 						"Cannot have duplicate names", Toast.LENGTH_LONG );
@@ -445,7 +487,8 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	 * 
 	 */
 	private void editPCChoice( DialogInterface dialog, int button ) {
-		if ( button == DialogInterface.BUTTON_POSITIVE ) {	
+		if ( button == DialogInterface.BUTTON_POSITIVE ) {
+			
 			setPCStats( true );
 			party.RemovePC( character );
 			party.addMember( character );
@@ -465,5 +508,75 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		}
 		else if ( button == DialogInterface.BUTTON_NEGATIVE )
 			dialog.dismiss();
+	}
+	
+	
+	
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////
+	// DATABASE ACCESS METHODS
+	//////////////////////////////////////////////////////////////////////////
+	
+	/**-----------------------------------------------------------------------
+	 * Calls up database to get existing party names and checks to prevent
+	 * duplicate names.
+	 */
+	private boolean partyNameIsUnique( String partyName ) {
+		Cursor cur;
+		MoFlowDB db = new MoFlowDB( this );
+		
+		try {
+			db.open();
+		} catch ( SQLException e ) {
+			Toast.makeText( this, "Database could not be opened!", Toast.LENGTH_LONG ).show();
+		}
+		
+		cur = db.getAllParties();
+		
+		// if the database is empty, just return
+		if ( cur.getCount() == 0 ) {
+			cur.close();
+			db.close();
+			return true;
+		}
+		
+		boolean unique = true;
+		
+		// else, load the party names
+		while( cur.moveToNext() ) {
+			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
+				String colValue = cur.getString( i );
+				if ( partyName.equalsIgnoreCase( colValue ) ) {
+					unique = false;
+					break;
+				}
+			}
+		}
+		cur.close();
+		db.close();
+		
+		return unique;
+	}
+	
+	
+	/**-----------------------------------------------------------------------
+	 * When editing a pc, modify the current record of the PC being edited.
+	 * @param modifiedPC
+	 * @param groupName
+	 * @param pcName
+	 */
+	private void modifyRecord( Moflow_PC modifiedPC, String groupName, String pcName ) {
+		MoFlowDB db = new MoFlowDB( this );
+		
+		try {
+			db.open();
+		} catch ( SQLException e ) {
+			Toast.makeText( this, "Database could not be opened!", Toast.LENGTH_LONG ).show();
+		}
+		
+		
 	}
 }

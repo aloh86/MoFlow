@@ -17,6 +17,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import moflow.database.MoFlowDB;
 import moflow.runnables.PartyListRunnable;
@@ -73,7 +74,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 		
 		this.getListView().setOnItemLongClickListener( this );
 		
-		initDatabase();
+		initList();
 	}
 
 	
@@ -108,7 +109,6 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 	@Override
 	public void onListItemClick( ListView parent, View v, int position, long id)
 	{
-		parent.setItemChecked(position, parent.isItemChecked(position));
 		party = adapter.getItem( position );
 		checkedItemPosition = position;
 		
@@ -122,7 +122,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 		startActivityForResult( i, REQC_EDITPARTY );
 	}
 
-	/**
+	/**-----------------------------------------------------------------------
 	 * Prompts the user if they want to delete the party in response to a
 	 * long-click.
 	 */
@@ -151,6 +151,8 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 			{
 				Bundle bundle = data.getExtras();
 				party = bundle.getParcelable( "partyData" );
+				savePartyToDB( party );
+				party.clearMembers();
 				adapter.add( party );
 				adapter.notifyDataSetChanged();
 			}
@@ -161,20 +163,46 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 				party = bundle.getParcelable( "partyData" );
 				adapter.remove( 
 						adapter.getItem( checkedItemPosition ) );
+				savePartyToDB( party );
+				party.clearMembers();
 				adapter.add( party );
 				adapter.notifyDataSetChanged();
 			}
 			
-			// party set to null to force user to click on item
-			// so that check mark appears. Else, they can just click on
-			// edit or delete without knowing which party is being
-			// edited or deleted.
+			party.clearMembers();
 			party = null;
-			
-			getListView().setItemChecked( checkedItemPosition, false );
 		}
 	}
 	
+	/**-----------------------------------------------------------------------
+	 * 
+	 */
+	private void savePartyToDB( Moflow_Party party ) {		
+		try {
+			database = new MoFlowDB( this );
+			database.open();
+		} catch ( SQLException e ) {
+			Toast.makeText( this, "Database could not be opened!", Toast.LENGTH_LONG ).show();
+		}
+		
+		database.insertGroup( party.getPartyName() );
+		
+		for ( int i = 0; i < party.getPartySize(); i++ ) {
+			Moflow_PC pc = party.getMember( i );
+			database.insertPlayer( 
+					party.getPartyName(), 
+					pc.getCharName(), 
+					pc.getInitMod(), 
+					pc.getAC(),
+					pc.getMaxHitPoints() );
+		}
+		
+		database.close();
+	}
+	
+	/**-----------------------------------------------------------------------
+	 * 
+	 */
 	private void gatherParty() {
 		Cursor cur;
 		
@@ -182,6 +210,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 			database = new MoFlowDB( this );
 			database.open();
 		} catch ( SQLException e ) {
+			Toast.makeText( this, "Database could not be opened!", Toast.LENGTH_LONG ).show();
 		}
 		
 		cur = database.getPCForGroup( party.getPartyName() );
@@ -194,11 +223,13 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 		}
 		
 		// else, load the PCs and insert into party
-		if ( cur.moveToFirst() ) {
+		Moflow_PC pc = new Moflow_PC();
+		while ( cur.moveToNext() ) {
 			for ( int i = 1; i < cur.getColumnCount(); i++ ) {
-				Moflow_PC pc = new Moflow_PC();
-				if ( i == 1 )
-					pc.setName( cur.getString( i ) );
+				if ( i == 1 ) {
+					String test = cur.getString( i );
+					pc.setName( test );
+				}
 				else if ( i == 2 )
 					pc.setInitMod( cur.getInt( i ) );
 				else if ( i == 3 )
@@ -206,9 +237,10 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 				else if ( i == 4 )
 					pc.setHitPoints( cur.getInt( i ) );
 			}
-			cur.moveToNext();
+			party.addMember( pc );
+			pc = new Moflow_PC();
 		}
-		adapter.notifyDataSetChanged();
+		
 		cur.close();
 		database.close();
 	}
@@ -216,12 +248,39 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 	/**-----------------------------------------------------------------------
 	 * 
 	 */
-	private void initDatabase() {
-		PartyListRunnable runnable = new PartyListRunnable( 
-				this.getBaseContext(),
-				database,
-				adapter );
-		Thread t = new Thread( runnable );
-		t.start();
+	private void initList() {
+		Cursor cur;
+		
+		try {
+			database = new MoFlowDB( this );
+			database.open();
+		} catch ( SQLException e ) {
+			Toast.makeText( this, "Database could not be opened!", Toast.LENGTH_LONG ).show();
+		}
+		
+		cur = database.getAllParties();
+		
+		// if the database is empty, just return
+		if ( cur.getCount() == 0 ) {
+			cur.close();
+			database.close();
+			return;
+		}
+		
+		// else, load the party names
+		Moflow_Party party = null;
+		int x = cur.getColumnCount();
+		while( cur.moveToNext() ) {
+			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
+				String colValue = cur.getString( i );
+				party = new Moflow_Party();
+				party.setPartyName( colValue );
+			}
+			adapter.add( party );
+		}
+		
+		adapter.notifyDataSetChanged();
+		cur.close();
+		database.close();
 	}
 }

@@ -52,7 +52,8 @@ public class MoFlowDB {
 	public long insertGroup( String partyName ) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put( Parties_Table.COL_PartyName , partyName );
-		return db.insert( Parties_Table.TABLE_NAME, null, initialValues );
+		//return db.insert( Parties_Table.TABLE_NAME, null, initialValues );
+		return db.insertWithOnConflict( Parties_Table.TABLE_NAME, null, initialValues, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
 	/**
@@ -72,7 +73,8 @@ public class MoFlowDB {
 		initVal.put( Players_Table.COL_InitBonus, init );
 		initVal.put( Players_Table.COL_ArmorClass, AC );
 		initVal.put( Players_Table.COL_MaxHP, hp );
-		return db.insert( Players_Table.TABLE_NAME, null, initVal );
+		//return db.insert( Players_Table.TABLE_NAME, null, initVal );
+		return db.insertWithOnConflict( Players_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
 	/**

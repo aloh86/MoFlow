@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import moflow.database.MoFlowDB;
 import moflow.tracker.Moflow_Party;
@@ -27,6 +28,7 @@ public class PartyListRunnable implements Runnable {
 			db = new MoFlowDB( context );
 			db.open();
 		} catch ( SQLException e ) {
+			Toast.makeText( context, "Database could not be opened!", Toast.LENGTH_LONG ).show();
 		}
 		
 		cur = db.getAllParties();
@@ -39,16 +41,17 @@ public class PartyListRunnable implements Runnable {
 		}
 		
 		// else, load the party names
-		if ( cur.moveToFirst() ) {
+		Moflow_Party party = null;
+		while( cur.moveToNext() ) {
 			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
 				String colValue = cur.getString( i );
-				Moflow_Party party = new Moflow_Party();
+				party = new Moflow_Party();
 				party.setPartyName( colValue );
-				adapter.add( party );
 			}
-			cur.moveToNext();
+			adapter.add( party );
 		}
-		adapter.notifyDataSetChanged();
+		
+		//adapter.notifyDataSetChanged();
 		cur.close();
 		db.close();
 	}

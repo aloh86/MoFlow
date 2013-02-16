@@ -26,6 +26,18 @@ public class Moflow_PC extends Moflow_Creature implements Parcelable
 		
 	}
 	
+	/**-----------------------------------------------------------------------
+	 * Deep copy a Moflow_PC object.
+	 */
+	public Moflow_PC copy( Moflow_PC obj ) {
+		obj.creatureName = creatureName;
+		obj.initMod = initMod;
+		obj.armorClass = armorClass;
+		obj.hitPoints = hitPoints;
+		
+		return obj;
+	}
+	
 	/*
 	=========================================================================
 	Parcelable implementation

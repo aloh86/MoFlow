@@ -27,6 +27,21 @@ public class Moflow_Party implements Parcelable
 		partyName = "";
 	}
 	
+	/**
+	 * Copy constructor
+	 * @return a copy of this
+	 */
+	public Moflow_Party copy( Moflow_Party obj )
+	{
+		obj.partyName = partyName;
+		
+		obj.party.clear();
+		for ( int i = 0; i < party.size(); i++ ) {
+			obj.party.add( party.get( i ) );
+		}
+		
+		return obj;
+	}
 	
 	
 	//-----------------------------------------------------------------------
@@ -132,6 +147,13 @@ public class Moflow_Party implements Parcelable
 			if ( party.get( i ) == pc )
 				party.remove( i );
 		}
+	}
+	
+	/**-----------------------------------------------------------------------
+	 * Removes all members from the party.
+	 */
+	public void clearMembers() {
+		party.clear();
 	}
 	
 	
