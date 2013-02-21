@@ -31,21 +31,20 @@
 			</intent-filter>
 		</activity>
 		<activity
-		android:name=".PCM_PartyList"
+		android:name=".PCM_PartyListActivity"
 		android:label="PartyList" >
 			<intent-filter>
-				<action android:name="moflow.tracker.PCM_PartyList" />
+				<action android:name="moflow.tracker.PCM_PartyListActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		<activity
-		android:name=".PCM_EditParty"
+		android:name=".PCM_EditPartyActivity"
 		android:label="EditParty" >
 			<intent-filter>
-				<action android:name="moflow.tracker.PCM_EditParty" />
+				<action android:name="moflow.tracker.PCM_EditPartyActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
     </application>
-    <uses-sdk android:minSdkVersion="8" />
 </manifest>

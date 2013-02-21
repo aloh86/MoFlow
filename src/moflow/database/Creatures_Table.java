@@ -27,9 +27,9 @@ public abstract class Creatures_Table implements BaseColumns {
 	public static final String COL_MaxHP	  		= "MaxHP";
 	
 	public static final String DB_CREATE = 
-			"CREATE TABLE " 	+ TABLE_NAME+ " ( " +
-			COL_Encounter 		+ " VARCHAR(20) NOT NULL, " +
-			COL_CreatureName	+ " VARCHAR(20) NOT NULL, " +
+			"CREATE TABLE " 	+ TABLE_NAME + " ( " +
+			COL_Encounter 		+ " VARCHAR(50) NOT NULL, " +
+			COL_CreatureName	+ " VARCHAR(50) NOT NULL, " +
 			COL_InitBonus		+ " INTEGER NOT NULL, " +
 			COL_ArmorClass		+ " INTEGER NOT NULL, " +
 			COL_MaxHP			+ " INTEGER NOT NULL, " +

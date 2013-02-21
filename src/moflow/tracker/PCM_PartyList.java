@@ -86,7 +86,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 	{
 		if ( v == addPartyBtn )
 			startActivityForResult( 
-					new Intent( "moflow.tracker.PCM_EditParty" ), 
+					new Intent( "moflow.tracker.PCM_EditPartyActivity" ), 
 					REQC_EDITPARTY );
 	}
 	

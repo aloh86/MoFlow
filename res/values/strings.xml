@@ -11,4 +11,5 @@
     <string name="groupItemInitText">Init Bonus:</string>
     <string name="groupItemACText">Armor Class:</string>
     <string name="groupItemHPText">Max Hit Points:</string>
+    <string name="testText">TEST TEXT</string>
 </resources>

@@ -25,10 +25,10 @@ public class Catalog_Table implements BaseColumns {
 	
 	public static final String DB_CREATE =
 			"CREATE TABLE "  + TABLE_NAME + " ( " +
-			COL_CreatureName + " VARCHAR(20) NOT NULL, " + 
+			COL_CreatureName + " VARCHAR(50) NOT NULL, " + 
 			COL_InitBonus 	 + " INTEGER NOT NULL, " +
 			COL_ArmorClass 	 + " INTEGER NOT NULL, " +
 			COL_MaxHP		 + " INTEGER NOT NULL, " +
-			"PRIMARY KEY (" + COL_CreatureName + ") " + 
+			"PRIMARY KEY (" + COL_CreatureName +  ") " + 
 			");";
 }

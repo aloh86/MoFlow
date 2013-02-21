@@ -62,9 +62,11 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	
 	private final String RETAIN_PARTY_KEY = "retainedParty";
 	
-	private boolean existingParty = false;
+	private boolean existingParty = false; 
 	private boolean editingItem = false;
 	private boolean addingNewItem = false;
+	
+	private String existingPartyOriginalName;
 	
 	
 	
@@ -83,9 +85,11 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	public void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		requestWindowFeature( Window.FEATURE_NO_TITLE );
-		setContentView( R.layout.new_group );
+		//setContentView( R.layout.new_group );
 		
 		party = new Moflow_Party();
+		partyEdited = new Moflow_Party();
+		partyEdited = party.copy( partyEdited );
 		
 		// setup adapter for list view
 		pc_arrayList = new ArrayList<Moflow_PC>();
@@ -93,7 +97,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		setListAdapter( adapter );
 		
 		// setup group name field
-		partyNameField = ( EditText ) findViewById( R.id.groupNameEditText );
+		//partyNameField = ( EditText ) findViewById( R.id.groupNameEditText );
 		partyNameField.setHint( "Group Name" );
 		
 		// setup "Add PC" button
@@ -102,7 +106,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		addPCBtn.setOnClickListener( this );
 		
 		// setup "Save" button
-		saveBtn = ( Button ) findViewById( R.id.saveBtn );
+		//saveBtn = ( Button ) findViewById( R.id.saveBtn );
 		saveBtn.setText( "Save" );
 		saveBtn.setOnClickListener( this );
 		
@@ -118,7 +122,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	@Override
 	public void onSaveInstanceState( Bundle outState ) {
 		super.onSaveInstanceState( outState );
-		outState.putParcelable( RETAIN_PARTY_KEY, party );
+		outState.putParcelable( RETAIN_PARTY_KEY, partyEdited );
 	}
 	
 	/**-----------------------------------------------------------------------
@@ -127,11 +131,11 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	@Override
 	public void onRestoreInstanceState( Bundle savedInstanceState ) {
 		super.onRestoreInstanceState( savedInstanceState );
-		party = savedInstanceState.getParcelable( RETAIN_PARTY_KEY );
+		partyEdited = savedInstanceState.getParcelable( RETAIN_PARTY_KEY );
 		
-		if ( party != null ) {
-			for ( int i = 0; i < party.getPartySize(); i++ ) {
-				adapter.add( party.getMember( i ) );
+		if ( partyEdited != null ) {
+			for ( int i = 0; i < partyEdited.getPartySize(); i++ ) {
+				adapter.add( partyEdited.getMember( i ) );
 			}
 		}
 		adapter.notifyDataSetChanged();
@@ -389,7 +393,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		}
 		
 		// if there are no members in the party, prompt user to add a member
-		if ( party.getPartySize() == 0 ) {
+		if ( partyEdited.getPartySize() == 0 ) {
 			Toast toast = Toast.makeText( PCM_EditParty.this, 
 					"You need at least 1 party member", 
 					Toast.LENGTH_LONG );
@@ -409,10 +413,10 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		}
 		
 		// package the party into bundle
-		party.setPartyName( partyNameField.getText().toString().trim() );
+		partyEdited.setPartyName( partyNameField.getText().toString().trim() );
 		Intent i = new Intent();
 		Bundle extras = new Bundle();
-		extras.putParcelable( "partyData", party );
+		extras.putParcelable( "partyData", partyEdited );
 		i.putExtras( extras );
 		
 		if ( !existingParty )
@@ -430,15 +434,16 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		Bundle extras = getIntent().getExtras();
 		
 		if ( extras != null ) {
-			party = extras.getParcelable( "party" );
+			partyEdited = extras.getParcelable( "party" );
 			
-			partyNameField.setText( party.getPartyName() );
+			partyNameField.setText( partyEdited.getPartyName() );
 			
-			for ( int i = 0; i < party.getPartySize(); i++ )
-				adapter.add( party.getMember( i ) );
+			for ( int i = 0; i < partyEdited.getPartySize(); i++ )
+				adapter.add( partyEdited.getMember( i ) );
 			
 			adapter.notifyDataSetChanged();
 			existingParty = true;
+			existingPartyOriginalName = party.getPartyName();
 		}
 	}
 	
@@ -454,8 +459,8 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		boolean unique = true;
 		
 		// go through the party list and check if there are name conflicts
-		for ( int i = 0; i < party.getPartySize(); i++ ) {
-			String memberName = party.getMember( i ).getCharName();
+		for ( int i = 0; i < partyEdited.getPartySize(); i++ ) {
+			String memberName = partyEdited.getMember( i ).getCharName();
 			
 			if ( charName.trim().equalsIgnoreCase( memberName ) ) {
 				unique = false;
@@ -475,7 +480,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	private void createPCChoice( DialogInterface dialog, int button ) {
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
 			setPCStats( false );
-			party.addMember( character );
+			partyEdited.addMember( character );
 			adapter.add( character );	
 			adapter.notifyDataSetChanged();
 		}
@@ -488,10 +493,16 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	 */
 	private void editPCChoice( DialogInterface dialog, int button ) {
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
+			// get the name of the previous/modified PC
+			String prevPCName = character.getCharName();
 			
+			// modify the character with new values
 			setPCStats( true );
-			party.RemovePC( character );
-			party.addMember( character );
+			
+			// update the previous record in the database with new one
+			
+			partyEdited.RemovePC( character );
+			partyEdited.addMember( character );
 			adapter.notifyDataSetChanged();
 		}
 		character = null;
@@ -504,7 +515,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	private void deletePCChoice( DialogInterface dialog, int button ) {
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
 			adapter.remove( character );
-			party.RemovePC( character );
+			partyEdited.RemovePC( character );
 		}
 		else if ( button == DialogInterface.BUTTON_NEGATIVE )
 			dialog.dismiss();
@@ -577,6 +588,6 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 			Toast.makeText( this, "Database could not be opened!", Toast.LENGTH_LONG ).show();
 		}
 		
-		
+		db.updatePlayerRecord( modifiedPC, groupName, pcName );
 	}
 }

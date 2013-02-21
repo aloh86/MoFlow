@@ -27,8 +27,8 @@ public abstract class Players_Table implements BaseColumns {
 	
 	public static final String DB_CREATE = 
 			"CREATE TABLE " + TABLE_NAME + " ( " +
-			COL_PartyName   + " VARCHAR(20) NOT NULL, " +
-			COL_PCName      + " VARCHAR(20) NOT NULL, " +
+			COL_PartyName   + " VARCHAR(50) NOT NULL, " +
+			COL_PCName      + " VARCHAR(50) NOT NULL, " +
 			COL_InitBonus   + " INTEGER NOT NULL, " +
 			COL_ArmorClass  + " INTEGER NOT NULL, " +
 			COL_MaxHP		+ " INTEGER NOT NULL, " +

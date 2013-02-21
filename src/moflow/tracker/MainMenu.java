@@ -33,6 +33,6 @@ public class MainMenu extends Activity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id ) {
 		if ( position == Position.PC_MANAGER.ordinal() )
-			startActivity( new Intent( "moflow.tracker.PCM_PartyList" ) );
+			startActivity( new Intent( "moflow.tracker.PCM_PartyListActivity" ) );
 	}
 }
