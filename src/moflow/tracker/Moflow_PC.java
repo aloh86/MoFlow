@@ -15,7 +15,7 @@ This class currently has no operations but is a separate class for reasons
 of flexibility should relevant operations need to be added in the future.
 ===============================================================================
 */
-public class Moflow_PC extends Moflow_Creature implements Parcelable
+public class Moflow_PC extends Moflow_Creature implements Parcelable, Cloneable
 {		
 	//-----------------------------------------------------------------------
 	/**
@@ -36,6 +36,21 @@ public class Moflow_PC extends Moflow_Creature implements Parcelable
 		obj.hitPoints = hitPoints;
 		
 		return obj;
+	}
+	
+	public Moflow_PC clone() {
+		Moflow_PC twin;
+		try {
+			twin = ( Moflow_PC ) super.clone();
+			twin.creatureName = creatureName;
+			twin.initMod = initMod;
+			twin.armorClass = armorClass;
+			twin.hitPoints = hitPoints;
+		} catch ( CloneNotSupportedException e ) {
+			throw new Error();
+		}
+		
+		return twin;
 	}
 	
 	/*

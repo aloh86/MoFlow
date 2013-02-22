@@ -10,13 +10,25 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 import moflow.adapters.*;
+/*
+===============================================================================
+MainMenuActivity.java
 
-public class MainMenu extends Activity implements OnItemClickListener {
+Activity for the main menu. This Activity starts when the program is first run.
+The main menu is the access point for all of the application's main features:
+1) PC Manager 2) Encounter Manager 3) Creature Catalog 4) Initiative Tracker
+as well as options and a user manual.
+===============================================================================
+*/
+
+public class MainMenuActivity extends Activity implements OnItemClickListener {
 	
 	private enum Position { PC_MANAGER, ENC_MANAGER, CREATURE, INIT, OPTIONS, MANUAL };
 	private GridView grid;
 	
-	
+	/**
+	 * Initializes the main menu.
+	 */
 	@Override
 	public void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
@@ -30,6 +42,9 @@ public class MainMenu extends Activity implements OnItemClickListener {
 		grid.setOnItemClickListener( this );
 	}
 
+	/**
+	 * Handler for the grid item clicks.
+	 */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id ) {
 		if ( position == Position.PC_MANAGER.ordinal() )

@@ -1,7 +1,6 @@
 package moflow.tracker;
 
 import java.util.ArrayList;
-
 import moflow.database.MoFlowDB;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -14,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class PCM_EditPartyActivity extends ListActivity 
-implements OnClickListener, android.content.DialogInterface.OnClickListener, OnFocusChangeListener, OnItemLongClickListener
+implements OnClickListener, android.content.DialogInterface.OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnItemClickListener
 {
 	// Members for the Activity
 	private Button addButton;
@@ -41,11 +41,6 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	private Moflow_Party party;
 	
 	private Moflow_PC character;
-	
-	private final int RC_SAVE = 1;			// result code returned when "Save" clicked
-	private final int RC_EXISTING_EDIT = 2;	// result code for editing existing party
-	
-	private final String RETAIN_PARTY_KEY = "retainedParty";
 	
 	private boolean editingItem;
 	
@@ -88,10 +83,12 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		super.onDestroy();
 		database.close();
 	}
+
 	
 	//////////////////////////////////////////////////////////////////////////
 	// LISTENERS
 	//////////////////////////////////////////////////////////////////////////
+	
 	@Override
 	public void onClick( View view ) 
 	{
@@ -106,6 +103,11 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	public void onClick(DialogInterface dialog, int buttonChoice ) {
 		if ( dialog == itemDialog && !editingItem )
 			handleNewItem( buttonChoice );
+		else if ( dialog == itemDialog && editingItem )
+			handleEditItem( buttonChoice );
+		else if ( dialog == deleteDialog )
+			handleDeleteItem( buttonChoice );
+		
 	}
 	
 	@Override
@@ -120,9 +122,18 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	}
 	
 	@Override
-	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-		// TODO Auto-generated method stub
+	public void onItemClick( AdapterView<?> parent, View view, int position, long id ) {
+		editingItem = true;
+		character = partyList.get( position );
+		itemDialog.show();
+		prepareItemDialogForEditPC();
+	}
+	
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id ) {
+		character = partyList.get( position );
+		deleteDialog.show();
+		
 		return false;
 	}
 	
@@ -136,6 +147,22 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 			partyList.add( character );
 			adapter.notifyDataSetChanged();
 			saveNewMemberToDB();
+		}
+	}
+	
+	private void handleEditItem( int button ) {
+		if ( button == DialogInterface.BUTTON_POSITIVE ) {
+			Moflow_PC oldCharacter = setPCStats( true );
+			adapter.notifyDataSetChanged();
+			updateMemberInDB( character, party.getPartyName(), oldCharacter.getCharName() );
+		}
+	}
+	
+	private void handleDeleteItem( int button ) {
+		if ( button == DialogInterface.BUTTON_POSITIVE ) {
+			partyList.remove( character );
+			adapter.notifyDataSetChanged();
+			removeCharacterFromDB();
 		}
 	}
 	
@@ -172,8 +199,8 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		hpField = ( EditText ) itemView.findViewById( R.id.hpEditText );
 		hpField.setOnFocusChangeListener( this );
 		
-		this.registerForContextMenu( this.getListView() );
 		this.getListView().setOnItemLongClickListener( this );
+		this.getListView().setOnItemClickListener( this );
 	}
 	
 	/**
@@ -219,11 +246,21 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		hpField.setText( "0" );
 	}
 	
-	private Moflow_PC setPCStats( boolean editing ) {
-		Moflow_PC oldCharacter = character;
+	private void prepareItemDialogForEditPC() {
+		itemNameField.setText( character.getCharName() );
+		initField.setText( String.valueOf( character.getInitMod() ) );
+		acField.setText( String.valueOf( character.getAC() ) );
+		hpField.setText( String.valueOf ( character.getMaxHitPoints() ) );
+	}
+	
+	private Moflow_PC setPCStats( boolean editing ) {	
+		Moflow_PC oldCharacter = null;
 		
-		if ( !editing )
+		if ( !editing ) {
 			character = new Moflow_PC();
+		} else {
+			oldCharacter = character.clone();
+		}
 		
 		String uniqueName = assimilateName( itemNameField.getText().toString().trim() );
 		character.setName( uniqueName );
@@ -235,7 +272,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	}
 	
 	private String assimilateName( String name ) {
-		if ( party.getPartySize() == 0 )
+		if ( partyList.size() == 0 )
 			return name;
 		
 		int count = 1;
@@ -244,9 +281,9 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		
 		while ( !unique )
 		{
-			for ( int i = 0; i < party.getPartySize(); i++ )
+			for ( int i = 0; i < partyList.size(); i++ )
 			{
-				if ( party.getMember( i ).getCharName().equals( original ) )
+				if ( partyList.get( i ).getCharName().equals( name ) )
 				{
 					name = original + " " + String.valueOf( count );
 					count++;
@@ -263,6 +300,9 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	// DATBASE
 	//////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Saves a new PC to the database.
+	 */
 	private void saveNewMemberToDB() {
 		String partyName = party.getPartyName();
 		String pcName = character.getCharName();
@@ -271,5 +311,23 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		int hp = character.getMaxHitPoints();
 
 		database.insertPlayer( partyName, pcName, init, AC, hp );
+	}
+	
+	/**
+	 * Removes a character from the database.
+	 */
+	private void removeCharacterFromDB() {
+		database.deletePC( party.getPartyName(), character.getCharName() );
+	}
+	
+	/**
+	 * Updates a member in the database. This is called when a PC is edited and the
+	 * previous records needs to be updated.
+	 * @param updated the edited character
+	 * @param partyName party that the old character belongs to
+	 * @param oldName the name of the character before it was edited
+	 */
+	private void updateMemberInDB( Moflow_PC updated, String partyName, String oldName ) {
+		database.updatePlayerRecord( updated, partyName, oldName );
 	}
 }

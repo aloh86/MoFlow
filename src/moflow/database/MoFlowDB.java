@@ -29,7 +29,7 @@ public class MoFlowDB {
 		DBHelper = new DatabaseHelper( context, DB_NAME, null, DB_VERSION );
 	}
 	
-	/**-----------------------------------------------------------------------
+	/**
 	 * Opens the database.
 	 * @return this
 	 * @throws SQLException
@@ -39,7 +39,7 @@ public class MoFlowDB {
 		return this;
 	}
 	
-	/**-----------------------------------------------------------------------
+	/**
 	 * Closes the database.
 	 */
 	public void close () {
@@ -50,7 +50,7 @@ public class MoFlowDB {
 	 *  INSERTS
 	 */
 	
-	/**-----------------------------------------------------------------------
+	/**
 	 * Inserts a group name into the PCGroup table.
 	 * @param partyName The name of the PC group.
 	 * @return tuple position of this entry
@@ -62,7 +62,7 @@ public class MoFlowDB {
 		return db.insertWithOnConflict( Parties_Table.TABLE_NAME, null, initialValues, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
-	/**-----------------------------------------------------------------------
+	/**
 	 * Inserts a new player entry into the PlayerCharacters table.
 	 * @param party party name that the PC is in.
 	 * @param pcName the pc's name.
@@ -87,7 +87,7 @@ public class MoFlowDB {
 	 *  QUERIES
 	 */
 	
-	/**-----------------------------------------------------------------------
+	/**
 	 * Get all the party names.
 	 * @return Cursor to all party tuples.
 	 */
@@ -103,7 +103,7 @@ public class MoFlowDB {
 				null );
 	}
 	
-	/**-----------------------------------------------------------------------
+	/**
 	 * Get all the PCs belonging to a group.
 	 * @param groupName The group that the PCs belong to.
 	 * @return Cursor to the queried tuples.
@@ -160,8 +160,7 @@ public class MoFlowDB {
 	 * @param oldName the old party name
 	 * @return the number of rows affected
 	 */
-	public int updatePartyRecord( String uniqueName, String oldName )
-	{
+	public int updatePartyRecord( String uniqueName, String oldName ) {
 		String whereClause =
 				Parties_Table.COL_PartyName + " = ?";
 		String [] whereArgs = { oldName };
@@ -169,6 +168,21 @@ public class MoFlowDB {
 		initVal.put( Parties_Table.COL_PartyName, uniqueName );
 		
 		return db.update( Parties_Table.TABLE_NAME, initVal, whereClause, whereArgs );
+	}
+	
+	/**
+	 * When a party is renamed, its member's membership to that party is renamed.
+	 * @param oldPartyName old party name
+	 * @param newPartyName new party name
+	 * @return the number of rows affected
+	 */
+	public int updateMembersForParty( String newPartyName, String oldPartyName ) {
+		String whereClause = Players_Table.COL_PartyName + " = ?";
+		String [] whereArgs = { oldPartyName };
+		ContentValues initVal = new ContentValues();
+		initVal.put( Players_Table.COL_PartyName, newPartyName );
+		
+		return db.update( Players_Table.TABLE_NAME, initVal, whereClause, whereArgs );
 	}
 	
 	/*************************************************************************
@@ -180,18 +194,32 @@ public class MoFlowDB {
 	 * @param partyName Name of the party to be deleted
 	 * @return the number of rows affected
 	 */
-	public int deletePartyRecord( String partyName )
-	{
+	public int deletePartyRecord( String partyName ) {
 		String whereClause = Parties_Table.COL_PartyName + " = ?";
 		String [] whereArgs = { partyName };
 		return db.delete( Parties_Table.TABLE_NAME, whereClause, whereArgs );
 	}
 	
-	public int deletePartyMembers( String partyName )
-	{
+	/**
+	 * Deletes all party members. Called when a party is deleted.
+	 * @param partyName The party name that the members belong to
+	 * @return the number of rows affected
+	 */
+	public int deletePartyMembers( String partyName ) {
 		String whereClause = Players_Table.COL_PartyName + " = ?";
 		String [] whereArgs = { partyName };
 		return db.delete( Players_Table.TABLE_NAME, whereClause, whereArgs );
 	}
 	
+	/**
+	 * Deletes an individual PC from the party.
+	 * @param partyName The party the PC belongs to
+	 * @param pcName The name of the PC.
+	 * @return the number of rows affected
+	 */
+	public int deletePC( String partyName, String pcName ) {
+		String whereClause = Players_Table.COL_PartyName + " = ? AND " +  Players_Table.COL_PCName + " = ?";
+		String [] whereArgs = { partyName, pcName };
+		return db.delete( Players_Table.TABLE_NAME, whereClause, whereArgs );
+	}
 }

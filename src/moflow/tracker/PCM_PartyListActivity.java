@@ -338,6 +338,7 @@ implements OnClickListener, android.view.View.OnClickListener, OnItemLongClickLi
 	private void updatePartyDBRecord( String newPartyName, String oldPartyName )
 	{
 		database.updatePartyRecord( newPartyName, oldPartyName );
+		database.updateMembersForParty( newPartyName, oldPartyName );
 	}
 	
 	private void getPartiesFromDB()
@@ -364,9 +365,10 @@ implements OnClickListener, android.view.View.OnClickListener, OnItemLongClickLi
 		
 		cur = database.getPCForGroup( party.getPartyName() );
 		
-		Moflow_PC pc = new Moflow_PC();
+		Moflow_PC pc;
 		while ( cur.moveToNext() )
 		{
+			pc = new Moflow_PC();
 			for ( int i = 1; i < cur.getColumnCount(); i++ )
 			{
 				if ( i == 1 )
