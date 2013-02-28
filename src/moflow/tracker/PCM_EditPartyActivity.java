@@ -20,7 +20,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+/*
+===============================================================================
+PCM_EditPartyActivity.java
 
+Activity for editing members of a party. Members can be added, edited, or 
+removed. All changes are saved in the Players table of the database.
+===============================================================================
+*/
 public class PCM_EditPartyActivity extends ListActivity 
 implements OnClickListener, android.content.DialogInterface.OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnItemClickListener
 {
@@ -56,6 +63,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	//////////////////////////////////////////////////////////////////////////
 	// ACTIVITY OVERRIDES
 	//////////////////////////////////////////////////////////////////////////
+	
 	@Override
 	public void onCreate( Bundle savedInstanceState ) 
 	{
@@ -259,7 +267,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		if ( !editing ) {
 			character = new Moflow_PC();
 		} else {
-			oldCharacter = character.clone();
+			oldCharacter = ( Moflow_PC ) character.clone();
 		}
 		
 		String uniqueName = assimilateName( itemNameField.getText().toString().trim() );

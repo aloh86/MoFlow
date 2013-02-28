@@ -12,4 +12,5 @@
     <string name="groupItemACText">Armor Class:</string>
     <string name="groupItemHPText">Max Hit Points:</string>
     <string name="testText">TEST TEXT</string>
+    <string name="contentDescription1">icon image</string>
 </resources>

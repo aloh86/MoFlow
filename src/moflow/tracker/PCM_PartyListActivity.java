@@ -26,7 +26,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+/*
+===============================================================================
+PCM_PartyListActivity.java
 
+Activity for listing the existing parties in the Parties table in the database.
+The user can create a new party and edit or delete an existing party. When
+the user 'taps' on a party, PCM_EditPartyActivity is called, where the party
+members can be added, edited, or removed.
+===============================================================================
+*/
 public class PCM_PartyListActivity extends ListActivity 
 implements OnClickListener, android.view.View.OnClickListener, OnItemLongClickListener
 {

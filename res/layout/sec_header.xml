@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     	<TextView
-    	    android:id="@+id/listHeader"
+    	    android:id="@+id/listHeaderTV"
     	    android:layout_width="fill_parent"
     	    android:layout_height="wrap_content"
     	    android:paddingLeft="5dp"
     	    android:text="Header"
-    	    android:textSize="20sp"
+    	    android:textSize="16sp"
     	    android:textColor="#000"
     	    android:background="#BADA55"/>
 </LinearLayout>

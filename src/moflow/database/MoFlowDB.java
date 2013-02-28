@@ -83,6 +83,15 @@ public class MoFlowDB {
 		return db.insertWithOnConflict( Players_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
+	public long insertCreatureInCatalog( String name, int init, int AC, int hp ) {
+		ContentValues initVal = new ContentValues();
+		initVal.put( Catalog_Table.COL_CreatureName, name );
+		initVal.put( Catalog_Table.COL_InitBonus, init );
+		initVal.put( Catalog_Table.COL_ArmorClass, AC );
+		initVal.put( Catalog_Table.COL_MaxHP, hp );
+		return db.insertWithOnConflict( Catalog_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
+	}
+	
 	/*************************************************************************
 	 *  QUERIES
 	 */
@@ -100,7 +109,7 @@ public class MoFlowDB {
 				null, 
 				null, 
 				null, 
-				null );
+				Parties_Table.COL_PartyName + " COLLATE NOCASE"  );
 	}
 	
 	/**
@@ -124,7 +133,28 @@ public class MoFlowDB {
 				selectionArgs, 
 				null, 
 				null, 
-				null );
+				Players_Table.COL_PCName + " COLLATE NOCASE" );
+	}
+	
+	/**
+	 * Get all the entries in the catalog sorted by name (ascending).
+	 * @return
+	 */
+	public Cursor getCatalog() {
+		String [] columns = {
+				Catalog_Table.COL_CreatureName,
+				Catalog_Table.COL_InitBonus,
+				Catalog_Table.COL_ArmorClass,
+				Catalog_Table.COL_MaxHP
+				};
+		return db.query(
+				Catalog_Table.TABLE_NAME,
+				columns,
+				null,
+				null,
+				null,
+				null,
+				Catalog_Table.COL_CreatureName + " COLLATE NOCASE" );
 	}
 	
 	/*************************************************************************

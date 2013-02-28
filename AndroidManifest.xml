@@ -46,5 +46,13 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
+		<activity
+		android:name=".CreatureCatalogActivity"
+		android:label="CreatureCatalog" >
+			<intent-filter>
+				<action android:name="moflow.tracker.CreatureCatalogActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
     </application>
 </manifest>

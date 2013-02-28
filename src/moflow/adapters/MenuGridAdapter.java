@@ -43,13 +43,11 @@ public class MenuGridAdapter extends BaseAdapter {
 		if( v == null ) {
 			LayoutInflater inflater = ( LayoutInflater ) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
 			v = inflater.inflate( moflow.tracker.R.layout.grid_icon, null );
+			
+			TextView iconText = ( TextView ) v.findViewById( moflow.tracker.R.id.icon_text );
+			iconText.setText( icoText[ position ] );
+			iconText.setCompoundDrawablesWithIntrinsicBounds( 0, moflow.tracker.R.drawable.icon, 0, 0 );
 		}
-		
-		ImageView iconImg = ( ImageView ) v.findViewById( moflow.tracker.R.id.icon_image );
-		iconImg.setImageResource( moflow.tracker.R.drawable.icon );
-		
-		TextView iconText = ( TextView ) v.findViewById( moflow.tracker.R.id.icon_text );
-		iconText.setText( icoText[ position ] );
 		
 		return v;
 	}

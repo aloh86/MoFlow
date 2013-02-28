@@ -14,7 +14,7 @@ creatures/monsters.
 player character.
 ===============================================================================
 */
-public class Moflow_Creature implements Parcelable
+public class Moflow_Creature implements Parcelable, Cloneable
 {	
 	protected int armorClass;
 	protected int reflex;
@@ -31,7 +31,7 @@ public class Moflow_Creature implements Parcelable
 	public enum Effect { NORMAL, DAZED, CONFUSED, PARALYZED, STUNNED };
 	public ArrayList<Effect> pcState;
 	
-	//-----------------------------------------------------------------------
+
 	/**
 	 * Creates "Blank" PC with all scores set to zero and no name.
 	 */
@@ -50,7 +50,24 @@ public class Moflow_Creature implements Parcelable
 		creatureName = "";
 	}
 	
-	//-----------------------------------------------------------------------
+	/**
+	 * Deep copy a Moflow_PC object.
+	 */
+	public Moflow_Creature clone() {
+		Moflow_Creature twin;
+		try {
+			twin = ( Moflow_Creature ) super.clone();
+			twin.creatureName = creatureName;
+			twin.initMod = initMod;
+			twin.armorClass = armorClass;
+			twin.hitPoints = hitPoints;
+		} catch ( CloneNotSupportedException e ) {
+			throw new Error();
+		}
+		
+		return twin;
+	}
+	
 	/**
 	 * Get character's armor class
 	 * @return armor class value
@@ -73,6 +90,7 @@ public class Moflow_Creature implements Parcelable
 	public int getWill() 	  { return will;	   }
 	
 	//-----------------------------------------------------------------------
+	
 	/**
 	 * Get character's initiative modifier
 	 * @return initiative modifier
