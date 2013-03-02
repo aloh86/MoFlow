@@ -52,7 +52,7 @@ public class MoFlowDB {
 	 */
 	
 	/**
-	 * Inserts a group name into the PCGroup table.
+	 * Inserts a group name into the Parties table.
 	 * @param partyName The name of the PC group.
 	 * @return tuple position of this entry
 	 */
@@ -101,6 +101,17 @@ public class MoFlowDB {
 		return db.insertWithOnConflict( Catalog_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
+	/**
+	 * Inserts an encounter into the Encounter table.
+	 * @param name name of the encounter
+	 * @return tuple position of this entry
+	 */
+	public long insertEncounter( String name ) {
+		ContentValues initVal = new ContentValues();
+		initVal.put( Encounters_Table.COL_Encounter, name );
+		return db.insertWithOnConflict( Encounters_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
+	}
+	
 	/*************************************************************************
 	 *  QUERIES
 	 */
@@ -119,6 +130,22 @@ public class MoFlowDB {
 				null, 
 				null, 
 				Parties_Table.COL_PartyName + " COLLATE NOCASE"  );
+	}
+	
+	/**
+	 * Get all the encounter names
+	 * @return Cursor to all encounter tuples.
+	 */
+	public Cursor getAllEncounters() {
+		String [] columns = new String [] { Encounters_Table.COL_Encounter };
+		return db.query( 
+				Encounters_Table.TABLE_NAME, 
+				columns, 
+				null, 
+				null, 
+				null, 
+				null, 
+				Encounters_Table.COL_Encounter + " COLLATE NOCASE" );
 	}
 	
 	/**
@@ -261,6 +288,38 @@ public class MoFlowDB {
 		return db.update( Catalog_Table.TABLE_NAME, initVal, whereClause, whereArgs );
 	}
 	
+	/**
+	 * Updates an encounter record in the Encounters table.
+	 * @param newName new encounter name
+	 * @param oldName old encounter name 
+	 * @return the number of rows affected
+	 */
+	public int updateEncounterRecord( String newName, String oldName ) {
+		String whereClause = Encounters_Table.COL_Encounter + " = ?";
+		String [] whereArgs = { oldName };
+		
+		ContentValues initVal = new ContentValues();
+		initVal.put( Encounters_Table.COL_Encounter, newName );
+		
+		return db.update( Encounters_Table.TABLE_NAME, initVal, whereClause, whereArgs );
+	}
+	
+	/**
+	 * When an encounter is renamed, its member's membership to that encounter is renamed.
+	 * @param newEncName new encounter name
+	 * @param oldEncName old encounter name
+	 * @return
+	 */
+	public int updateEncountersForCreatures( String newEncName, String oldEncName ) {
+		String whereClause = Creatures_Table.COL_Encounter + " =?";
+		String [] whereArgs = { oldEncName };
+		
+		ContentValues initVal = new ContentValues();
+		initVal.put( Creatures_Table.COL_Encounter, newEncName );
+		
+		return db.update( Creatures_Table.TABLE_NAME, initVal, whereClause, whereArgs );
+	}
+	
 	/*************************************************************************
 	 *  DELETIONS
 	 */
@@ -277,7 +336,8 @@ public class MoFlowDB {
 	}
 	
 	/**
-	 * Deletes all party members. Called when a party is deleted.
+	 * Deletes all party members belong to party specified by partyName. 
+	 * Called when a party is deleted.
 	 * @param partyName The party name that the members belong to
 	 * @return the number of rows affected
 	 */
@@ -308,5 +368,28 @@ public class MoFlowDB {
 		String whereClause = Catalog_Table.COL_CreatureName + " = ?";
 		String [] whereArgs = { name };
 		return db.delete( Catalog_Table.TABLE_NAME, whereClause, whereArgs );
+	}
+	
+	/**
+	 * Deletes an encounter from Encounter table.
+	 * @param encounterName the encounter to delete
+	 * @return the number of rows affected
+	 */
+	public int deleteEncounter( String encounterName ) {
+		String whereClause = Encounters_Table.COL_Encounter + " = ?";
+		String [] whereArgs = { encounterName };
+		return db.delete( Encounters_Table.TABLE_NAME, whereClause, whereArgs );
+	}
+	
+	/**
+	 * Deletes all creatures belonging to an encounter specified by encounterName.
+	 * Called when deleting an encounter from the encounters list.
+	 * @param encounterName the encounter that the creatures belong to.
+	 * @return the number of rows affected
+	 */
+	public int deleteEncounterCreatures( String encounterName ) {
+		String whereClause = Creatures_Table.COL_Encounter + " = ?";
+		String [] whereArgs = { encounterName };
+		return db.delete( Creatures_Table.TABLE_NAME, whereClause, whereArgs );
 	}
 }

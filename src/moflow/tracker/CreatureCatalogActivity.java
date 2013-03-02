@@ -156,6 +156,15 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		return oldCrit;
 	}
 	
+	/**
+	 * Ensures that every name in the catalog is unique. An inefficient algorithm O(n),
+	 * but this way avoids creating duplicate catalog lists. First, the starting index
+	 * is found, and then each value is checked from the starting index until the next
+	 * header is reached or it is the end of the list. This range is looped through
+	 * until the name is unique.
+	 * @param name The name to make unique.
+	 * @return a unique name
+	 */
 	private String makeNameUnique( String name ) {
 		// if the catalog is empty, yes it's unique
 		if ( creatureList.size() == 0 )
@@ -182,7 +191,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		{
 			for ( int i = startIndex; i < creatureList.size() && !creatureList.get( i ).header; i++ )
 			{
-				if ( creatureList.get( i ).name.equalsIgnoreCase( name ) )
+				if ( creatureList.get( i ).name.equals( name ) )
 				{
 					name = original + " " + String.valueOf( count );
 					count++;
