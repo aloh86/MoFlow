@@ -269,9 +269,12 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		} else {
 			oldCharacter = ( Moflow_PC ) character.clone();
 		}
+		String currentNameInField = itemNameField.getText().toString().trim();
 		
-		String uniqueName = assimilateName( itemNameField.getText().toString().trim() );
-		character.setName( uniqueName );
+		if ( !character.getCharName().equals( currentNameInField ) ) {
+			String uniqueName = assimilateName( itemNameField.getText().toString().trim() );
+			character.setName( uniqueName );
+		}
 		character.setInitMod( Integer.parseInt( initField.getText().toString().trim() ) );
 		character.setArmorClass( Integer.parseInt( acField.getText().toString().trim() ) );
 		character.setHitPoints( Integer.parseInt( hpField.getText().toString().trim() ) );

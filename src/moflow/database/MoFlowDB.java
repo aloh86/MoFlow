@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import moflow.tracker.Moflow_Creature;
 import moflow.tracker.Moflow_PC;
 
 /*
@@ -83,6 +84,14 @@ public class MoFlowDB {
 		return db.insertWithOnConflict( Players_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
+	/**
+	 * Insert a single creature into the catalog
+	 * @param name name of creature
+	 * @param init init bonus of creature
+	 * @param AC ac of creature
+	 * @param hp hit points of creature
+	 * @return tuple position of this entry
+	 */
 	public long insertCreatureInCatalog( String name, int init, int AC, int hp ) {
 		ContentValues initVal = new ContentValues();
 		initVal.put( Catalog_Table.COL_CreatureName, name );
@@ -129,7 +138,7 @@ public class MoFlowDB {
 		return db.query(
 				Players_Table.TABLE_NAME, 
 				columns, 
-				"PartyName = ?", 
+				Players_Table.COL_PartyName + " = ?", 
 				selectionArgs, 
 				null, 
 				null, 
@@ -155,6 +164,24 @@ public class MoFlowDB {
 				null,
 				null,
 				Catalog_Table.COL_CreatureName + " COLLATE NOCASE" );
+	}
+	
+	/**
+	 * Retrieve a single creature from the catalog.
+	 * @param name name of the creature to retrieve
+	 * @return Cursor to the queried creature
+	 */
+	public Cursor getCreatureFromCatalog( String name ) {
+		String [] columns = {
+				Catalog_Table.COL_CreatureName,
+				Catalog_Table.COL_InitBonus,
+				Catalog_Table.COL_ArmorClass,
+				Catalog_Table.COL_MaxHP
+				};
+		String whereClause = Catalog_Table.COL_CreatureName + " = ?";
+		String [] whereArgs = { name };
+		
+		return db.query( Catalog_Table.TABLE_NAME, columns, whereClause, whereArgs, null, null, null );
 	}
 	
 	/*************************************************************************
@@ -215,6 +242,25 @@ public class MoFlowDB {
 		return db.update( Players_Table.TABLE_NAME, initVal, whereClause, whereArgs );
 	}
 	
+	/**
+	 * Updates values for a record in the catalog.
+	 * @param updated the updated creature
+	 * @param oldCreatureName the name of the record to update
+	 * @return the number of rows affected
+	 */
+	public int updateCreatureInCatalog( Moflow_Creature updated, String oldCreatureName ) {
+		String whereClause = Catalog_Table.COL_CreatureName + " = ?";
+		String [] whereArgs = { oldCreatureName };
+		
+		ContentValues initVal = new ContentValues();
+		initVal.put( Catalog_Table.COL_CreatureName, updated.getCharName() );
+		initVal.put( Catalog_Table.COL_InitBonus, updated.getInitMod() );
+		initVal.put( Catalog_Table.COL_ArmorClass, updated.getAC() );
+		initVal.put( Catalog_Table.COL_MaxHP, updated.getMaxHitPoints() );
+		
+		return db.update( Catalog_Table.TABLE_NAME, initVal, whereClause, whereArgs );
+	}
+	
 	/*************************************************************************
 	 *  DELETIONS
 	 */
@@ -251,5 +297,16 @@ public class MoFlowDB {
 		String whereClause = Players_Table.COL_PartyName + " = ? AND " +  Players_Table.COL_PCName + " = ?";
 		String [] whereArgs = { partyName, pcName };
 		return db.delete( Players_Table.TABLE_NAME, whereClause, whereArgs );
+	}
+	
+	/**
+	 * Deletes a single creature from the catalog.
+	 * @param name the creature to delete
+	 * @return the number of rows affected
+	 */
+	public int deleteCreatureFromCatalog( String name ) {
+		String whereClause = Catalog_Table.COL_CreatureName + " = ?";
+		String [] whereArgs = { name };
+		return db.delete( Catalog_Table.TABLE_NAME, whereClause, whereArgs );
 	}
 }

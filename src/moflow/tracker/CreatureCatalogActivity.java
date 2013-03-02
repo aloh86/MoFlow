@@ -17,31 +17,39 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class CreatureCatalogActivity extends ListActivity 
-implements OnClickListener, android.content.DialogInterface.OnClickListener, OnItemClickListener {
+implements OnClickListener, android.content.DialogInterface.OnClickListener, OnItemClickListener, OnItemLongClickListener {
 	
-	Button addButton;
+	private Button addButton;
 	
-	AlertDialog entryDialog;
+	private AlertDialog entryDialog;
+	private AlertDialog deleteDialog;
 	
-	MoFlowDB database;
+	private MoFlowDB database;
 	
 	// dialog views
-	EditText nameField;
-	EditText initField;
-	EditText acField;
-	EditText hpField;
+	private EditText nameField;
+	private EditText initField;
+	private EditText acField;
+	private EditText hpField;
 	
-	View entryView;
+	private View entryView;
 	
-	ArrayList< CatalogItem > creatureList;
-	CatalogListAdapter adapter;
+	private ArrayList< CatalogItem > creatureList;
+	private CatalogListAdapter adapter;
 	
-	Moflow_Creature creature;
+	private CatalogItem item;
+	
+	private Moflow_Creature creature;
+	
+	private boolean editingItem;
+	
+	private int selectedItemPosition;
 	
 	//////////////////////////////////////////////////////////////////////////
 	// ACTIVITY OVERRIDES
@@ -75,6 +83,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		adapter = new CatalogListAdapter( this, android.R.layout.simple_list_item_1, creatureList );
 		this.getListView().setAdapter( adapter );
 		this.getListView().setOnItemClickListener( this );
+		this.getListView().setOnItemLongClickListener( this );
 		this.getListView().setFastScrollEnabled( true );
 	}
 	
@@ -103,6 +112,12 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		initField = ( EditText ) entryView.findViewById( R.id.initEditText );
 		acField = ( EditText ) entryView.findViewById( R.id.acEditText );
 		hpField = ( EditText ) entryView.findViewById( R.id.hpEditText );
+		
+		builder = new AlertDialog.Builder( this );
+		builder.setMessage( "Delete Party?" );
+		builder.setPositiveButton( "Yes", this );
+		builder.setNegativeButton( "No", this );
+		deleteDialog = builder.create();
 	}
 	
 	private void prepNewEntryDialog() {
@@ -110,6 +125,13 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		initField.setText( "0" );
 		acField.setText( "0" );
 		hpField.setText( "0" );
+	}
+	
+	private void prepEditEntryDialog( Moflow_Creature critter ) {
+		nameField.setText( critter.getCharName() );
+		initField.setText( String.valueOf( critter.getInitMod() ) );
+		acField.setText( String.valueOf( critter.getAC() ) );
+		hpField.setText( String.valueOf( critter.getMaxHitPoints() ) );
 	}
 	
 	private Moflow_Creature setCreatureStats( boolean editing ) {
@@ -120,8 +142,13 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		else
 			oldCrit = creature.clone();
 		
-		String uniqueName = makeNameUnique( nameField.getText().toString().trim() );
-		creature.setName( uniqueName );
+		String currentNameInField = nameField.getText().toString().trim();
+		
+		if ( !creature.getCharName().equals( currentNameInField ) ) {
+			String uniqueName = makeNameUnique( nameField.getText().toString().trim() );
+			creature.setName( uniqueName );
+		}
+
 		creature.setInitMod( Integer.valueOf( initField.getText().toString().trim() ) );
 		creature.setArmorClass( Integer.valueOf( acField.getText().toString().trim() ) );
 		creature.setHitPoints( Integer.valueOf( hpField.getText().toString().trim() ) );
@@ -169,16 +196,43 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		return name;
 	}
 	
+	private boolean createNewHeader( String curSection, String newSection ) {
+		boolean createHeader = false;
+		
+		if ( !( curSection.equalsIgnoreCase( newSection ) ) )
+			createHeader = true;
+		
+		return createHeader;
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// VIEW HELPERS
 	//////////////////////////////////////////////////////////////////////////
 	
-	private void handleAddNewCreature( int button ) {
+	private void handleAddNewCreature( final int button ) {
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
 			setCreatureStats( false );
 			saveNewCreatureToDB();
 			creatureList.clear();
 			loadCreaturesFromDB();
+			adapter.notifyDataSetChanged();
+		}
+	}
+	
+	private void handleCreatureEdit( final int button ) {
+		if ( button == DialogInterface.BUTTON_POSITIVE ) {
+			Moflow_Creature oldCritter = setCreatureStats( true );
+			saveEditedCreatureToDB( creature, oldCritter.getCharName() );
+			creatureList.clear();
+			loadCreaturesFromDB();
+			adapter.notifyDataSetChanged();
+		}
+	}
+	
+	private void handleDeleteCatalogItem( final int button ) {
+		if ( button == DialogInterface.BUTTON_POSITIVE ) {
+			deleteCatalogCreatureFromDB( item.name );
+			creatureList.remove( selectedItemPosition );
 			adapter.notifyDataSetChanged();
 		}
 	}
@@ -216,13 +270,35 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		cur.close();
 	}
 	
-	private boolean createNewHeader( String curSection, String newSection ) {
-		boolean createHeader = false;
+	private Moflow_Creature getCreatureFromDB( String name ) {
+		Cursor cur;
 		
-		if ( !( curSection.equalsIgnoreCase( newSection ) ) )
-			createHeader = true;
+		cur = database.getCreatureFromCatalog( name );
 		
-		return createHeader;
+		creature = new Moflow_Creature();
+		
+		while ( cur.moveToNext() ) {
+			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
+				if ( i == 0 ) // name column
+					creature.setName( cur.getString( i ) );
+				else if ( i == 1 ) // init column
+					creature.setInitMod( cur.getInt( i ) );
+				else if ( i == 2 ) // AC column
+					creature.setArmorClass( cur.getInt( i ) );
+				else if ( i == 3 ) // HP column
+					creature.setHitPoints( cur.getInt( i ) );
+			}
+		}
+		cur.close();
+		return creature;
+	}
+	
+	private void saveEditedCreatureToDB( Moflow_Creature edited, String oldCreatureName ) {
+		database.updateCreatureInCatalog( edited, oldCreatureName );
+	}
+	
+	private void deleteCatalogCreatureFromDB( String name ) {
+		database.deleteCreatureFromCatalog( name );
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -232,6 +308,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	@Override
 	public void onClick( View view ) {
 		if ( view == addButton ) {
+			editingItem = false;
 			entryDialog.show();
 			prepNewEntryDialog();
 		}
@@ -239,13 +316,29 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 
 	@Override
 	public void onClick( DialogInterface dialog, int button ) {
-		if ( dialog == entryDialog ) {
+		if ( dialog == entryDialog && !editingItem )
 			handleAddNewCreature( button );
-		}
+		else if ( dialog == entryDialog && editingItem )
+			handleCreatureEdit( button );
+		else if ( dialog == deleteDialog )
+			handleDeleteCatalogItem( button );
 	}
 
 	@Override
 	public void onItemClick( AdapterView<?> parent, View view, int position, long id ) {
+		editingItem = true;
+		item = creatureList.get( position );
+		creature = getCreatureFromDB( item.name );
+		entryDialog.show();
+		prepEditEntryDialog( creature );
+	}
+
+	@Override
+	public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id ) {
+		selectedItemPosition = position;
+		item = creatureList.get( position );
+		deleteDialog.show();
 		
+		return false;
 	}
 }
