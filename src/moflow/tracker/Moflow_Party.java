@@ -14,7 +14,7 @@ Definition of class Moflow_Party. Groups characters (PCs) by a party name.
 public class Moflow_Party implements Parcelable 
 {
 	private String partyName;
-	private ArrayList<Moflow_PC> party;
+	private ArrayList<Moflow_Creature> party;
 	
 	
 	//-----------------------------------------------------------------------
@@ -23,7 +23,7 @@ public class Moflow_Party implements Parcelable
 	 */
 	public Moflow_Party()
 	{
-		party = new ArrayList< Moflow_PC >();
+		party = new ArrayList< Moflow_Creature >();
 		partyName = "";
 	}
 	
@@ -72,7 +72,7 @@ public class Moflow_Party implements Parcelable
 	 * @return get party member
 	 * objects.
 	 */
-	public Moflow_PC getMember( String name )
+	public Moflow_Creature getMember( String name )
 	{
 		for ( int i = 0; i < party.size(); i++ )
 		{
@@ -90,7 +90,7 @@ public class Moflow_Party implements Parcelable
 	 * Get a member from the party by position.
 	 * @return get party member
 	 */
-	public Moflow_PC getMember( int position )
+	public Moflow_Creature getMember( int position )
 	{
 		return party.get( position );
 	}
@@ -101,7 +101,7 @@ public class Moflow_Party implements Parcelable
 	 * Add a player to the party.
 	 * @param pc the character to be added to the party
 	 */
-	public void addMember( Moflow_PC pc )
+	public void addMember( Moflow_Creature pc )
 	{
 		party.add( pc );
 	}
@@ -140,7 +140,7 @@ public class Moflow_Party implements Parcelable
 	 * Removes a player character from the party.
 	 * @param name of the player to remove
 	 */
-	public void RemovePC( Moflow_PC pc )
+	public void RemovePC( Moflow_Creature pc )
 	{
 		for ( int i = 0; i < party.size(); i++ )
 		{
@@ -189,7 +189,7 @@ public class Moflow_Party implements Parcelable
 	private Moflow_Party( Parcel in )
 	{	
 		partyName = in.readString();
-		party = in.readArrayList( Moflow_PC.class.getClassLoader() );
+		party = in.readArrayList( Moflow_Creature.class.getClassLoader() );
 	}
 	
 	

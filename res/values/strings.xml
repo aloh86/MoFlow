@@ -13,4 +13,6 @@
     <string name="groupItemHPText">Max Hit Points:</string>
     <string name="testText">TEST TEXT</string>
     <string name="contentDescription1">icon image</string>
+    <string name="saveToCatalog">Save to Catalog</string>
+    <string name="catalogDialogAmt">How many?</string>
 </resources>

@@ -211,6 +211,30 @@ public class MoFlowDB {
 		return db.query( Catalog_Table.TABLE_NAME, columns, whereClause, whereArgs, null, null, null );
 	}
 	
+	/**
+	 * Get all the creatures belonging to an encounter.
+	 * @param encounterName name of the encounter creature belongs to
+	 * @return Cursor to the queried creature
+	 */
+	public Cursor getCreaturesForEncounter( String encounterName ) {
+		String [] columns = {
+				Creatures_Table.COL_CreatureName,
+				Creatures_Table.COL_InitBonus,
+				Creatures_Table.COL_ArmorClass,
+				Creatures_Table.COL_MaxHP
+				};
+		String whereClause = Creatures_Table.COL_Encounter + " = ?";
+		String [] whereArgs = { encounterName };
+		
+		return db.query( 
+				Creatures_Table.TABLE_NAME, 
+				columns, whereClause, 
+				whereArgs, 
+				null, 
+				null, 
+				Creatures_Table.COL_CreatureName + " COLLATE NOCASE" );
+	}
+	
 	/*************************************************************************
 	 *  UPDATES
 	 */

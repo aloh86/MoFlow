@@ -6,6 +6,7 @@ import moflow.database.MoFlowDB;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.os.Bundle;
@@ -18,13 +19,15 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class EncounterListActivity extends ListActivity implements OnClickListener, OnItemLongClickListener, android.content.DialogInterface.OnClickListener {
+public class EncounterListActivity extends ListActivity 
+implements OnClickListener, OnItemLongClickListener, android.content.DialogInterface.OnClickListener, OnItemClickListener {
 
 	private Button newEncounterButton;
 	
@@ -103,6 +106,7 @@ public class EncounterListActivity extends ListActivity implements OnClickListen
 		
 		this.registerForContextMenu( this.getListView() );
 		this.getListView().setOnItemLongClickListener( this );
+		this.getListView().setOnItemClickListener( this );
 	}
 	
 	private void initializeDialogs()
@@ -201,6 +205,28 @@ public class EncounterListActivity extends ListActivity implements OnClickListen
 		database.deleteEncounterCreatures( encounterToRemove );
 	}
 	
+	private void loadMonstersIntoEncounter( Moflow_Party party ) {
+		Cursor cur;
+		
+		cur = database.getCreaturesForEncounter( party.getPartyName() );
+		
+		while ( cur.moveToNext() ) {
+			Moflow_Creature creature = new Moflow_Creature();
+			
+			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
+				if ( i == 0 ) // name column
+					creature.setName( cur.getString( i ) );
+				else if ( i == 1 ) // init column
+					creature.setInitMod( cur.getInt( i ) );
+				else if ( i == 2 ) // ac column
+					creature.setArmorClass( cur.getInt( i ) );
+				else if ( i == 3 ) // hp column
+					creature.setHitPoints( cur.getInt( i ) );
+			}
+			party.addMember( creature );
+		}
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// VIEW HELPERS : Helpers for buttons and other GUI elements
 	//////////////////////////////////////////////////////////////////////////
@@ -296,5 +322,20 @@ public class EncounterListActivity extends ListActivity implements OnClickListen
 				return super.onContextItemSelected( item );
 		}
 		return false;
+	}
+
+	@Override
+	public void onItemClick( AdapterView<?> parent, View view, int position, long id ) {
+		Moflow_Party monsterParty = new Moflow_Party();
+		monsterParty.setPartyName( encList.get( position ) );
+		loadMonstersIntoEncounter( monsterParty );
+		
+		Intent i = new Intent( "moflow.tracker.EditEncounterActivity" );
+		Bundle extras = new Bundle();
+		extras.putParcelable( BUNDLE_KEY, monsterParty );
+		i.putExtras( extras );
+		
+		// start the activity
+		startActivityForResult( i, REQC_EDITENC );
 	}
 }

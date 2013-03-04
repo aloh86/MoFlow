@@ -225,7 +225,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 			partyNameTV.setText( party.getPartyName() );
 			
 			for ( int i = 0; i < party.getPartySize(); i++ )
-				partyList.add( party.getMember( i ) );
+				partyList.add( (Moflow_PC) party.getMember( i ) );
 			
 			adapter.notifyDataSetChanged();
 		}

@@ -62,5 +62,13 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
+		<activity
+		android:name=".EditEncounterActivity"
+		android:label="Edit Encounter" >
+			<intent-filter>
+				<action android:name="moflow.tracker.EditEncounterActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
     </application>
 </manifest>
