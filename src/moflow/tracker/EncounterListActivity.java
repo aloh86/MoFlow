@@ -225,6 +225,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 			}
 			party.addMember( creature );
 		}
+		cur.close();
 	}
 	
 	//////////////////////////////////////////////////////////////////////////

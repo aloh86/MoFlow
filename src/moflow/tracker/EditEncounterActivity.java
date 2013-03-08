@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import moflow.database.MoFlowDB;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -67,11 +68,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	private EditText acField;
 	private EditText hpField;
 	
-	// Members for the catalog dialog
-	private View catalogView;
-	
-	private EditText amountField;
-	private ListView catalogListView;
+	private int selectedItemPosition;
 	
 	//////////////////////////////////////////////////////////////////////////
 	// ACTIVITY OVERRIDES
@@ -82,13 +79,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		requestWindowFeature( Window.FEATURE_NO_TITLE );
 		setContentView( R.layout.group );
 		
-		// always call the following three functions in order because 
-		// loadCreatures() and initializeDialogs() depends on some variables
-		// initialized in initializeLayout().
-		initializeLayout();
-		loadCreatures();
-		initializeDialogs();
-		
+		// initialize and open the database first before all the next three function calls
 		database = new MoFlowDB( this );
 		
 		try 
@@ -97,6 +88,13 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		} catch ( SQLException e ) {
 			Toast.makeText( this, "Error: database could not be opened", Toast.LENGTH_LONG ).show();
 		}
+		
+		// always call the following three functions in order because 
+		// loadCreatures() and initializeDialogs() depends on some variables
+		// initialized in initializeLayout().
+		initializeLayout();
+		loadCreatures();
+		initializeDialogs();
 	}
 	
 	@Override
@@ -138,16 +136,9 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		this.getListView().setOnItemLongClickListener( this );
 		this.getListView().setOnItemClickListener( this );
 		
-		// initialize views for the catalog dialog
-		catalogView = inflater.inflate( R.layout.catalog_dialog, null );
-		
-		amountField = ( EditText ) catalogView.findViewById( R.id.creatureAmountEditText );
-		amountField.setText( "1" );
-		
+		// initialize adapter for the catalog dialog
 		initializeCatalogList();
-		catalogAdapter = new ArrayAdapter< String >( this, R.layout.catalog_dialog, catalogList );
-		catalogListView = ( ListView ) catalogView.findViewById( R.id.catalogList );
-		catalogListView.setAdapter( catalogAdapter );
+		catalogAdapter = new ArrayAdapter< String >( this, R.layout.list_item, catalogList );
 	}
 	
 	private void initializeDialogs() {
@@ -168,8 +159,9 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		
 		// setup the catalog dialog
 		builder = new AlertDialog.Builder( this );
-		builder.setView( catalogView );
 		builder.setTitle( "Creature Catalog" );
+		builder.setAdapter( catalogAdapter, this );
+		catalogDialog = builder.create();
 	}
 	
 	private void loadCreatures() {
@@ -188,6 +180,46 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		}
 	}
 	
+	private String makeNameUnique( String name ) {
+		if ( creatureList.size() == 0 )
+			return name;
+		
+		int count = 1;
+		String original = name;
+		boolean unique = false;
+		
+		while ( !unique )
+		{
+			for ( int i = 0; i < creatureList.size(); i++ )
+			{
+				if ( creatureList.get( i ).getCharName().equals( name ) )
+				{
+					name = original + " " + String.valueOf( count );
+					count++;
+					i = 0;	// take i back to the start to re-check
+				}
+				else
+					unique = true;
+			}
+		}
+		return name;
+	}
+	
+	private String setCreatureStats() {
+		String oldName = creature.getCharName();
+		String currentNameInField = itemNameField.getText().toString().trim();
+		
+		if ( !creature.getCharName().equals( currentNameInField ) ) {
+			String uniqueName = makeNameUnique( itemNameField.getText().toString().trim() );
+			creature.setName( uniqueName );
+		}
+		creature.setInitMod( Integer.parseInt( initField.getText().toString().trim() ) );
+		creature.setArmorClass( Integer.parseInt( acField.getText().toString().trim() ) );
+		creature.setHitPoints( Integer.parseInt( hpField.getText().toString().trim() ) );
+		
+		return oldName;
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// DATABASES
 	//////////////////////////////////////////////////////////////////////////
@@ -203,10 +235,80 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		cur.close();
 	}
 	
+	private void setActiveCreature( String name ) {
+		Cursor cur;
+		
+		cur = database.getCreatureFromCatalog( name );
+		creature = new Moflow_Creature();
+		
+		while ( cur.moveToNext() ) {
+			// always returns 4 columns:
+			// 0 = name, 1 = init, 2 = ac, 3 = hp
+			creature.setName( cur.getString( 0 ) );
+			creature.setInitMod( cur.getInt( 1 ) );
+			creature.setArmorClass( cur.getInt( 2 ) );
+			creature.setHitPoints( cur.getInt( 3 ) );
+		}
+		cur.close();
+	}
+	
+	private void saveItemToCreaturesDB() {
+		String encounterName = encounterNameTV.getText().toString();
+		String creatureName = creature.getCharName();
+		int init = creature.getInitMod();
+		int ac = creature.getAC();
+		int hp = creature.getMaxHitPoints();
+		
+		database.insertCreature( encounterName, creatureName, init, ac, hp ); 
+	}
+	
+	private void updateCreatureInDB( Moflow_Creature updated, String oldName, String encounterName ) {
+		String name = updated.getCharName();
+		int init = updated.getInitMod();
+		int ac = updated.getAC();
+		int hp = updated.getMaxHitPoints();
+		
+		database.updateCreatureRecord( name, oldName, encounterName, init, ac, hp );
+	}
 	
 	//////////////////////////////////////////////////////////////////////////
 	// VIEW/LISTENER HELPERS
 	//////////////////////////////////////////////////////////////////////////
+	private void prepItemDialog() {
+		itemNameField.setText( creature.getCharName() );
+		initField.setText( String.valueOf( creature.getInitMod() ) );
+		acField.setText( String.valueOf( creature.getAC() ) );
+		hpField.setText( String.valueOf( creature.getMaxHitPoints() ) );
+	}
+	
+	private void addNewItemToList( int position ) {
+		String creatureName = catalogList.get( position );
+		setActiveCreature( creatureName );
+		
+		// make sure the name is unique before adding
+		String uniqueName = makeNameUnique( creature.getCharName() );
+		creature.setName( uniqueName );
+		
+		creatureList.add( creature );
+		adapter.notifyDataSetChanged();
+		saveItemToCreaturesDB();
+	}
+	
+	private void handleEditedItem( final int which ) {
+		if ( which == Dialog.BUTTON_POSITIVE ) {
+			String oldName = setCreatureStats();
+			adapter.notifyDataSetChanged();
+			updateCreatureInDB( creature, oldName, creatureParty.getPartyName() );
+		}
+	}
+	
+	private void handleItemDelete( final int which ) {
+		if ( which == Dialog.BUTTON_POSITIVE ) {
+			creatureList.remove( selectedItemPosition );
+			adapter.notifyDataSetChanged();
+			database.deleteCreature( creatureParty.getPartyName(), creature.getCharName() );
+		}
+	}
 	
 	//////////////////////////////////////////////////////////////////////////
 	// LISTENERS
@@ -215,7 +317,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	@Override
 	public void onClick( View view ) {
 		if ( view == addButton ) {
-			
+			catalogDialog.show();
 		}
 	}
 
@@ -226,17 +328,26 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 
 	@Override
 	public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id ) {
-		
+		creature = creatureList.get( position );
+		selectedItemPosition = position;
+		deleteDialog.show();
 		return false;
 	}
 
 	@Override
 	public void onItemClick( AdapterView<?> parent, View view, int position, long id ) {
-		
+		creature = creatureList.get( position );
+		prepItemDialog();
+		itemDialog.show();
 	}
 
 	@Override
-	public void onClick( DialogInterface dialog, int button ) {
-		
+	public void onClick( DialogInterface dialog, int which ) {
+		if ( dialog == catalogDialog )
+			addNewItemToList( which );
+		else if ( dialog == itemDialog )
+			handleEditedItem( which );
+		else if ( dialog == deleteDialog )
+			handleItemDelete( which );
 	}
 }
