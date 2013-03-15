@@ -53,5 +53,7 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 			startActivity( new Intent( "moflow.tracker.EncounterListActivity" ) );
 		else if ( position == Position.CREATURE.ordinal() )
 			startActivity( new Intent( "moflow.tracker.CreatureCatalogActivity" ) );
+		else if ( position == Position.INIT.ordinal() )
+			startActivity( new Intent( "moflow.tracker.InitiativeActivity" ) );
 	}
 }

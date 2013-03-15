@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class CatalogListAdapter extends ArrayAdapter< CatalogItem > implements SectionIndexer {
+public class CatalogListAdapter extends ArrayAdapter< CatalogItem > {
 	private List< CatalogItem > catalog;
 	Context mContext;
 	LayoutInflater inflater;
@@ -27,24 +27,6 @@ public class CatalogListAdapter extends ArrayAdapter< CatalogItem > implements S
 		mContext = context;
 		catalog = objects;
 		inflater = ( LayoutInflater ) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-	}
-
-	@Override
-	public int getPositionForSection( int section ) {
-		
-		return 0;
-	}
-
-	@Override
-	public int getSectionForPosition( int position ) {
-		
-		return 0;
-	}
-
-	@Override
-	public Object[] getSections() {
-		
-		return null;
 	}
 	
 	@Override

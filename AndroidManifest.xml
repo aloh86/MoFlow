@@ -70,5 +70,13 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
+		<activity
+		android:name=".InitiativeActivity"
+		android:label="Edit Encounter" >
+			<intent-filter>
+				<action android:name="moflow.tracker.InitiativeActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
     </application>
 </manifest>

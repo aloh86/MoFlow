@@ -11,8 +11,26 @@
     <string name="groupItemInitText">Init Bonus:</string>
     <string name="groupItemACText">Armor Class:</string>
     <string name="groupItemHPText">Max Hit Points:</string>
-    <string name="testText">TEST TEXT</string>
+    <string name="testText">testVal</string>
     <string name="contentDescription1">icon image</string>
     <string name="saveToCatalog">Save to Catalog</string>
     <string name="catalogDialogAmt">How many?</string>
+    
+    <string name="menuAdd">Add</string>
+    <string name="menuSub">Remove</string>
+    <string name="menuWait">Wait List</string>
+    <string name="menuGrave">Graveyard</string>
+    
+    <string name="nextInit">Next</string>
+    <string name="prevInit">Previous</string>
+    
+    <string name="rounds">Rounds: </string>
+    
+    <string name="initItemInit">Init: </string>
+    <string name="initItemHP">HP: </string>
+    <string name="initItemHPDivide">/</string>
+    <string name="initItemAC">AC: </string>
+    <string name="initItemConditions">Conditions: </string>
+    
+    <string name="contentDescription2">divider</string>
 </resources>
