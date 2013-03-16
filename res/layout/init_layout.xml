@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 	    <TextView 
-	        android:id="@+id/roundLabelTV"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="5dp"
@@ -23,8 +22,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="5dp"
-	        android:layout_marginRight="5dp"
-	        android:text="@string/testText"/>
+	        android:layout_marginRight="5dp"/>
 	</LinearLayout>
     
     <RelativeLayout

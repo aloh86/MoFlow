@@ -24,7 +24,7 @@
     <string name="nextInit">Next</string>
     <string name="prevInit">Previous</string>
     
-    <string name="rounds">Rounds: </string>
+    <string name="rounds">Round: </string>
     
     <string name="initItemInit">Init: </string>
     <string name="initItemHP">HP: </string>

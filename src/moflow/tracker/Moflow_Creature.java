@@ -14,17 +14,14 @@ creatures/monsters.
 player character.
 ===============================================================================
 */
-public class Moflow_Creature implements Parcelable, Cloneable
+public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 {	
 	protected int armorClass;
-	protected int reflex;
-	protected int fortitude;
-	protected int will;
-	
 	protected int initMod;
 	protected int hitPoints;
 	protected int currentHP;
-	protected int tempHP;
+	protected float initiative;
+	protected boolean isMonster;
 	
 	protected String creatureName;
 	
@@ -37,16 +34,12 @@ public class Moflow_Creature implements Parcelable, Cloneable
 	 */
 	Moflow_Creature()
 	{
-		armorClass = 0;
-		fortitude = 0;		
-		reflex = 0;
-		will = 0;
-		
+		armorClass = 0;		
 		initMod = 0;
 		hitPoints = 0;
 		currentHP = 0;
-		tempHP = 0;
-		
+		initiative = 0;
+		isMonster = true;
 		creatureName = "";
 	}
 	
@@ -73,44 +66,24 @@ public class Moflow_Creature implements Parcelable, Cloneable
 	 * @return armor class value
 	 */
 	public int getAC() 		  { return armorClass; }
-	/**
-	 * Get character's fortitude saving throw
-	 * @return fortitude saving throw
-	 */
-	public int getFortitude() { return fortitude;  }
-	/**
-	 * Get character's reflex value
-	 * @return reflex saving throw
-	 */
-	public int getReflex() 	  { return reflex; 	   }
-	/**
-	 * Get character's will value
-	 * @return will saving throw
-	 */
-	public int getWill() 	  { return will;	   }
-	
-	//-----------------------------------------------------------------------
 	
 	/**
 	 * Get character's initiative modifier
 	 * @return initiative modifier
 	 */
 	public int getInitMod()   { return initMod;	  }
+	
 	/**
 	 * Get character's hit points
 	 * @return hit point total
 	 */
 	public int getMaxHitPoints() { return hitPoints; }
+	
 	/**
 	 * Get current amount of character's hit points
 	 * @return current hit point value
 	 */
 	public int getCurrentHP() { return currentHP; }
-	/**
-	 * Get character's current temporary hit point value
-	 * @return temporary hit point value
-	 */
-	public int getTempHP() 	  { return tempHP;	  }
 	
 	/**
 	 * Get character's name
@@ -118,12 +91,17 @@ public class Moflow_Creature implements Parcelable, Cloneable
 	 */
 	public String getCharName() { return creatureName; }
 	
-	//-----------------------------------------------------------------------
 	/**
-	 * Set the temp hit point value
-	 * @param points the new temp hit point value
+	 * Get character's initiative
+	 * @return initiative value
 	 */
-	public void setTempHitPoints( int points ) { tempHP = points; }
+	public float getInitiative() { return initiative; }
+	
+	/**
+	 * Determine whether item is a "monster" creature or a player character.
+	 * @return true if monster creature, false if player character
+	 */
+	public boolean isCreature() { return isMonster; }
 	
 	/**
 	 * Add a new condition effect to the character
@@ -137,32 +115,12 @@ public class Moflow_Creature implements Parcelable, Cloneable
 	 */
 	public void setName( String name ) { creatureName = name; }
 	
-	//-----------------------------------------------------------------------
 	/**
 	 * Mutator for armor class
 	 * @param AC armor class value
 	 */
 	public void setArmorClass( int AC ) { armorClass = AC; }
 	
-	/**
-	 * Mutator for fortitude defense/saving throw
-	 * @param fort fortitude value
-	 */
-	public void setFortitude( int fort ) { fortitude = fort; }
-	
-	/**
-	 * Mutator for reflex defense/saving throw
-	 * @param ref reflex value
-	 */
-	public void setReflex( int ref ) { reflex = ref; }
-	
-	/**
-	 * Mutator for will defense/saving throw
-	 * @param willpower will value
-	 */
-	public void setWill( int willpower ) { will = willpower; }
-	
-	//-----------------------------------------------------------------------
 	/**
 	 * Mutator for initiative modifier
 	 * @param mod initiative modifier
@@ -178,10 +136,13 @@ public class Moflow_Creature implements Parcelable, Cloneable
 	/**
 	 * Mutator for current hit points.
 	 */
-	public void setCurrentHP( int hp )
-	{
-		currentHP = hp;
-	}
+	public void setCurrentHP( int hp ) { currentHP = hp; }
+	
+	/**
+	 * Mutator for initiative.
+	 * @param init initiative value
+	 */
+	public void setInitiative( float init ) { initiative = init; }
 	
 	
 	/*
@@ -213,14 +174,11 @@ public class Moflow_Creature implements Parcelable, Cloneable
 	protected Moflow_Creature( Parcel in )
 	{		
 		armorClass = in.readInt();
-		fortitude = in.readInt();
-		reflex = in.readInt();
-		will = in.readInt();
 		
 		initMod = in.readInt();
 		hitPoints = in.readInt();
 		currentHP = in.readInt();
-		tempHP = in.readInt();
+		initiative = in.readFloat();
 		
 		creatureName = in.readString();
 	}
@@ -244,14 +202,11 @@ public class Moflow_Creature implements Parcelable, Cloneable
 	public void writeToParcel( Parcel dest, int flags )
 	{		
 		dest.writeInt( armorClass );
-		dest.writeInt( fortitude );
-		dest.writeInt( reflex );
-		dest.writeInt( will );
 		
 		dest.writeInt( initMod );
 		dest.writeInt( hitPoints );
 		dest.writeInt( currentHP );
-		dest.writeInt( tempHP );
+		dest.writeFloat( initiative );
 		
 		dest.writeString( creatureName );
 	}
@@ -268,5 +223,21 @@ public class Moflow_Creature implements Parcelable, Cloneable
 		"Hit Points: " + hitPoints + "\n" +
 		"AC: " + armorClass +
 		"  Init Bonus: " + initMod;
+	}
+
+	/**
+	 * If this creature is equal to, return 0. If less than, return -1.
+	 * If greater than, return 1.
+	 */
+	@Override
+	public int compareTo( Object obj ) {
+		Moflow_Creature creature = ( Moflow_Creature ) obj;
+		
+		if ( this.initiative == creature.initiative )
+			return 0;
+		else if ( this.initiative < creature.initiative )
+			return -1;
+		else
+			return 1;
 	}
 }

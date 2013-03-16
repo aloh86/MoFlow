@@ -6,9 +6,9 @@
 
 	<RelativeLayout
 	    android:layout_width="fill_parent"
-	    android:layout_height="61dp" >
+	    android:layout_height="61dp">
 	    
-	    <TextView 
+	    <TextView
 	        android:id="@+id/initItemName"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -16,7 +16,8 @@
 	        android:layout_alignParentTop="true"
 	        android:layout_marginLeft="5dp"
 	        android:layout_marginTop="5dp"
-	        android:text="@string/testText"/>
+	        android:text="@string/testText"
+	        android:textColor="@android:color/white" />
 	    
 	    <LinearLayout
 	        android:layout_width="wrap_content"
@@ -25,15 +26,20 @@
 	        android:layout_alignParentTop="true"
 	        android:layout_marginRight="5dp"
 	        android:layout_marginTop="5dp">
+
 	        <TextView
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/initItemInit"/>
+	            android:text="@string/initItemInit"
+	            android:textColor="@android:color/white" />
+
 	        <TextView
 	            android:id="@+id/initValue"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/testText"/>
+	            android:text="@string/testText"
+	            android:textColor="@android:color/white" />
+
 	    </LinearLayout>
 	    
 	    <LinearLayout
@@ -43,10 +49,13 @@
 	        android:layout_alignParentBottom="true"
 	        android:layout_marginBottom="5dp"
 	        android:layout_marginRight="5dp">
+
 	        <TextView
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/initItemHP"/>
+	            android:text="@string/initItemHP"
+	            android:textColor="@android:color/white" />
+
 	        <TextView
 	            android:id="@+id/initHPCurrent"
 	            android:layout_width="wrap_content"

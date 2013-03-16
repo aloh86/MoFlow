@@ -31,8 +31,7 @@ import android.widget.Toast;
 EditEncounterActivity.java
 
 Allows the user to add, edit, or remove an item from an encounter. User
-can add items to encounter from scratch or from the creature catalog. Items
-added from scratch 
+can add items to encounter from the creature catalog.
 ===============================================================================
 */
 public class EditEncounterActivity extends ListActivity 

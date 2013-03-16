@@ -24,6 +24,7 @@ public class Moflow_PC extends Moflow_Creature implements Parcelable
 	Moflow_PC()
 	{
 		super();
+		this.isMonster = false;
 	}
 	
 	/*
