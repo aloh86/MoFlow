@@ -1,6 +1,7 @@
 package moflow.tracker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,13 +21,12 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	protected int initMod;
 	protected int hitPoints;
 	protected int currentHP;
-	protected float initiative;
+	protected int initiative;
 	protected boolean isMonster;
-	
+	protected boolean hasInit;
 	protected String creatureName;
 	
-	public enum Effect { NORMAL, DAZED, CONFUSED, PARALYZED, STUNNED };
-	public ArrayList<Effect> pcState;
+	public Conditions conditions;
 	
 
 	/**
@@ -37,10 +37,12 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 		armorClass = 0;		
 		initMod = 0;
 		hitPoints = 0;
-		currentHP = 0;
+		currentHP = hitPoints;
 		initiative = 0;
 		isMonster = true;
 		creatureName = "";
+		hasInit = false;
+		conditions = new Conditions();
 	}
 	
 	/**
@@ -95,19 +97,13 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	 * Get character's initiative
 	 * @return initiative value
 	 */
-	public float getInitiative() { return initiative; }
+	public int getInitiative() { return initiative; }
 	
 	/**
 	 * Determine whether item is a "monster" creature or a player character.
 	 * @return true if monster creature, false if player character
 	 */
 	public boolean isCreature() { return isMonster; }
-	
-	/**
-	 * Add a new condition effect to the character
-	 * @param state the new condition to be added
-	 */
-	public void setState( Effect state ) { pcState.add( state ); }
 	
 	/**
 	 * Mutator for character name
@@ -142,7 +138,11 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	 * Mutator for initiative.
 	 * @param init initiative value
 	 */
-	public void setInitiative( float init ) { initiative = init; }
+	public void setInitiative( int init ) { initiative = init; }
+	
+	public void setAsMonster( int type ) { 
+		isMonster = ( type == 0 ? false : true ); // 0 = PC, 1 = monster 
+	}
 	
 	
 	/*
@@ -178,7 +178,7 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 		initMod = in.readInt();
 		hitPoints = in.readInt();
 		currentHP = in.readInt();
-		initiative = in.readFloat();
+		initiative = in.readInt();
 		
 		creatureName = in.readString();
 	}

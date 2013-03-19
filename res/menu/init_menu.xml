@@ -10,6 +10,6 @@
 	    android:id="@+id/menu_wait"
 	    android:title="@string/menuWait"/>
 	<item 
-	    android:id="@+id/menu_grave"
-	    android:title="@string/menuGrave"/>
+	    android:id="@+id/menu_initiative"
+	    android:title="@string/menuInit"/>
 </menu>

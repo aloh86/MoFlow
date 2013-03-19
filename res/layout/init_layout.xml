@@ -24,6 +24,13 @@
 	        android:layout_marginTop="5dp"
 	        android:layout_marginRight="5dp"/>
 	</LinearLayout>
+	
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:src="#0084ED"
+        android:contentDescription="@string/contentDescription2"/>
     
     <RelativeLayout
         android:layout_width="fill_parent"

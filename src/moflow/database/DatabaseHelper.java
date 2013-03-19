@@ -21,6 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			db.execSQL( Encounters_Table.DB_CREATE );
 			db.execSQL( Creatures_Table.DB_CREATE );
 			db.execSQL( Catalog_Table.DB_CREATE );
+			db.execSQL( Init_Table.DB_CREATE );
+			db.execSQL( Condition_Table.DB_CREATE );
 		} catch ( SQLException e ) {
 			e.printStackTrace();
 		}

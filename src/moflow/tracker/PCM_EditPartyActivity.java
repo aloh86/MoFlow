@@ -126,7 +126,6 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 			acField.setText( "0" );
 		else if ( view == hpField && !hasFocus && hpField.getText().toString().trim().equals("") )
 			hpField.setText( "0" );
-			
 	}
 	
 	@Override

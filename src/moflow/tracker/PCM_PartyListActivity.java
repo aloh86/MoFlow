@@ -378,15 +378,15 @@ implements OnClickListener, android.view.View.OnClickListener, OnItemLongClickLi
 		while ( cur.moveToNext() )
 		{
 			pc = new Moflow_PC();
-			for ( int i = 1; i < cur.getColumnCount(); i++ )
+			for ( int i = 0; i < cur.getColumnCount(); i++ )
 			{
-				if ( i == 1 )
+				if ( i == 0 )
 					pc.setName( cur.getString( i ) );
-				else if ( i == 2 )
+				else if ( i == 1 )
 					pc.setInitMod( cur.getInt( i ) );
-				else if ( i == 3 )
+				else if ( i == 2 )
 					pc.setArmorClass( cur.getInt( i ) );
-				else if ( i == 4 )
+				else if ( i == 3 )
 					pc.setHitPoints( cur.getInt( i ) );
 			}
 			party.addMember( pc );

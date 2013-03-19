@@ -16,8 +16,7 @@
 	        android:layout_alignParentTop="true"
 	        android:layout_marginLeft="5dp"
 	        android:layout_marginTop="5dp"
-	        android:text="@string/testText"
-	        android:textColor="@android:color/white" />
+	        android:text="@string/testText" />
 	    
 	    <LinearLayout
 	        android:layout_width="wrap_content"
@@ -30,15 +29,13 @@
 	        <TextView
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/initItemInit"
-	            android:textColor="@android:color/white" />
+	            android:text="@string/initItemInit" />
 
 	        <TextView
 	            android:id="@+id/initValue"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/testText"
-	            android:textColor="@android:color/white" />
+	            android:text="@string/testText" />
 
 	    </LinearLayout>
 	    
@@ -53,8 +50,7 @@
 	        <TextView
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/initItemHP"
-	            android:textColor="@android:color/white" />
+	            android:text="@string/initItemHP" />
 
 	        <TextView
 	            android:id="@+id/initHPCurrent"
@@ -90,14 +86,7 @@
 	            android:text="@string/testText"/>
 	    </LinearLayout>
 	</RelativeLayout>
-	
-	<ImageView
-	    android:layout_gravity="center_horizontal"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:src="@android:drawable/divider_horizontal_bright"
-	    android:contentDescription="@string/contentDescription2"/>
-	
+	<!-- 
 	<LinearLayout
 	    android:id="@+id/conditionsLayout"
 	    android:layout_width="wrap_content"
@@ -105,13 +94,9 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp">
 	    <TextView
-	        android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/initItemConditions"/>
-	    <TextView
 	        android:id="@+id/initItemConditions"
 	        android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/testText"/>
-	</LinearLayout>
+	</LinearLayout> -->
 </LinearLayout>

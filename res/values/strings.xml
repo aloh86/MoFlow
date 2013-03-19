@@ -20,6 +20,7 @@
     <string name="menuSub">Remove</string>
     <string name="menuWait">Wait List</string>
     <string name="menuGrave">Graveyard</string>
+    <string name="menuInit">Initiative</string>
     
     <string name="nextInit">Next</string>
     <string name="prevInit">Previous</string>
@@ -31,6 +32,11 @@
     <string name="initItemHPDivide">/</string>
     <string name="initItemAC">AC: </string>
     <string name="initItemConditions">Conditions: </string>
+    
+    <string name="menu_moveUp">Move Up</string>
+    <string name="menu_itemWait">Wait</string>
+    <string name="menu_itemRemove">Remove</string>
+    <string name="menu_moveDown">Move Down</string>
     
     <string name="contentDescription2">divider</string>
 </resources>

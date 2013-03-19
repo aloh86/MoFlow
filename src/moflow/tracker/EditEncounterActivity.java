@@ -321,8 +321,13 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	}
 
 	@Override
-	public void onFocusChange( View v, boolean hasFocus ) {
-		
+	public void onFocusChange( View view, boolean hasFocus ) {
+		if ( view == initField && !hasFocus && initField.getText().toString().trim().equals("") )
+			initField.setText( "0" );
+		else if ( view == acField && !hasFocus && acField.getText().toString().trim().equals("") )
+			acField.setText( "0" );
+		else if ( view == hpField && !hasFocus && hpField.getText().toString().trim().equals("") )
+			hpField.setText( "0" );
 	}
 
 	@Override

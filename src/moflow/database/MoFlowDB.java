@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import moflow.tracker.Conditions;
 import moflow.tracker.Moflow_Creature;
 import moflow.tracker.Moflow_PC;
 
@@ -133,6 +134,52 @@ public class MoFlowDB {
 		return db.insertWithOnConflict( Creatures_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
+	/**
+	 * Insert a creature from the initiative list.
+	 * @param creature the creature to insert
+	 * @return tuple position of this entry
+	 */
+	public long insertItemFromInitiative( Moflow_Creature creature ) {
+		ContentValues initVal = new ContentValues();
+		initVal.put( Init_Table.COL_Init, creature.getInitiative() );
+		initVal.put( Init_Table.COL_CreatureName, creature.getCharName() );
+		initVal.put( Init_Table.COL_InitBonus, creature.getInitMod() );
+		initVal.put( Init_Table.COL_ArmorClass, creature.getAC() );
+		initVal.put( Init_Table.COL_CurrentHP, creature.getCurrentHP() );
+		initVal.put( Init_Table.COL_MaxHP, creature.getMaxHitPoints() );
+		initVal.put( Init_Table.COL_Type, ( creature.isCreature() == false ? 0 : 1 ) ); // 0 = PC, 1 = Creature
+		
+		return db.insert( Init_Table.TABLE_NAME, null, initVal );
+	}
+	
+	/**
+	 * Save all conditions for a certain id.
+	 * @param id id for creature
+	 * @param condition set of conditions
+	 * @return tuple position of this entry
+	 */
+	public long insertConditions( long id, Conditions condition ) {
+		ContentValues initVal = new ContentValues();
+		initVal.put( Condition_Table._ID, id );
+		initVal.put( Condition_Table.COL_BLINDED, condition.getState( Conditions.BLINDED ) );
+		initVal.put( Condition_Table.COL_COWERING, condition.getState( Conditions.COWERING ) );
+		initVal.put( Condition_Table.COL_DAZED, condition.getState( Conditions.DAZED ) );
+		initVal.put( Condition_Table.COL_DEAFENED, condition.getState( Conditions.DEAFENED ) );
+		initVal.put( Condition_Table.COL_ENTANGLED, condition.getState( Conditions.ENTANGLED ) );
+		initVal.put( Condition_Table.COL_EXHAUSTED, condition.getState( Conditions.EXHAUSTED ) );
+		initVal.put( Condition_Table.COL_FATIGUED, condition.getState( Conditions.FATIGUED ) );
+		initVal.put( Condition_Table.COL_HELPLESS, condition.getState( Conditions.HELPLESS ) );
+		initVal.put( Condition_Table.COL_MARKED, condition.getState( Conditions.MARKED ) );
+		initVal.put( Condition_Table.COL_NAUSEATED, condition.getState( Conditions.NAUSEATED ) );
+		initVal.put( Condition_Table.COL_PANICKED, condition.getState( Conditions.PANICKED ) );
+		initVal.put( Condition_Table.COL_PARALYZED, condition.getState( Conditions.PARALYZED ) );
+		initVal.put( Condition_Table.COL_SHAKEN, condition.getState( Conditions.SHAKEN ) );
+		initVal.put( Condition_Table.COL_STUNNED, condition.getState( Conditions.STUNNED ) );
+		
+		db.execSQL( "PRAGMA foreign_keys = ON" );
+		return db.insertWithOnConflict( Condition_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
+	}
+	
 	/*************************************************************************
 	 *  QUERIES
 	 */
@@ -176,7 +223,7 @@ public class MoFlowDB {
 	 */
 	public Cursor getPCForGroup( String groupName ) {
 		String [] columns = { 
-				Players_Table.COL_PartyName, 
+				//Players_Table.COL_PartyName, 
 				Players_Table.COL_PCName, 
 				Players_Table.COL_InitBonus,
 				Players_Table.COL_ArmorClass,
@@ -254,6 +301,39 @@ public class MoFlowDB {
 				null, 
 				null, 
 				Creatures_Table.COL_CreatureName + " COLLATE NOCASE" );
+	}
+	
+	/**
+	 * Retrieve all saved initiative items.
+	 * @return Cursor to the rows
+	 */
+	public Cursor getInitListFromDB() {
+		return db.query( 
+				Init_Table.TABLE_NAME, 
+				null, 
+				null, 
+				null, 
+				null, 
+				null, 
+				Init_Table.COL_Init + " DESC" );
+	}
+	
+	/**
+	 * Get condition for a certain item in the initiative list
+	 * @param id identifier for item in initiative list
+	 * @return Cursor to condition for item in list.
+	 */
+	public Cursor getCondition( long id ) {
+		String selection = Init_Table._ID + " = ?";
+		String [] whereClause = { String.valueOf( id ) };
+		return db.query( 
+				Init_Table.TABLE_NAME, 
+				null, 
+				selection, 
+				whereClause, 
+				null, 
+				null, 
+				null );
 	}
 	
 	/*************************************************************************
@@ -476,5 +556,33 @@ public class MoFlowDB {
 				Creatures_Table.COL_CreatureName + " = ?";
 		String [] whereArgs = { encounterName, creatureName };
 		return db.delete( Creatures_Table.TABLE_NAME, whereClause, whereArgs );
+	}
+	
+	/**
+	 * Delete everything.
+	 * @return number of rows affected.
+	 */
+	public int deleteInitListAll() {
+		return db.delete( Init_Table.TABLE_NAME, null, null );
+	}
+	
+	/**
+	 * Delete only PCs from the init list.
+	 * @return number of rows affected
+	 */
+	public int deleteInitListPCs() {
+		String whereClause = Init_Table.COL_Type + " = ?";
+		String [] whereArgs = { String.valueOf( 0 ) };
+		return db.delete( Init_Table.TABLE_NAME, whereClause, whereArgs );
+	}
+	
+	/**
+	 * Delete only monsters from the init list.
+	 * @return number of rows affected
+	 */
+	public int deleteInitListMonsters() {
+		String whereClause = Init_Table.COL_Type + " = ?";
+		String [] whereArgs = { String.valueOf( 1 ) };
+		return db.delete( Init_Table.TABLE_NAME, whereClause, whereArgs );
 	}
 }

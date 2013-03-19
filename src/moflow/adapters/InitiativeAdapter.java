@@ -8,6 +8,7 @@ import moflow.tracker.Moflow_Creature;
 import moflow.tracker.R;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,6 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 			holder.initHPCurrent = ( TextView ) convertView.findViewById( R.id.initHPCurrent );
 			holder.initHPMax = ( TextView ) convertView.findViewById( R.id.initHPMax );
 			holder.initItemAC = ( TextView ) convertView.findViewById( R.id.initItemAC );
-			holder.initItemConditions = ( TextView ) convertView.findViewById( R.id.initItemConditions );
 			
 			convertView.setTag( holder );
 		} else {
@@ -56,11 +56,29 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 		//holder.initItemConditions.setText( creature.getConditionString() );
 		
 		if ( creature.isCreature() )
-			convertView.setBackgroundColor( Color.RED );
+			holder.initItemName.setTextColor( Color.RED );
 		else
-			convertView.setBackgroundColor( Color.GREEN );
+			holder.initItemName.setTextColor( Color.GREEN );
 		
+		setCurrentHPTextColor( creature.getCurrentHP(), creature.getMaxHitPoints(), holder.initHPCurrent );
+		holder.initHPMax.setTextColor( Color.GREEN );
 		return convertView;
+	}
+	
+	private void setCurrentHPTextColor( int curHP, int maxHP, TextView hpTV ) {
+		if ( maxHP > 0 ) {
+			int percent = ( curHP / maxHP ) * 100;
+			
+			if ( percent >= 90 )
+				hpTV.setTextColor( Color.GREEN );
+			else if ( percent >=80 && percent < 90 )
+				hpTV.setTextColor( Color.YELLOW );
+			else if ( percent >= 70 && percent < 80 )
+				hpTV.setTextColor( 0xFF4500 ); // orange
+			else
+				hpTV.setTextColor( 0xFC1501 ); // gummi red
+		} else
+			hpTV.setTextColor( Color.GREEN );
 	}
 
 	public static class ViewHolder {
@@ -69,6 +87,5 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 		public TextView initHPCurrent;
 		public TextView initHPMax;
 		public TextView initItemAC;
-		public TextView initItemConditions;
 	}
 }
