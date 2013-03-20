@@ -39,4 +39,11 @@
     <string name="menu_moveDown">Move Down</string>
     
     <string name="contentDescription2">divider</string>
+    
+    <string name="plusSign">+</string>
+    <string name="minusSign">-</string>
+    
+    <string name="initiativeLabel">Initiative </string>
+    <string name="hitPointsLabel">Hit Points </string>
+    <string name="armorClassLabel">Armor Class </string>
 </resources>

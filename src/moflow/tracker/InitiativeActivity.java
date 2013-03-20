@@ -19,15 +19,17 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -47,9 +49,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	private Button prevButton;
 	private Button nextButton;
 	
-	private AlertDialog surpriseDialog;
 	private AlertDialog itemEditDialog;
-	private AlertDialog graveDialog;
 	private AlertDialog itemDialog;
 	private AlertDialog addOptionsDialog;
 	private AlertDialog partyListDialog;
@@ -58,6 +58,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	private AlertDialog friendFoeDialog;
 	private AlertDialog removeOptionsDialog;
 	private AlertDialog waitListDialog;
+	private AlertDialog initiativeOptionsDialog;
 	
 	private ArrayList< Moflow_Creature > initList;
 	private ArrayList< Moflow_Creature > waitList;
@@ -82,6 +83,16 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	private EditText initField;
 	private EditText acField;
 	private EditText hpField;
+	
+	// stuff for edit item layout
+	private View editView;
+	
+	private TextView nameLabel;
+	
+	private EditText initiativeEditText;
+	private EditText curHPEditText;
+	private EditText maxHPEditText;
+	private EditText armorClassEditText;
 	
 	//////////////////////////////////////////////////////////////////////////
 	// ACTIVITY OVERRIDES
@@ -186,28 +197,31 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		acField.setOnFocusChangeListener( this );
 		hpField = ( EditText ) itemView.findViewById( R.id.hpEditText );
 		hpField.setOnFocusChangeListener( this );
+		
+		// initialize layout for editView
+		editView = inflater.inflate( R.layout.init_item_edit, null );
+		
+		initiativeEditText = ( EditText ) editView.findViewById( R.id.initiativeEditText );
+		curHPEditText = ( EditText ) editView.findViewById( R.id.curHPEditText );
+		maxHPEditText = ( EditText ) editView.findViewById( R.id.maxHPEditText );
+		armorClassEditText = ( EditText ) editView.findViewById( R.id.armorClassEditText );
+		
+		nameLabel = ( TextView ) editView.findViewById( R.id.nameLabel );
 	}
 	
 	private void initializeDialogs() {
 		AlertDialog.Builder builder = new AlertDialog.Builder( this );
-		
-		// setup the dialog for creating a new group
-		builder.setMessage( "Start with surprise round?" );
-		builder.setPositiveButton( "OK", this );
-		builder.setNegativeButton( "Cancel", this );
-		surpriseDialog = builder.create();
-		
-		builder = new AlertDialog.Builder( this );
-		builder.setMessage( "Remove from list?" );
-		builder.setPositiveButton( "OK", this );
-		builder.setNegativeButton( "Cancel", this );
-		graveDialog = builder.create();
 		
 		builder = new AlertDialog.Builder( this );
 		builder.setView( itemView );
 		builder.setPositiveButton( "OK", this );
 		builder.setNegativeButton( "Cancel", this );
 		itemDialog = builder.create();
+		
+		builder = new AlertDialog.Builder( this );
+		builder.setView( editView );
+		builder.setPositiveButton( "OK", this );
+		itemEditDialog = builder.create();
 	}
 	
 	private void prepareItemDialogForNewPC() {
@@ -336,6 +350,53 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			}
 		}
 		return index;
+	}
+	
+	private void moveItemUp() {
+		if ( selectedItemPosition > 0 && selectedItemPosition < initList.size() ) {
+			initList.add( selectedItemPosition - 1, initList.get( selectedItemPosition ) );
+			initList.remove( selectedItemPosition + 1 );
+		}
+		adapter.notifyDataSetChanged();
+	}
+	
+	private void moveItemDown() {
+		if ( selectedItemPosition >= 0 && selectedItemPosition < initList.size() - 1 ) {
+			initList.add( selectedItemPosition, initList.get( selectedItemPosition + 1 ) );
+			initList.remove( selectedItemPosition + 2 );
+		}
+		adapter.notifyDataSetChanged();
+	}
+	
+	private void removeItem() {
+		initList.remove( selectedItemPosition );
+		adapter.notifyDataSetChanged();
+	}
+	
+	private void prepareItemEditDialog() {
+		Moflow_Creature creature = initList.get( selectedItemPosition );
+		nameLabel.setText( creature.creatureName );
+		initiativeEditText.setText( String.valueOf( creature.initiative ) );
+		curHPEditText.setText( String.valueOf( creature.currentHP ) );
+		maxHPEditText.setText( String.valueOf( creature.hitPoints ) );
+		armorClassEditText.setText( String.valueOf( creature.armorClass ) );
+	}
+	
+	private void setNewStats() {
+		Moflow_Creature creature = initList.get( selectedItemPosition );
+		if ( initiativeEditText.getText().toString().equals( "" ) )
+			initiativeEditText.setText( String.valueOf( creature.initiative ) );
+		if ( curHPEditText.getText().toString().equals( "" ) )
+			curHPEditText.setText( String.valueOf( creature.currentHP ) );
+		if ( maxHPEditText.getText().toString().equals( "" ) )
+			maxHPEditText.setText( String.valueOf( creature.hitPoints ) );
+		if ( armorClassEditText.getText().toString().equals( "" ) )
+			armorClassEditText.setText( String.valueOf( creature.armorClass ) );
+		
+		creature.initiative = Integer.valueOf( initiativeEditText.getText().toString() );
+		creature.currentHP  = Integer.valueOf( curHPEditText.getText().toString() );
+		creature.hitPoints  = Integer.valueOf( maxHPEditText.getText().toString() );
+		creature.armorClass = Integer.valueOf( armorClassEditText.getText().toString() );
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -483,12 +544,16 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	
 	@Override
 	public void onClick( View view ) {
+		Moflow_Creature critter = initList.get(selectedItemPosition);
 		
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public void onItemClick( AdapterView<?> parent, View view, int position, long id ) {
-		
+		selectedItemPosition = position;
+		itemEditDialog.show();
+		prepareItemEditDialog();
 	}
 
 	@Override
@@ -499,15 +564,17 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 
 	@Override
 	public void onClick( DialogInterface dialog, int which ) {
-		final int NEW, SELECTION;
-		final int PARTY, REMOVE_PC;
-		final int ENCOUNTER, REMOVE_MONSTER;
-		final int CATALOG, REMOVE_ALL;
+		final int NEW, PARTY, ENCOUNTER, CATALOG;
+		final int REMOVE_PC, REMOVE_MONSTER, REMOVE_ALL;
 		
-		NEW = SELECTION = 0;
-		PARTY = REMOVE_PC = 1;
-		ENCOUNTER = REMOVE_MONSTER = 2;
-		CATALOG = REMOVE_ALL = 3;
+		NEW = 0;
+		PARTY = 1;
+		ENCOUNTER = 2;
+		CATALOG = 3;
+		
+		REMOVE_PC = 0;
+		REMOVE_MONSTER = 1;
+		REMOVE_ALL = 2;
 		
 		if ( dialog == addOptionsDialog ) {
 			if ( which == NEW )
@@ -521,9 +588,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		}
 		
 		else if ( dialog == removeOptionsDialog ) {
-			if ( which == SELECTION )
-				;
-			else if ( which == REMOVE_PC )
+			if ( which == REMOVE_PC )
 				removeAllPCs();
 			else if ( which == REMOVE_MONSTER )
 				removeAllMonsters();
@@ -572,6 +637,10 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			adapter.notifyDataSetChanged();
 		}
 		
+		else if ( dialog == itemEditDialog ) {
+			setNewStats();
+			adapter.notifyDataSetChanged();
+		}
 	}
 	
 	@Override
@@ -580,17 +649,18 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	    switch ( item.getItemId() ) {
 	    	case R.id.menu_add:
 	    		startAddMenu();
-	    		break;
+	    		return true;
 	    	case R.id.menu_sub:
 	    		startRemoveMenu();
-	    		break;
+	    		return true;
 	    	case R.id.menu_wait:
 	    		startWaitList();
-	    		break;
+	    		return true;
+	    	case R.id.menu_initiative:
+	    		return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
-	    return false;
 	}
 
 	@Override
@@ -608,13 +678,19 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 	    switch (item.getItemId()) {
 	        case R.id.menu_moveUp:
-	            
+	            moveItemUp();
 	            return true;
 	        case R.id.menu_itemWait:
 	            waitList.add( initList.get( selectedItemPosition ) );
 	            initList.remove( selectedItemPosition );
 	            adapter.notifyDataSetChanged();
 	            return true;
+	        case R.id.menu_itemRemove:
+	        	removeItem();
+	        	return true;
+	        case R.id.menu_moveDown:
+	        	moveItemDown();
+	        	return true;
 	        default:
 	            return super.onContextItemSelected(item);
 	    }

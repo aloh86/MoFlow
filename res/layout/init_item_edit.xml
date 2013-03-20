@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="5dp" >
+    
+	<TextView 
+	    android:id="@+id/nameLabel"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/testText"
+	    android:layout_gravity="center"/>
+	
+	<TableLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:layout_gravity="center">
+	    <TableRow 
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content">
+            <TextView
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="@string/initiativeLabel"/>
+		    <EditText
+		        android:id="@+id/initiativeEditText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:inputType="number"
+		        android:ems="2"
+		        android:selectAllOnFocus="true"/>
+	    </TableRow>
+	    
+	    <TableRow 
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content">
+            <TextView
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="@string/hitPointsLabel"/>
+		    <EditText
+		        android:id="@+id/curHPEditText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:inputType="number"
+		        android:ems="2"
+		        android:selectAllOnFocus="true"/>
+		    <TextView
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="@string/initItemHPDivide"/>
+		    <EditText
+		        android:id="@+id/maxHPEditText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:inputType="number"
+		        android:ems="2"
+		        android:selectAllOnFocus="true"/>
+	    </TableRow>
+	    
+	    <TableRow 
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content">
+            <TextView
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="@string/armorClassLabel"/>
+		    <EditText
+		        android:id="@+id/armorClassEditText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:inputType="number"
+		        android:ems="2"
+		        android:selectAllOnFocus="true"/>
+	    </TableRow>
+	</TableLayout>
+</LinearLayout>

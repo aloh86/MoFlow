@@ -53,7 +53,6 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 		holder.initHPCurrent.setText( String.valueOf( creature.getCurrentHP() ) );
 		holder.initHPMax.setText( String.valueOf( creature.getMaxHitPoints() ) );
 		holder.initItemAC.setText( String.valueOf( creature.getAC() ) );
-		//holder.initItemConditions.setText( creature.getConditionString() );
 		
 		if ( creature.isCreature() )
 			holder.initItemName.setTextColor( Color.RED );
@@ -65,18 +64,19 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 		return convertView;
 	}
 	
-	private void setCurrentHPTextColor( int curHP, int maxHP, TextView hpTV ) {
+	private void setCurrentHPTextColor( float curHP, float maxHP, TextView hpTV ) {
 		if ( maxHP > 0 ) {
-			int percent = ( curHP / maxHP ) * 100;
+			float percent = ( curHP / maxHP ) * 100;
+			int flatScore = (int) percent;
 			
-			if ( percent >= 90 )
+			if ( flatScore >= 90 )
 				hpTV.setTextColor( Color.GREEN );
-			else if ( percent >=80 && percent < 90 )
+			else if ( flatScore >=80 && percent < 90 )
 				hpTV.setTextColor( Color.YELLOW );
-			else if ( percent >= 70 && percent < 80 )
-				hpTV.setTextColor( 0xFF4500 ); // orange
+			else if ( flatScore >= 70 && percent < 80 )
+				hpTV.setTextColor( Color.parseColor( "#FF4500" ) ); // orange
 			else
-				hpTV.setTextColor( 0xFC1501 ); // gummi red
+				hpTV.setTextColor( Color.parseColor( "#FC1501" ) ); // gummi red
 		} else
 			hpTV.setTextColor( Color.GREEN );
 	}
