@@ -28,7 +28,7 @@
 		        android:id="@+id/initiativeEditText"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:inputType="number"
+		        android:inputType="numberSigned"
 		        android:ems="2"
 		        android:selectAllOnFocus="true"/>
 	    </TableRow>
@@ -44,7 +44,7 @@
 		        android:id="@+id/curHPEditText"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:inputType="number"
+		        android:inputType="numberSigned"
 		        android:ems="2"
 		        android:selectAllOnFocus="true"/>
 		    <TextView

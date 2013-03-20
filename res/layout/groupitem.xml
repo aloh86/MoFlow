@@ -30,7 +30,7 @@
 			            android:id="@+id/initEditText"
 			            android:layout_width="50dp"
 			            android:layout_height="wrap_content"
-			            android:inputType="number"
+			            android:inputType="numberSigned"
 			            android:maxLength="3"
 			            android:selectAllOnFocus="true"/>
 		</TableRow>

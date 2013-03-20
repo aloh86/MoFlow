@@ -23,7 +23,7 @@ as well as options and a user manual.
 
 public class MainMenuActivity extends Activity implements OnItemClickListener {
 	
-	private enum Position { PC_MANAGER, ENC_MANAGER, CREATURE, INIT, OPTIONS, MANUAL };
+	private enum Position { PC_MANAGER, ENC_MANAGER, CREATURE, INIT, MANUAL };
 	private GridView grid;
 	
 	/**

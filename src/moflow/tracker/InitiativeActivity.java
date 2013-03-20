@@ -1,7 +1,10 @@
 package moflow.tracker;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ListIterator;
+import java.util.Random;
 
 import moflow.adapters.InitiativeAdapter;
 import moflow.database.MoFlowDB;
@@ -75,6 +78,8 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	String [] menuList; // used for lists opened by menu options
 	
 	MoFlowDB db;
+	
+	private int roundCount;
 	
 	// stuff for new item layout
 	private View itemView;
@@ -399,6 +404,59 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		creature.armorClass = Integer.valueOf( armorClassEditText.getText().toString() );
 	}
 	
+	private void startInitMenu() {
+		String [] menu = { "Start", "Sort Ascending", "Sort Descending", "Auto Roll Players", "Auto Roll Monsters", "Auto Roll All" };
+		AlertDialog.Builder builder = new AlertDialog.Builder( this );
+		builder.setTitle( "Initiative" );
+		builder.setItems( menu, this );
+		initiativeOptionsDialog = builder.create();
+		initiativeOptionsDialog.show();
+	}
+	
+	private void autoRollPlayers() {
+		Random rand = new Random();
+		for ( int i = 0; i < initList.size(); i++ ) {
+			if ( !initList.get( i ).isMonster ) {
+				Moflow_Creature critter = initList.get( i );
+				critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
+			}
+		}
+	}
+	
+	private void autoRollMonsters() {
+		Random rand = new Random();
+		for ( int i = 0; i < initList.size(); i++ ) {
+			if ( initList.get( i ).isMonster ) {
+				Moflow_Creature critter = initList.get( i );
+				critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
+			}
+		}
+	}
+	
+	private void autoRollAll() {
+		Random rand = new Random();
+		for ( int i = 0; i < initList.size(); i++ ) {
+			Moflow_Creature critter = initList.get( i );
+			critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
+		}
+	}
+	
+	private void sortList( boolean descending ) {
+		Comparator< Moflow_Creature > comparator;
+		if ( descending ) {
+			comparator = Collections.reverseOrder();
+			Collections.sort( initList, comparator );
+		} else {
+			Collections.sort( initList );
+		}
+	}
+	
+	private void startInitiative() {
+		roundCount = 1;
+		roundsText.setText( String.valueOf( roundCount ) );
+		initList.get( 0 ).setHasInit( true );
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// DATABASE
 	//////////////////////////////////////////////////////////////////////////
@@ -544,7 +602,44 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	
 	@Override
 	public void onClick( View view ) {
-		Moflow_Creature critter = initList.get(selectedItemPosition);
+		int index;
+		index = getWhoHasInitiative();
+		
+		if ( index == -1 ) {
+			initList.get( 0 ).hasInit = true;
+			roundCount = 1;
+			index = 0;
+		}
+		
+		else if ( view == nextButton ) {
+			initList.get( index ).hasInit = false;
+			if ( index == initList.size() - 1 ) {
+				initList.get( 0 ).hasInit = true;
+				roundCount += 1;
+			}
+			else
+				initList.get( index + 1 ).hasInit = true;
+			
+			roundsText.setText( String.valueOf( roundCount ) );
+		}
+		
+		else if ( view == prevButton ) {
+			index = getWhoHasInitiative();
+			initList.get( index ).hasInit = false;
+			if ( index == 0 ) {
+				if ( roundCount <= 1 ) {
+					roundCount = 1;
+					initList.get( 0 ).hasInit = true;
+				} else {
+					initList.get( initList.size() - 1 ).hasInit = true;
+					roundCount -= 1;
+				}
+			}
+			else
+				initList.get( index - 1 ).hasInit = true;
+			
+			roundsText.setText( String.valueOf( roundCount ) );
+		}
 		
 		adapter.notifyDataSetChanged();
 	}
@@ -566,6 +661,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	public void onClick( DialogInterface dialog, int which ) {
 		final int NEW, PARTY, ENCOUNTER, CATALOG;
 		final int REMOVE_PC, REMOVE_MONSTER, REMOVE_ALL;
+		final int START, SORT_ASC, SORT_DESC, AUTO_PCS, AUTO_MONSTERS, AUTO_ALL;
 		
 		NEW = 0;
 		PARTY = 1;
@@ -575,6 +671,13 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		REMOVE_PC = 0;
 		REMOVE_MONSTER = 1;
 		REMOVE_ALL = 2;
+		
+		START = 0;
+		SORT_ASC = 1;
+		SORT_DESC = 2;
+		AUTO_PCS = 3;
+		AUTO_MONSTERS = 4;
+		AUTO_ALL = 5;
 		
 		if ( dialog == addOptionsDialog ) {
 			if ( which == NEW )
@@ -610,20 +713,23 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			loadCreatureFromDB( menuList[ which ] );
 			adapter.notifyDataSetChanged();
 		}
+		
 		else if ( dialog == itemDialog ) {
 			addNewItemToList( which );
 			adapter.notifyDataSetChanged();
 		}
+		
 		else if ( dialog == friendFoeDialog ) {
 			creatureType = which;
 			itemDialog.show();
 			prepareItemDialogForNewPC();
 		}
+		
 		else if ( dialog == waitListDialog ) {
 			int index = getWhoHasInitiative();
 			
 			if ( index > 1 && index < initList.size() ) {
-				initList.add( index - 1, waitList.get( which ) );
+				initList.add( index, waitList.get( which ) );
 				waitList.remove( which );
 			}
 			else if ( index == 0 ) {
@@ -639,6 +745,23 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		
 		else if ( dialog == itemEditDialog ) {
 			setNewStats();
+			adapter.notifyDataSetChanged();
+		}
+		
+		else if ( dialog == initiativeOptionsDialog ) {
+			if ( which == START )
+				startInitiative();
+			else if ( which == SORT_ASC )
+				sortList( false );
+			else if ( which == SORT_DESC )
+				sortList( true );
+			else if ( which == AUTO_PCS )
+				autoRollPlayers();
+			else if ( which == AUTO_MONSTERS )
+				autoRollMonsters();
+			else if ( which == AUTO_ALL )
+				autoRollAll();
+			
 			adapter.notifyDataSetChanged();
 		}
 	}
@@ -657,6 +780,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	    		startWaitList();
 	    		return true;
 	    	case R.id.menu_initiative:
+	    		startInitMenu();
 	    		return true;
 	        default:
 	            return super.onOptionsItemSelected(item);

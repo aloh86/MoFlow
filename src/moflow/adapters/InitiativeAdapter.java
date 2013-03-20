@@ -61,6 +61,12 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 		
 		setCurrentHPTextColor( creature.getCurrentHP(), creature.getMaxHitPoints(), holder.initHPCurrent );
 		holder.initHPMax.setTextColor( Color.GREEN );
+		
+		if ( creature.getHasInit() ) 
+			convertView.setBackgroundColor( Color.parseColor( "#383951" ) );
+		else
+			convertView.setBackgroundColor( Color.BLACK );
+			
 		return convertView;
 	}
 	
@@ -74,7 +80,7 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 			else if ( flatScore >=80 && percent < 90 )
 				hpTV.setTextColor( Color.YELLOW );
 			else if ( flatScore >= 70 && percent < 80 )
-				hpTV.setTextColor( Color.parseColor( "#FF4500" ) ); // orange
+				hpTV.setTextColor( Color.parseColor( "#FFA000" ) ); // orange
 			else
 				hpTV.setTextColor( Color.parseColor( "#FC1501" ) ); // gummi red
 		} else

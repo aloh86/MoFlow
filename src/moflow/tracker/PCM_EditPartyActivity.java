@@ -240,7 +240,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		
 		// setup the delete dialog
 		builder = new AlertDialog.Builder( this );
-		builder.setMessage( "Delete Party?" );
+		builder.setMessage( "Delete Character?" );
 		builder.setPositiveButton( "Yes", this );
 		builder.setNegativeButton( "No", this );
 		deleteDialog = builder.create();

@@ -14,7 +14,7 @@ public class MenuGridAdapter extends BaseAdapter {
 	private int [] iconResIDs;
 	private String [] icoText = {
 			"PC Manager", "Encounter Manager", "Creature Catalog",
-			"Initiative", "Options", "Manual"
+			"Initiative", "Manual"
 	};
 	
 	public MenuGridAdapter( Context c ) {

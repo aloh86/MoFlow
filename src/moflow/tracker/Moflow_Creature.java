@@ -100,10 +100,22 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	public int getInitiative() { return initiative; }
 	
 	/**
+	 * Get has-init state.
+	 * @return true if creature has initiative, false otherwise.
+	 */
+	public boolean getHasInit() { return hasInit; }
+	
+	/**
 	 * Determine whether item is a "monster" creature or a player character.
 	 * @return true if monster creature, false if player character
 	 */
 	public boolean isCreature() { return isMonster; }
+	
+	/**
+	 * Set creature's has init state
+	 * @param has true to set initiative, false otherwise
+	 */
+	public void setHasInit( boolean has ) { hasInit = has; }
 	
 	/**
 	 * Mutator for character name
