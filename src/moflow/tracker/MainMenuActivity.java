@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import moflow.adapters.*;
 /*
@@ -25,6 +26,7 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 	
 	private enum Position { PC_MANAGER, ENC_MANAGER, CREATURE, INIT, MANUAL };
 	private GridView grid;
+	private LinearLayout mainRLayout;
 	
 	/**
 	 * Initializes the main menu.
@@ -36,6 +38,9 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 		setContentView( R.layout.main );
 		
 		MenuGridAdapter gridAdapter = new MenuGridAdapter( getApplicationContext() );
+		
+		mainRLayout = ( LinearLayout ) findViewById( R.id.mainRlayout );
+		mainRLayout.setBackgroundResource( R.drawable.moflow_main_screen );
 		
 		grid = ( GridView ) findViewById( R.id.menuGridView );
 		grid.setAdapter( gridAdapter );

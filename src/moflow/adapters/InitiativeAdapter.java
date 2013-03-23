@@ -63,7 +63,7 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 		holder.initHPMax.setTextColor( Color.GREEN );
 		
 		if ( creature.getHasInit() ) 
-			convertView.setBackgroundColor( Color.parseColor( "#383951" ) );
+			convertView.setBackgroundColor( Color.parseColor( "#694489" ) );
 		else
 			convertView.setBackgroundColor( Color.BLACK );
 			

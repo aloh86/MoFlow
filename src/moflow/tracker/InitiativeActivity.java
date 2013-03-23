@@ -43,6 +43,7 @@ InitiativeActivity.java
 Keeps track of initiative.
 ===============================================================================
 */
+import android.widget.Toast;
 
 public class InitiativeActivity extends ListActivity 
 implements OnClickListener, OnItemClickListener, OnItemLongClickListener, android.content.DialogInterface.OnClickListener, OnFocusChangeListener {
@@ -312,9 +313,15 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	
 	private void removeAllPCs() {
 		ListIterator< Moflow_Creature > litr = initList.listIterator();
+		ListIterator< Moflow_Creature > waitLitr = waitList.listIterator();
 		while( litr.hasNext() ) {
 			if ( !litr.next().isCreature() ) {
 				litr.remove();
+			}
+		}
+		while( waitLitr.hasNext() ) {
+			if ( !waitLitr.next().isCreature() ) {
+				waitLitr.remove();
 			}
 		}
 		adapter.notifyDataSetChanged();
@@ -322,9 +329,15 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	
 	private void removeAllMonsters() {
 		ListIterator< Moflow_Creature > litr = initList.listIterator();
+		ListIterator< Moflow_Creature > waitLitr = waitList.listIterator();
 		while( litr.hasNext() ) {
 			if ( litr.next().isCreature() ) {
 				litr.remove();
+			}
+		}
+		while( waitLitr.hasNext() ) {
+			if ( waitLitr.next().isCreature() ) {
+				waitLitr.remove();
 			}
 		}
 		adapter.notifyDataSetChanged();
@@ -332,6 +345,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	
 	private void removeAll() {
 		initList.clear();
+		waitList.clear();
 		adapter.notifyDataSetChanged();
 	}
 	
@@ -405,7 +419,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	}
 	
 	private void startInitMenu() {
-		String [] menu = { "Start", "Sort Ascending", "Sort Descending", "Auto Roll Players", "Auto Roll Monsters", "Auto Roll All" };
+		String [] menu = { "Restart", "Sort Ascending", "Sort Descending", "Auto Roll Players", "Auto Roll Monsters", "Auto Roll All" };
 		AlertDialog.Builder builder = new AlertDialog.Builder( this );
 		builder.setTitle( "Initiative" );
 		builder.setItems( menu, this );
@@ -421,6 +435,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 				critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
 			}
 		}
+		sortList( true );
 	}
 	
 	private void autoRollMonsters() {
@@ -431,6 +446,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 				critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
 			}
 		}
+		sortList( true );
 	}
 	
 	private void autoRollAll() {
@@ -439,6 +455,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			Moflow_Creature critter = initList.get( i );
 			critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
 		}
+		sortList( true );
 	}
 	
 	private void sortList( boolean descending ) {
@@ -455,6 +472,24 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		roundCount = 1;
 		roundsText.setText( String.valueOf( roundCount ) );
 		initList.get( 0 ).setHasInit( true );
+	}
+	
+	private void addItemToWaitList() {
+		if ( initList.get( selectedItemPosition ).hasInit ) {
+			if ( selectedItemPosition >= 0 && selectedItemPosition < initList.size() - 1 ) {
+				initList.get( selectedItemPosition ).hasInit = false;
+				initList.get( selectedItemPosition + 1 ).hasInit = true;
+			}
+			else if ( selectedItemPosition == initList.size() - 1 ) {
+				initList.get( selectedItemPosition ).hasInit = false;
+				initList.get( 0 ).hasInit = true;
+			}
+			waitList.add( initList.get( selectedItemPosition ) );
+	        initList.remove( selectedItemPosition );
+	        adapter.notifyDataSetChanged();
+		}
+		else
+			Toast.makeText( this, "Must have initiative to wait", Toast.LENGTH_LONG ).show();
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -602,16 +637,16 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	
 	@Override
 	public void onClick( View view ) {
-		int index;
-		index = getWhoHasInitiative();
+		int index = getWhoHasInitiative();
 		
-		if ( index == -1 ) {
+		if ( index == -1 && !initList.isEmpty() ) {
 			initList.get( 0 ).hasInit = true;
 			roundCount = 1;
 			index = 0;
+			roundsText.setText( String.valueOf( roundCount ) );
 		}
 		
-		else if ( view == nextButton ) {
+		else if ( view == nextButton && !initList.isEmpty() ) {
 			initList.get( index ).hasInit = false;
 			if ( index == initList.size() - 1 ) {
 				initList.get( 0 ).hasInit = true;
@@ -620,10 +655,15 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			else
 				initList.get( index + 1 ).hasInit = true;
 			
+			if ( index != initList.size() - 1 )
+				this.getListView().smoothScrollToPosition( index + 1 );
+			else
+				this.getListView().smoothScrollToPosition( 0 );
+			
 			roundsText.setText( String.valueOf( roundCount ) );
 		}
 		
-		else if ( view == prevButton ) {
+		else if ( view == prevButton && !initList.isEmpty() ) {
 			index = getWhoHasInitiative();
 			initList.get( index ).hasInit = false;
 			if ( index == 0 ) {
@@ -637,6 +677,11 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			}
 			else
 				initList.get( index - 1 ).hasInit = true;
+			
+			if ( index != 0 )
+				this.getListView().smoothScrollToPosition( index - 1 );
+			else
+				this.getListView().smoothScrollToPosition( initList.size() - 1 );
 			
 			roundsText.setText( String.valueOf( roundCount ) );
 		}
@@ -728,7 +773,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		else if ( dialog == waitListDialog ) {
 			int index = getWhoHasInitiative();
 			
-			if ( index > 1 && index < initList.size() ) {
+			if ( index >= 1 && index < initList.size() ) {
 				initList.add( index, waitList.get( which ) );
 				waitList.remove( which );
 			}
@@ -749,8 +794,12 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		}
 		
 		else if ( dialog == initiativeOptionsDialog ) {
-			if ( which == START )
+			int index = getWhoHasInitiative();
+			
+			if ( which == START ) {
+				initList.get( index ).hasInit = false;
 				startInitiative();
+			}
 			else if ( which == SORT_ASC )
 				sortList( false );
 			else if ( which == SORT_DESC )
@@ -805,9 +854,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	            moveItemUp();
 	            return true;
 	        case R.id.menu_itemWait:
-	            waitList.add( initList.get( selectedItemPosition ) );
-	            initList.remove( selectedItemPosition );
-	            adapter.notifyDataSetChanged();
+	        	addItemToWaitList();
 	            return true;
 	        case R.id.menu_itemRemove:
 	        	removeItem();

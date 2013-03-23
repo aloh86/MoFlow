@@ -24,6 +24,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EncounterListActivity extends ListActivity 
@@ -33,6 +34,8 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 	
 	private EditText encNameField;
 	private EditText renameField;
+	
+	private TextView activityNameTV;
 	
 	private AlertDialog newEncounterDialog;
 	private AlertDialog renameDialog;
@@ -103,6 +106,9 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 		encList = new ArrayList< String >();
 		adapter = new ArrayAdapter< String >( this, R.layout.list_item, encList );
 		this.setListAdapter( adapter );
+		
+		activityNameTV = ( TextView ) findViewById( R.id.activityNameTV );
+		activityNameTV.setText( "Encounters" );
 		
 		this.registerForContextMenu( this.getListView() );
 		this.getListView().setOnItemLongClickListener( this );

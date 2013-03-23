@@ -14,18 +14,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class CreatureCatalogActivity extends ListActivity 
-implements OnClickListener, android.content.DialogInterface.OnClickListener, OnItemClickListener, OnItemLongClickListener {
+implements OnClickListener, android.content.DialogInterface.OnClickListener, OnItemClickListener, OnItemLongClickListener, OnFocusChangeListener {
 	
 	private Button addButton;
+	
+	private TextView activityNameTV;
 	
 	private AlertDialog entryDialog;
 	private AlertDialog deleteDialog;
@@ -64,6 +68,9 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		addButton = ( Button ) findViewById( R.id.addGroupButton );
 		addButton.setText( "Add New Creature" );
 		addButton.setOnClickListener( this );
+		
+		activityNameTV = ( TextView ) findViewById( R.id.activityNameTV );
+		activityNameTV.setText( "Creature Catalog" );
 		
 		initializeDialogs();
 		
@@ -113,8 +120,12 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		acField = ( EditText ) entryView.findViewById( R.id.acEditText );
 		hpField = ( EditText ) entryView.findViewById( R.id.hpEditText );
 		
+		initField.setOnFocusChangeListener( this );
+		acField.setOnFocusChangeListener( this );
+		hpField.setOnFocusChangeListener( this );
+		
 		builder = new AlertDialog.Builder( this );
-		builder.setMessage( "Delete Party?" );
+		builder.setMessage( "Delete Creature?" );
 		builder.setPositiveButton( "Yes", this );
 		builder.setNegativeButton( "No", this );
 		deleteDialog = builder.create();
@@ -141,6 +152,9 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 			creature = new Moflow_Creature();
 		else
 			oldCrit = creature.clone();
+		
+		if ( nameField.getText().toString().trim().equals( "" ) )
+			nameField.setText( "Nameless One" );
 		
 		String currentNameInField = nameField.getText().toString().trim();
 		
@@ -171,17 +185,23 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 			return name;
 		
 		int startIndex = 0;
+		// grab the first letter of the name to find the appropriate section header
 		String startSection = String.valueOf( name.toUpperCase( Locale.getDefault() ).charAt( 0 ) );
 		
+		// move startIndex up to the section header
 		for ( int i = 0; i < creatureList.size(); i++ ) {
+			// if it went to end of the list it's unique
+			if ( i == creatureList.size() - 1 )
+				return name;
+			
 			if ( startSection.equalsIgnoreCase( creatureList.get( i ).name ) && creatureList.get( i ).header ) {
 				startIndex = i + 1;
 				break;
 			}
-			// if it went to end of the list it's unique
-			if ( i == creatureList.size() - 1 )
-				return name;
 		}
+		
+		if ( creatureList.get( startIndex ).header )
+			return name;
 		
 		String original = name;
 		boolean unique = false;
@@ -242,6 +262,8 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
 			deleteCatalogCreatureFromDB( item.name );
 			creatureList.remove( selectedItemPosition );
+//			creatureList.clear();
+//			loadCreaturesFromDB();
 			adapter.notifyDataSetChanged();
 		}
 	}
@@ -349,5 +371,15 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		deleteDialog.show();
 		
 		return false;
+	}
+	
+	@Override
+	public void onFocusChange( View view, boolean hasFocus ) {
+		if ( view == initField && !hasFocus && initField.getText().toString().trim().equals("") )
+			initField.setText( "0" );
+		else if ( view == acField && !hasFocus && acField.getText().toString().trim().equals("") )
+			acField.setText( "0" );
+		else if ( view == hpField && !hasFocus && hpField.getText().toString().trim().equals("") )
+			hpField.setText( "0" );
 	}
 }

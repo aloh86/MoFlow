@@ -13,5 +13,5 @@
 	    android:text="@string/testText"
 	    android:layout_gravity="center_horizontal"
 	    android:gravity="center"
-	    android:drawableTop="@drawable/icon"/>
+	    android:drawableTop="@drawable/init_icon"/>
 </LinearLayout>

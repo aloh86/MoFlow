@@ -11,7 +11,13 @@ import android.widget.TextView;
 
 public class MenuGridAdapter extends BaseAdapter {
 	private Context mContext;
-	private int [] iconResIDs;
+	private int [] iconResIDs = { 
+			moflow.tracker.R.drawable.sword_pc_icon,
+			moflow.tracker.R.drawable.encounter_icon,
+			moflow.tracker.R.drawable.creature_cat_icon,
+			moflow.tracker.R.drawable.init_icon,
+			moflow.tracker.R.drawable.manual_icon
+	};
 	private String [] icoText = {
 			"PC Manager", "Encounter Manager", "Creature Catalog",
 			"Initiative", "Manual"
@@ -46,7 +52,7 @@ public class MenuGridAdapter extends BaseAdapter {
 			
 			TextView iconText = ( TextView ) v.findViewById( moflow.tracker.R.id.icon_text );
 			iconText.setText( icoText[ position ] );
-			iconText.setCompoundDrawablesWithIntrinsicBounds( 0, moflow.tracker.R.drawable.icon, 0, 0 );
+			iconText.setCompoundDrawablesWithIntrinsicBounds( 0, iconResIDs[ position ], 0, 0 );
 		}
 		
 		return v;

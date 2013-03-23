@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 /*
 ===============================================================================
@@ -43,6 +44,8 @@ implements OnClickListener, android.view.View.OnClickListener, OnItemLongClickLi
 	
 	private EditText groupNameField;
 	private EditText renameField;
+	
+	private TextView activityNameTV;
 	
 	private AlertDialog newGroupDialog;
 	private AlertDialog renameDialog;
@@ -292,6 +295,9 @@ implements OnClickListener, android.view.View.OnClickListener, OnItemLongClickLi
 		newPartyButton = ( Button ) findViewById( R.id.addGroupButton );
 		newPartyButton.setText( "Create New Party" );
 		newPartyButton.setOnClickListener( this );
+		
+		activityNameTV = ( TextView ) findViewById( R.id.activityNameTV );
+		activityNameTV.setText( "Parties" );
 		
 		partyList = new ArrayList< String >();
 		adapter = new ArrayAdapter< String >( this, R.layout.list_item, partyList );
