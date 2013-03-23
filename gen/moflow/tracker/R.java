@@ -91,9 +91,10 @@ public final class R {
         public static final int init_layout=0x7f030008;
         public static final int list_item=0x7f030009;
         public static final int main=0x7f03000a;
-        public static final int options=0x7f03000b;
-        public static final int sec_header=0x7f03000c;
-        public static final int sec_item=0x7f03000d;
+        public static final int manual=0x7f03000b;
+        public static final int options=0x7f03000c;
+        public static final int sec_header=0x7f03000d;
+        public static final int sec_item=0x7f03000e;
     }
     public static final class menu {
         public static final int edit_del_prompt=0x7f060000;
@@ -123,6 +124,14 @@ public final class R {
         public static final int initiativeLabel=0x7f040022;
         public static final int logoTextA=0x7f040005;
         public static final int logoTextB=0x7f040006;
+        public static final int man_catalogHeader=0x7f040027;
+        public static final int man_catalogHelp=0x7f04002b;
+        public static final int man_encHeader=0x7f040026;
+        public static final int man_encHelp=0x7f04002a;
+        public static final int man_initHeader=0x7f040028;
+        public static final int man_initHelp=0x7f04002c;
+        public static final int man_pcHeader=0x7f040025;
+        public static final int man_pcHelp=0x7f040029;
         public static final int menuAdd=0x7f04000e;
         public static final int menuGrave=0x7f040011;
         public static final int menuInit=0x7f040012;
@@ -141,6 +150,8 @@ public final class R {
         public static final int testText=0x7f04000a;
     }
     public static final class style {
+        public static final int manualHeader=0x7f050001;
+        public static final int manualText=0x7f050002;
         public static final int statEntry=0x7f050000;
     }
 }

@@ -600,6 +600,9 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		for ( int i = 0; i < initList.size(); i++ ) {
 			db.insertItemFromInitiative( initList.get( i ) );
 		}
+		for ( int i = 0; i < waitList.size(); i++ ) {
+			db.insertItemFromInitiative( waitList.get( i ) );
+		}
 	}
 	
 	private void loadListFromDB() {
