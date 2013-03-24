@@ -40,7 +40,7 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 		MenuGridAdapter gridAdapter = new MenuGridAdapter( getApplicationContext() );
 		
 		mainRLayout = ( LinearLayout ) findViewById( R.id.mainRlayout );
-		mainRLayout.setBackgroundResource( R.drawable.moflow_main_screen );
+		//mainRLayout.setBackgroundResource( R.drawable.moflow_main_screen );
 		
 		grid = ( GridView ) findViewById( R.id.menuGridView );
 		grid.setAdapter( gridAdapter );

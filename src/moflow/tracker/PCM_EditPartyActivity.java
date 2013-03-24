@@ -268,6 +268,10 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		} else {
 			oldCharacter = ( Moflow_PC ) character.clone();
 		}
+		
+		if ( itemNameField.getText().toString().trim().equals( "" ) )
+			itemNameField.setText( "Nameless One" );
+		
 		String currentNameInField = itemNameField.getText().toString().trim();
 		
 		if ( !character.getCharName().equals( currentNameInField ) ) {

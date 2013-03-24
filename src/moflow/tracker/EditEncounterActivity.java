@@ -151,15 +151,19 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		
 		// setup the delete dialog
 		builder = new AlertDialog.Builder( this );
-		builder.setMessage( "Delete Party?" );
+		builder.setMessage( "Delete Creature?" );
 		builder.setPositiveButton( "Yes", this );
 		builder.setNegativeButton( "No", this );
 		deleteDialog = builder.create();
 		
 		// setup the catalog dialog
+		String [] nameList = new String[ catalogList.size() ];
+		for ( int i = 0; i < catalogList.size(); i++ ) { 
+			nameList[ i ] = catalogList.get( i );
+		}
 		builder = new AlertDialog.Builder( this );
 		builder.setTitle( "Creature Catalog" );
-		builder.setAdapter( catalogAdapter, this );
+		builder.setItems( nameList, this );
 		catalogDialog = builder.create();
 	}
 	
