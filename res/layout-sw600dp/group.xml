@@ -18,7 +18,7 @@
 	    	android:layout_height="wrap_content"
 	    	android:layout_width="fill_parent"
 	    	android:text="@string/testText"
-	    	android:textSize="16sp"/>
+	    	android:textSize="28sp"/>
     </LinearLayout>
     
 	<RelativeLayout
@@ -47,7 +47,8 @@
 	    			android:id="@+id/addBtn"
 	    			android:layout_width="0dip"
 	    			android:layout_height="wrap_content" 
-	    			android:layout_weight="1" />
+	    			android:layout_weight="1"
+	    			android:textSize="21sp" />
 		</LinearLayout>
 	</RelativeLayout>
 </RelativeLayout>

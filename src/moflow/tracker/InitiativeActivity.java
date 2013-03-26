@@ -74,7 +74,8 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	private int creatureType; // 0 for Friendly, 1 for Hostile
 	private int selectedItemPosition;
 	
-	private final String RETAIN_LIST_KEY = "listKey";
+	private final String RETAIN_INIT_KEY = "initKey";
+	private final String RETAIN_ROUND_KEY = "roundKey";
 	
 	String [] menuList; // used for lists opened by menu options
 	
@@ -122,20 +123,26 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		loadListFromDB();
 	}
 	
-//	@Override
-//	public void onSaveInstanceState( Bundle outState ) {
-//		super.onSaveInstanceState( outState );
-//		outState.putParcelableArrayList( RETAIN_LIST_KEY, initList );
-//	}
-//	
-//	@Override
-//	public void onRestoreInstanceState( Bundle savedInstanceState ) {
-//		super.onRestoreInstanceState( savedInstanceState );
-//		initList = savedInstanceState.getParcelableArrayList( RETAIN_LIST_KEY );
-//		adapter = new InitiativeAdapter( this, R.layout.init_layout, initList );
-//		this.setListAdapter( adapter );
-//		adapter.notifyDataSetChanged();
-//	}
+	@Override
+	public void onSaveInstanceState( Bundle outState ) {
+		super.onSaveInstanceState( outState );
+		int index = getWhoHasInitiative();
+		outState.putInt( RETAIN_INIT_KEY, index );
+		outState.putInt( RETAIN_ROUND_KEY, roundCount );
+	}
+	
+	@Override
+	public void onRestoreInstanceState( Bundle savedInstanceState ) {
+		super.onRestoreInstanceState( savedInstanceState );
+		int index = savedInstanceState.getInt( RETAIN_INIT_KEY );
+		
+		if ( index != -1 && initList.size() > 0 )
+			initList.get( index ).hasInit = true;
+		
+		int round = savedInstanceState.getInt( RETAIN_ROUND_KEY );
+		roundCount = round;
+		roundsText.setText( String.valueOf( roundCount ) );
+	}
 	
 	public void onStop() {
 		db.deleteInitListAll();
@@ -669,6 +676,12 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		else if ( view == prevButton && !initList.isEmpty() ) {
 			index = getWhoHasInitiative();
 			initList.get( index ).hasInit = false;
+			
+			if ( index != 0 )
+				this.getListView().smoothScrollToPosition( index - 1 );
+			else if ( index == 0 && roundCount > 1 )
+				this.getListView().smoothScrollToPosition( initList.size() - 1 );
+			
 			if ( index == 0 ) {
 				if ( roundCount <= 1 ) {
 					roundCount = 1;
@@ -680,11 +693,6 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			}
 			else
 				initList.get( index - 1 ).hasInit = true;
-			
-			if ( index != 0 )
-				this.getListView().smoothScrollToPosition( index - 1 );
-			else
-				this.getListView().smoothScrollToPosition( initList.size() - 1 );
 			
 			roundsText.setText( String.valueOf( roundCount ) );
 		}

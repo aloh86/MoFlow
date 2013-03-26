@@ -9,6 +9,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.os.Bundle;
