@@ -136,12 +136,12 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		super.onRestoreInstanceState( savedInstanceState );
 		int index = savedInstanceState.getInt( RETAIN_INIT_KEY );
 		
-		if ( index != -1 && initList.size() > 0 )
+		if ( index != -1 && initList.size() > 0 ) {
 			initList.get( index ).hasInit = true;
-		
-		int round = savedInstanceState.getInt( RETAIN_ROUND_KEY );
-		roundCount = round;
-		roundsText.setText( String.valueOf( roundCount ) );
+			int round = savedInstanceState.getInt( RETAIN_ROUND_KEY );
+			roundCount = round;
+			roundsText.setText( String.valueOf( roundCount ) );
+		}
 	}
 	
 	public void onStop() {
