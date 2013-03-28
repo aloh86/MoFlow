@@ -279,6 +279,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	//////////////////////////////////////////////////////////////////////////
 	private void prepItemDialog() {
 		itemNameField.setText( creature.getCharName() );
+		itemNameField.requestFocus();
 		initField.setText( String.valueOf( creature.getInitMod() ) );
 		acField.setText( String.valueOf( creature.getAC() ) );
 		hpField.setText( String.valueOf( creature.getMaxHitPoints() ) );

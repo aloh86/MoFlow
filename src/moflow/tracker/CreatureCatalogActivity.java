@@ -133,6 +133,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	
 	private void prepNewEntryDialog() {
 		nameField.setText( "" );
+		nameField.requestFocus();
 		initField.setText( "0" );
 		acField.setText( "0" );
 		hpField.setText( "0" );
@@ -140,6 +141,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	
 	private void prepEditEntryDialog( Moflow_Creature critter ) {
 		nameField.setText( critter.getCharName() );
+		nameField.requestFocus();
 		initField.setText( String.valueOf( critter.getInitMod() ) );
 		acField.setText( String.valueOf( critter.getAC() ) );
 		hpField.setText( String.valueOf( critter.getMaxHitPoints() ) );

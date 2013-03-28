@@ -248,6 +248,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	
 	private void prepareItemDialogForNewPC() {
 		itemNameField.setText( "" );
+		itemNameField.requestFocus();
 		initField.setText( "0" );
 		acField.setText( "0" );
 		hpField.setText( "0" );
@@ -255,6 +256,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	
 	private void prepareItemDialogForEditPC() {
 		itemNameField.setText( character.getCharName() );
+		itemNameField.requestFocus();
 		initField.setText( String.valueOf( character.getInitMod() ) );
 		acField.setText( String.valueOf( character.getAC() ) );
 		hpField.setText( String.valueOf ( character.getMaxHitPoints() ) );
