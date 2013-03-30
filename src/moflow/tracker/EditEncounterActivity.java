@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -38,6 +40,9 @@ public class EditEncounterActivity extends ListActivity
 implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener {
 	// Members for the Activity
 	private Button addButton;
+	private Button newItemButton;
+	
+	private LinearLayout buttonLayout;
 	
 	private TextView encounterNameTV;
 	
@@ -56,6 +61,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	private Moflow_Creature creature;
 	
 	private boolean editingItem;
+	private boolean addingNew;
 	
 	private MoFlowDB database;
 	
@@ -109,8 +115,20 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	
 	private void initializeLayout() {
 		addButton = ( Button ) findViewById( R.id.addBtn );
-		addButton.setText( "Add Creature" );
+		addButton.setText( "Catalog" );
 		addButton.setOnClickListener( this );
+		
+		newItemButton = new Button( this );
+		newItemButton.setText( "New Item" );
+		newItemButton.setOnClickListener( this );
+		newItemButton.setLayoutParams( new LinearLayout.LayoutParams( 0, LayoutParams.WRAP_CONTENT, 1 ) );
+		
+		if ( DeviceInfo.getSizeInfo( this ) == Configuration.SCREENLAYOUT_SIZE_LARGE )
+			newItemButton.setTextSize( 21 );
+		
+		
+		buttonLayout = ( LinearLayout ) findViewById( R.id.pcAddEditBtns );
+		buttonLayout.addView( newItemButton );
 		
 		encounterNameTV = ( TextView ) findViewById( R.id.partyNameTV );
 		
@@ -223,6 +241,14 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		return oldName;
 	}
 	
+	private void prepItemDialogForNew() {
+		itemNameField.setText( "" );
+		itemNameField.requestFocus();
+		initField.setText( String.valueOf( 0 ) );
+		acField.setText( String.valueOf( 0 ) );
+		hpField.setText( String.valueOf( 0 ) );
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// DATABASES
 	//////////////////////////////////////////////////////////////////////////
@@ -314,6 +340,29 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		}
 	}
 	
+	private void handleItemFromScratch( final int which ) {
+		if ( which == Dialog.BUTTON_POSITIVE ) {
+			creature = new Moflow_Creature();
+			
+			if ( itemNameField.getText().toString().trim().equals( "" ) )
+				itemNameField.setText( "Nameless One" );
+			
+			String uniqueName = makeNameUnique( itemNameField.getText().toString().trim() );
+			// don't use setCreatureStats. Initial design did not allow new items,
+			// only items from the creature catalog, which setCreatureStats() was
+			// designed in mind for. Set creature manually here.
+			creature.setName( uniqueName );
+			creature.setInitMod( Integer.parseInt( initField.getText().toString().trim() ) );
+			creature.setArmorClass( Integer.parseInt( acField.getText().toString().trim() ) );
+			creature.setHitPoints( Integer.parseInt( hpField.getText().toString().trim() ) );
+			
+			creatureList.add( creature );
+			adapter.notifyDataSetChanged();
+			saveItemToCreaturesDB();
+			creature = null;
+		}
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// LISTENERS
 	//////////////////////////////////////////////////////////////////////////
@@ -321,7 +370,13 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	@Override
 	public void onClick( View view ) {
 		if ( view == addButton ) {
+			addingNew = false;
 			catalogDialog.show();
+		}
+		else if ( view == newItemButton ) {
+			addingNew = true;
+			itemDialog.show();
+			prepItemDialogForNew();
 		}
 	}
 
@@ -354,9 +409,11 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	public void onClick( DialogInterface dialog, int which ) {
 		if ( dialog == catalogDialog )
 			addNewItemToList( which );
-		else if ( dialog == itemDialog )
+		else if ( dialog == itemDialog && !addingNew )
 			handleEditedItem( which );
 		else if ( dialog == deleteDialog )
 			handleItemDelete( which );
+		else if ( dialog == itemDialog && addingNew )
+			handleItemFromScratch( which );
 	}
 }
