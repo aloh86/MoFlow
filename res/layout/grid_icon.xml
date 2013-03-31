@@ -11,6 +11,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:text="@string/testText"
+	    android:textColor="#FFF"
 	    android:layout_gravity="center_horizontal"
 	    android:gravity="center"
 	    android:drawableTop="@drawable/init_icon"/>

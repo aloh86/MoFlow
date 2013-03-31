@@ -121,4 +121,10 @@
         
         To start initiative, add some items to the list and hit the next button.\n\n
     </string>
+    
+    <string name="credits">
+        Wolf Pup Software\n
+        Programming: Alex Oh\n
+        Artwork: Alexander Forssberg\n
+    </string>
 </resources>

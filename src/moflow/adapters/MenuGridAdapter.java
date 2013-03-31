@@ -12,11 +12,11 @@ import android.widget.TextView;
 public class MenuGridAdapter extends BaseAdapter {
 	private Context mContext;
 	private int [] iconResIDs = { 
-			moflow.tracker.R.drawable.sword_pc_icon,
-			moflow.tracker.R.drawable.encounter_icon,
-			moflow.tracker.R.drawable.creature_cat_icon,
+			moflow.tracker.R.drawable.knight,
+			moflow.tracker.R.drawable.skull,
+			moflow.tracker.R.drawable.gazer,
 			moflow.tracker.R.drawable.init_icon,
-			moflow.tracker.R.drawable.manual_icon
+			moflow.tracker.R.drawable.manual
 	};
 	private String [] icoText = {
 			"PC Manager", "Encounter Manager", "Creature Catalog",

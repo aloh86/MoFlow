@@ -11,12 +11,12 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int creature_cat_icon=0x7f020000;
-        public static final int encounter_icon=0x7f020001;
-        public static final int init_icon=0x7f020002;
-        public static final int manual_icon=0x7f020003;
-        public static final int moflow_main_screen=0x7f020004;
-        public static final int sword_pc_icon=0x7f020005;
+        public static final int gazer=0x7f020000;
+        public static final int init_icon=0x7f020001;
+        public static final int knight=0x7f020002;
+        public static final int main_screen=0x7f020003;
+        public static final int manual=0x7f020004;
+        public static final int skull=0x7f020005;
     }
     public static final class id {
         public static final int acEditText=0x7f07000c;
@@ -110,6 +110,7 @@ public final class R {
         public static final int catalogDialogAmt=0x7f04000d;
         public static final int contentDescription1=0x7f04000b;
         public static final int contentDescription2=0x7f04001f;
+        public static final int credits=0x7f04002d;
         public static final int delete=0x7f040004;
         public static final int edit=0x7f040003;
         public static final int groupItemACText=0x7f040008;
