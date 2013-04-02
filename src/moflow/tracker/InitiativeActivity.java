@@ -753,6 +753,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 				removeAllMonsters();
 			else if ( which == REMOVE_ALL )
 				removeAll();
+			roundsText.setText( "" );
 		}
 		
 		else if ( dialog == partyListDialog ) {
@@ -807,7 +808,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		else if ( dialog == initiativeOptionsDialog ) {
 			int index = getWhoHasInitiative();
 			
-			if ( which == START ) {
+			if ( which == START &&  index != -1 ) {
 				initList.get( index ).hasInit = false;
 				startInitiative();
 			}
