@@ -39,7 +39,7 @@ can add items to encounter from the creature catalog.
 public class EditEncounterActivity extends ListActivity 
 implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener {
 	// Members for the Activity
-	private Button addButton;
+	private Button catalogButton;
 	private Button newItemButton;
 	
 	private LinearLayout buttonLayout;
@@ -114,9 +114,9 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	//////////////////////////////////////////////////////////////////////////
 	
 	private void initializeLayout() {
-		addButton = ( Button ) findViewById( R.id.addBtn );
-		addButton.setText( "Catalog" );
-		addButton.setOnClickListener( this );
+		catalogButton = ( Button ) findViewById( R.id.addBtn );
+		catalogButton.setText( "Catalog" );
+		catalogButton.setOnClickListener( this );
 		
 		newItemButton = new Button( this );
 		newItemButton.setText( "New Item" );
@@ -369,7 +369,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	
 	@Override
 	public void onClick( View view ) {
-		if ( view == addButton ) {
+		if ( view == catalogButton ) {
 			addingNew = false;
 			catalogDialog.show();
 		}
@@ -413,7 +413,9 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 			handleEditedItem( which );
 		else if ( dialog == deleteDialog )
 			handleItemDelete( which );
-		else if ( dialog == itemDialog && addingNew )
+		else if ( dialog == itemDialog && addingNew ) {
 			handleItemFromScratch( which );
+			addingNew = false;
+		}
 	}
 }
