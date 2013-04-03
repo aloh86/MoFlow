@@ -79,10 +79,11 @@
         rename an encounter or to delete it, tap-hold the item until a menu appears. To add
         creatures into an encounter, just tap the name of the encounter to load the encounter screen.\n\n
         
-        To add a creature into the encounter, tap the "Add Creature" button. A dialog will appear 
+        To add a creature into the encounter, tap the "Catalog" button. A dialog will appear 
         showing you all the creatures that exist in the creature catalog. Tap a creature in the
         dialog to add it to the list. To modify an existing creature, simply tap the item you 
-        wish to modify. To delete an item, tap-hold the item you wish to delete until a dialog appears.\n\n
+        wish to modify. To delete an item, tap-hold the item you wish to delete until a dialog appears.
+        To add an item not in the catalog, choose the "New Item" button.\n\n
     </string>
     
     <string name="man_catalogHelp">
@@ -123,8 +124,8 @@
     </string>
     
     <string name="credits">
-        Wolf Pup Software\n
-        Programming: Alex Oh\n
-        Artwork: Alexander Forssberg\n
+        Wolfpup Software\n
+        www.wolfpupsoftware.com\n
+        helpdesk@wolfpupsoftware.com\n\n
     </string>
 </resources>
