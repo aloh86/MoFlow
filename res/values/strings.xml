@@ -101,7 +101,8 @@
         All initiative list options are accessed through your Android options key. When you hit the options
         key, you have the choice of "Add", "Remove", "Wait List", or "Initiative".\n\n
         
-        The Add option allows you to add a new item, party, encounter, or a creature from the catalog to the list.\n\n
+        The Add option allows you to add a new item, party, encounter, or a creature from the catalog to the list.
+        If you add a party or encounter group twice, please note that it will result in duplicate values.\n\n
         
         The Remove option allows you to remove either only players, only monsters, or all items from the list.\n\n
         

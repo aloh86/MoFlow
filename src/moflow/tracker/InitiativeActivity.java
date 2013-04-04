@@ -237,6 +237,32 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		itemEditDialog = builder.create();
 	}
 	
+	private String makeNameUnique( String name )
+	{
+		if ( initList.size() == 0 )
+			return name;
+		
+		int count = 1;
+		String original = name;
+		boolean unique = false;
+		
+		while ( !unique )
+		{
+			for ( int i = 0; i < initList.size(); i++ )
+			{
+				if ( initList.get( i ).creatureName.equals( name ) )
+				{
+					name = original + " " + String.valueOf( count );
+					count++;
+					i = 0;	// take i back to the start to re-check
+				}
+				else
+					unique = true;
+			}
+		}
+		return name;
+	}
+	
 	private void prepareItemDialogForNewPC() {
 		nameField.setText( "" );
 		nameField.requestFocus();
@@ -252,10 +278,14 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			else
 				newCreature = new Moflow_Creature();
 			
-			if ( nameField.getText().toString().trim().equals( "" ) )
+			if ( nameField.getText().toString().trim().equals( "" ) ) {
+				nameField.setText( "Nameless One" );
 				newCreature.setName( "Nameless One" );
-			else
-				newCreature.setName( nameField.getText().toString().trim() );
+			}
+			
+			String uniqueName = makeNameUnique( nameField.getText().toString().trim() );
+			newCreature.setName( uniqueName );
+			
 			newCreature.setInitMod( Integer.parseInt( initField.getText().toString().trim() ) );
 			newCreature.setArmorClass( Integer.parseInt( acField.getText().toString().trim() ) );
 			newCreature.setHitPoints( Integer.parseInt( hpField.getText().toString().trim() ) );
@@ -598,6 +628,9 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 			critter.setArmorClass( cur.getInt( 2 ) ); // get ac column
 			critter.setHitPoints( cur.getInt( 3 ) ); // get hp column
 			critter.setCurrentHP( cur.getInt( 3 ) ); // set current hp same to max hp
+			
+			String unique = makeNameUnique( critter.creatureName );
+			critter.creatureName = unique;
 			initList.add( critter );
 		}
 		cur.close();
