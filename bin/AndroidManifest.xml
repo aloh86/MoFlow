@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="moflow.tracker"
+      android:versionCode="3"
+      android:versionName="1.2">
+    <uses-sdk android:minSdkVersion="8" />
+
+    <application android:icon="@drawable/gazer" android:label="@string/app_name">
+		
+		<activity 
+		android:name="moflow.tracker.MainMenuActivity"
+		android:label="@string/app_name"
+		android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+		android:name=".OptionsScreen"
+		android:label="Options" >
+			<intent-filter>
+				<action android:name="moflow.tracker.OptionsScreen" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		<activity
+		android:name=".ManagerScreen"
+		android:label="Managers" >
+			<intent-filter>
+				<action android:name="moflow.tracker.ManagerScreen" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+		android:name=".PCM_PartyListActivity"
+		android:label="Party List" >
+			<intent-filter>
+				<action android:name="moflow.tracker.PCM_PartyListActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+		android:name=".PCM_EditPartyActivity"
+		android:label="Edit Party" >
+			<intent-filter>
+				<action android:name="moflow.tracker.PCM_EditPartyActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+		android:name=".CreatureCatalogActivity"
+		android:label="Creature Catalog" >
+			<intent-filter>
+				<action android:name="moflow.tracker.CreatureCatalogActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+		android:name=".EncounterListActivity"
+		android:label="Encounters" >
+			<intent-filter>
+				<action android:name="moflow.tracker.EncounterListActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+		android:name=".EditEncounterActivity"
+		android:label="Edit Encounter" >
+			<intent-filter>
+				<action android:name="moflow.tracker.EditEncounterActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+		android:name=".InitiativeActivity"
+		android:label="Initiative" >
+			<intent-filter>
+				<action android:name="moflow.tracker.InitiativeActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+		android:name=".ManualActivity"
+		android:label="Manual" >
+			<intent-filter>
+				<action android:name="moflow.tracker.ManualActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+    </application>
+</manifest>
