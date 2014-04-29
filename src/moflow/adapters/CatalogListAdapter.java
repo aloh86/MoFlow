@@ -2,8 +2,8 @@ package moflow.adapters;
 
 import java.util.List;
 
-import moflow.tracker.CatalogItem;
-import moflow.tracker.R;
+import moflow.activities.CatalogItem;
+import moflow.activities.R;
 
 import android.content.Context;
 import android.view.LayoutInflater;

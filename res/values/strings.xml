@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- ContentDescriptions -->
+    <string name="icon_img">Icon Image</string>
+    
+    <!-- Main Menu Strings -->
+    <string name="actbar_help">Help</string>
+    <string name="actbar_featreq">Feature Request</string>
+    <string name="actbar_donate">Donate</string>
+    <string name="actbar_helpWebContact">help@wolfpupsoftware.com</string>
+    <string name="actbar_helpYoutube">Wolfpup YouTube Channel</string>
+    <string name="actbar_helpSiteLink">Wolfpup Software Website</string>
+    <string name="actbar_donateMsg">
+        If you find this app useful please help alleviate global poverty by donating to \nOne Day\'s Wages.</string>
+
     <string name="app_name">MoFlow</string>
-    <string name="about_info">MoFlow created by Alex Oh\n\nFor user 
-    manual and support see www.wolfpup.com</string>
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
@@ -51,82 +62,4 @@
     <string name="man_encHeader">Encounter Manager</string>
     <string name="man_catalogHeader">Creature Catalog</string>
     <string name="man_initHeader">Initiative</string>
-    
-    <string name="man_pcHelp">
-        You can use the player character manager to save your player\'s characters so that
-        they can be easily inserted into initiative later on. You can form different parties
-        and place PCs into those parties.\n\n
-        
-        To add a new party, tap on the "Create New Party" button. A dialog will appear where
-        you can name your party. Once finished, your party name will appear in the list. To
-        rename a party or to delete it, tap-hold the item until a menu appears. To add
-        PCs into a party, just tap the name of the party to load the party screen.\n\n
-        
-        To add a PC into the party, tap the "Add PC" button. A dialog will appear where you
-        can enter in character details. Your PCs must have unique names. When you are finished,
-        the PC will appear in the list. To modify an existing character, simply tap the item
-        you wish to modify. To delete an item, tap-hold the item you wish to delete until a 
-        dialog appears.\n\n
-    </string>
-    
-    <string name="man_encHelp">
-        You can use the encounter manager to prepare encounters so that they can be easily
-        inserted into initiative later on. You can form different encounters and place 
-        monsters from the creature catalog into your encounters.\n\n
-        
-        To add a new encounter, tap on the "Create New Encounter" button. A dialog will appear where
-        you can name your encounter. Once finished, your encounter name will appear in the list. To
-        rename an encounter or to delete it, tap-hold the item until a menu appears. To add
-        creatures into an encounter, just tap the name of the encounter to load the encounter screen.\n\n
-        
-        To add a creature into the encounter, tap the "Catalog" button. A dialog will appear 
-        showing you all the creatures that exist in the creature catalog. Tap a creature in the
-        dialog to add it to the list. To modify an existing creature, simply tap the item you 
-        wish to modify. To delete an item, tap-hold the item you wish to delete until a dialog appears.
-        To add an item not in the catalog, choose the "New Item" button.\n\n
-    </string>
-    
-    <string name="man_catalogHelp">
-        You can use the creature catalog to save the creatures that will appear in your adventures
-        and campaigns. It is necessary to insert items into the creature catalog if you want to use the encounter
-        manager, since the creature catalog is used to populate encounters.\n\n
-        
-        To add a new creature to the catalog, tap the "Add New Creature" button. A dialog will
-        appear where you can enter in creature details. Once finished, the item will appear
-        in the catalog list. To modify a creature, just tap on it. To delete a creature, tap-hold
-        until a dialog appears.\n\n
-    </string>
-    
-    <string name="man_initHelp">
-        All initiative list options are accessed through your Android options key. When you hit the options
-        key, you have the choice of "Add", "Remove", "Wait List", or "Initiative".\n\n
-        
-        The Add option allows you to add a new item, party, encounter, or a creature from the catalog to the list.
-        If you add a party or encounter group twice, please note that it will result in duplicate values.\n\n
-        
-        The Remove option allows you to remove either only players, only monsters, or all items from the list.\n\n
-        
-        The Wait List option allows you to put back into the initiative those players or monsters who have decided
-        to wait their turn. When players are reinserted back into the list, the players are inserted before the
-        item that currently has initiative. An item can only be sent to the wait list if the item has initiative.\n\n
-        
-        The Initiative option allows you to restart initiative, sort the list in ascending or descending order, or
-        automatically roll initiative for either only players, only monsters, or for everyone. Auto-rolling
-        will sort the items in descending order.\n\n
-        
-        If you tap-hold an item, you can move that item up or down in the list, send it to the wait list (if it 
-        has intiative), or remove the item. Moving the item up or down will not change it\'s initiative value,
-        so if you wish to reset it, it must be done manually.\n\n
-        
-        To modify the initiative value, hit points, and armor class of an item, just tap the item and a dialog
-        will appear where you can edit the values. Press the "OK" button to finish.\n\n
-        
-        To start initiative, add some items to the list and hit the next button.\n\n
-    </string>
-    
-    <string name="credits">
-        Wolfpup Software\n
-        www.wolfpupsoftware.com\n
-        helpdesk@wolfpupsoftware.com\n\n
-    </string>
 </resources>

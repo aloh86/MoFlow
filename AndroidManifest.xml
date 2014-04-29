@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="moflow.tracker"
+      package="moflow.activities"
       android:versionCode="3"
       android:versionName="1.2">
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="19" />
 
-    <application android:icon="@drawable/gazer" android:label="@string/app_name">
+    <application android:icon="@drawable/gazer" android:label="@string/app_name" android:theme="@android:style/Theme.Holo">
 		
 		<activity 
-		android:name="moflow.tracker.MainMenuActivity"
+		android:name="moflow.activities.MainMenuActivity"
 		android:label="@string/app_name"
 		android:screenOrientation="portrait">
 			<intent-filter>
@@ -21,15 +21,7 @@
 		android:name=".OptionsScreen"
 		android:label="Options" >
 			<intent-filter>
-				<action android:name="moflow.tracker.OptionsScreen" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<activity
-		android:name=".ManagerScreen"
-		android:label="Managers" >
-			<intent-filter>
-				<action android:name="moflow.tracker.ManagerScreen" />
+				<action android:name="moflow.activities.OptionsScreen" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -38,7 +30,7 @@
 		android:name=".PCM_PartyListActivity"
 		android:label="Party List" >
 			<intent-filter>
-				<action android:name="moflow.tracker.PCM_PartyListActivity" />
+				<action android:name="moflow.activities.PCM_PartyListActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -47,7 +39,7 @@
 		android:name=".PCM_EditPartyActivity"
 		android:label="Edit Party" >
 			<intent-filter>
-				<action android:name="moflow.tracker.PCM_EditPartyActivity" />
+				<action android:name="moflow.activities.PCM_EditPartyActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -56,7 +48,7 @@
 		android:name=".CreatureCatalogActivity"
 		android:label="Creature Catalog" >
 			<intent-filter>
-				<action android:name="moflow.tracker.CreatureCatalogActivity" />
+				<action android:name="moflow.activities.CreatureCatalogActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -65,7 +57,7 @@
 		android:name=".EncounterListActivity"
 		android:label="Encounters" >
 			<intent-filter>
-				<action android:name="moflow.tracker.EncounterListActivity" />
+				<action android:name="moflow.activities.EncounterListActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -74,7 +66,7 @@
 		android:name=".EditEncounterActivity"
 		android:label="Edit Encounter" >
 			<intent-filter>
-				<action android:name="moflow.tracker.EditEncounterActivity" />
+				<action android:name="moflow.activities.EditEncounterActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -83,19 +75,10 @@
 		android:name=".InitiativeActivity"
 		android:label="Initiative" >
 			<intent-filter>
-				<action android:name="moflow.tracker.InitiativeActivity" />
+				<action android:name="moflow.activities.InitiativeActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-		
-		<activity
-		android:name=".ManualActivity"
-		android:label="Manual" >
-			<intent-filter>
-				<action android:name="moflow.tracker.ManualActivity" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
+
     </application>
 </manifest>

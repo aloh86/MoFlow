@@ -5,21 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainMenuListAdapter extends BaseAdapter {
 	private Context mContext;
 	private int [] iconResIDs = { 
-			moflow.tracker.R.drawable.knight,
-			moflow.tracker.R.drawable.skull,
-			moflow.tracker.R.drawable.gazer,
-			moflow.tracker.R.drawable.init_icon,
-			moflow.tracker.R.drawable.donate
+			moflow.activities.R.drawable.knight,
+			moflow.activities.R.drawable.skull,
+			moflow.activities.R.drawable.gazer,
+			moflow.activities.R.drawable.init_icon,
 	};
+
 	private String [] icoText = {
 			"Create Player Characters", "Create Encounters", "Creature Catalog",
-			"Initiative", "Donate"
+			"Initiative"
 	};
 	
 	public MainMenuListAdapter( Context c ) {
@@ -47,11 +46,12 @@ public class MainMenuListAdapter extends BaseAdapter {
 		
 		if( v == null ) {
 			LayoutInflater inflater = ( LayoutInflater ) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-			v = inflater.inflate( moflow.tracker.R.layout.inflate_mainmenu, null );
+			v = inflater.inflate( moflow.activities.R.layout.inflate_mainmenu, null );
 			
-			TextView iconText = ( TextView ) v.findViewById( moflow.tracker.R.id.mainMenuItemText );
+			TextView iconText = ( TextView ) v.findViewById( moflow.activities.R.id.mainMenuItemText );
 			iconText.setText( icoText[ position ] );
 			iconText.setCompoundDrawablesWithIntrinsicBounds( iconResIDs[ position ], 0, 0, 0 );
+            iconText.setCompoundDrawablePadding( 10 );
 		}
 		
 		return v;

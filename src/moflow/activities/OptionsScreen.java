@@ -1,6 +1,6 @@
 package moflow.activities;
 
-import moflow.tracker.R;
+import moflow.activities.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

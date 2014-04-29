@@ -2,10 +2,10 @@ package moflow.adapters;
 
 import java.util.List;
 
+import moflow.activities.CatalogItem;
+import moflow.activities.Moflow_Creature;
 import moflow.adapters.CatalogListAdapter.ViewHolder;
-import moflow.tracker.CatalogItem;
-import moflow.tracker.Moflow_Creature;
-import moflow.tracker.R;
+import moflow.activities.R;
 
 import android.content.Context;
 import android.content.res.ColorStateList;

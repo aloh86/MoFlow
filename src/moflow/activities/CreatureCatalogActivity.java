@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import moflow.adapters.CatalogListAdapter;
 import moflow.database.MoFlowDB;
-import moflow.tracker.R;
+import moflow.activities.R;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;

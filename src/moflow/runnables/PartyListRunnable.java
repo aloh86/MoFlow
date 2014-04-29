@@ -6,8 +6,8 @@ import android.database.SQLException;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import moflow.activities.Moflow_Party;
 import moflow.database.MoFlowDB;
-import moflow.tracker.Moflow_Party;
 
 public class PartyListRunnable implements Runnable {
 	private Context context;

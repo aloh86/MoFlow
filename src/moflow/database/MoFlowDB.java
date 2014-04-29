@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import moflow.tracker.Conditions;
-import moflow.tracker.Moflow_Creature;
-import moflow.tracker.Moflow_PC;
+import moflow.activities.Conditions;
+import moflow.activities.Moflow_Creature;
+import moflow.activities.Moflow_PC;
 
 /*
 ===============================================================================
