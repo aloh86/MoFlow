@@ -35,7 +35,7 @@ public class DonateDialogFragment extends DialogFragment implements DialogInterf
 
         AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
         builder.setView( msg );
-        builder.setPositiveButton("Ok", this);
+        builder.setPositiveButton( "Ok", this );
 
         return builder.create();
     }

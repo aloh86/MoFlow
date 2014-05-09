@@ -26,7 +26,7 @@ as well as options and a user manual.
 
 public class MainMenuActivity extends Activity implements OnItemClickListener {
 
-    private enum Position { PC_MANAGER, ENC_MANAGER, CREATURE, INIT, DONATE };
+    private enum Position { PC_MANAGER, ENC_MANAGER, CREATURE, INIT, OPTIONS };
 	private HelpDialogFragment helpDlg;
     private DonateDialogFragment donateDlg;
 	/**
@@ -103,7 +103,7 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
         i.putExtra(Intent.EXTRA_SUBJECT, "Feature Request");
         i.putExtra(Intent.EXTRA_TEXT   , "");
         try {
-            startActivity(Intent.createChooser( i, "Send mail...") );
+            startActivity( Intent.createChooser( i, "Send mail...") );
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText( this, "There are no email clients installed.", Toast.LENGTH_SHORT ).show();
         }

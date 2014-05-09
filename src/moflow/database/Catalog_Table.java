@@ -18,7 +18,6 @@ CREATE TABLE Catalog (
 
 public class Catalog_Table implements BaseColumns {
 	public static final String TABLE_NAME     		= "Catalog";
-	//public static final String COL_Letter			= "Letter";
 	public static final String COL_CreatureName     = "CreatureName";
 	public static final String COL_InitBonus  		= "InitBonus";
 	public static final String COL_ArmorClass 		= "ArmorClass";
