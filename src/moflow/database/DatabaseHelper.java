@@ -29,6 +29,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion ) {
+        switch ( oldVersion ) {
+            case 1:
+                
+        }
 	}
 
 }

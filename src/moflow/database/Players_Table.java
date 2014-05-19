@@ -32,6 +32,13 @@ public abstract class Players_Table implements BaseColumns {
 			COL_InitBonus   + " INTEGER NOT NULL, " +
 			COL_ArmorClass  + " INTEGER NOT NULL, " +
 			COL_MaxHP		+ " INTEGER NOT NULL, " +
-			"PRIMARY KEY (" + COL_PartyName + "," + COL_PCName + ") " +
+			"PRIMARY KEY (" + COL_PartyName + "," + COL_PCName + "), " +
+            "FOREIGN KEY (" + COL_PartyName + ") REFERENCES " + Catalog_Table.TABLE_NAME + "(" + COL_PartyName + ") " +
+                    "ON UPGRADE CASCADE ON DELETE CASCADE" +
 			");";
+
+    public static final String V1_UPGRADE =
+            "ALTER TABLE " + TABLE_NAME +
+            "ADD FOREIGN KEY (" + COL_PartyName + ") REFERENCES " + Catalog_Table.TABLE_NAME + "(" + COL_PartyName + ") " +
+                    "ON UPGRADE CASCADE ON DELETE CASCADE;";
 }
