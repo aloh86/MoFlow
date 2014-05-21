@@ -1,19 +1,13 @@
 package moflow.database;
 
 import android.provider.BaseColumns;
+
+import java.util.ArrayList;
 /*
 ===============================================================================
 Players_Table.java
 
 Database table schema for all players belonging to a party group.
-
-CREATE TABLE PlayerCharacters (
-	PartyName  VARCHAR NOT NULL
-	PCName	   VARCHAR NOT NULL
-	InitBonus  INTEGER NOT NULL
-	ArmorClass INTEGER NOT NULL
-	MaxHP	   INTEGER NOT NULL
-)
 ===============================================================================
 */
 
@@ -24,6 +18,17 @@ public abstract class Players_Table implements BaseColumns {
 	public static final String COL_InitBonus  = "InitBonus";
 	public static final String COL_ArmorClass = "ArmorClass";
 	public static final String COL_MaxHP	  = "MaxHP";
+    public static final String COL_STR        = "str";
+    public static final String COL_DEX        = "dex";
+    public static final String COL_CON        = "con";
+    public static final String COL_INT        = "int";
+    public static final String COL_WIS        = "wis";
+    public static final String COL_CHA        = "cha";
+    public static final String COL_FORT       = "fort";
+    public static final String COL_REF        = "ref";
+    public static final String COL_WILL       = "will";
+
+    public static ArrayList< String > V1_UPGRADE;
 	
 	public static final String DB_CREATE = 
 			"CREATE TABLE " + TABLE_NAME + " ( " +
@@ -32,13 +37,17 @@ public abstract class Players_Table implements BaseColumns {
 			COL_InitBonus   + " INTEGER NOT NULL, " +
 			COL_ArmorClass  + " INTEGER NOT NULL, " +
 			COL_MaxHP		+ " INTEGER NOT NULL, " +
+            COL_STR         + " INTEGER, " +
+            COL_DEX         + " INTEGER, " +
+            COL_CON         + " INTEGER, " +
+            COL_INT         + " INTEGER, " +
+            COL_WIS         + " INTEGER, " +
+            COL_CHA         + " INTEGER, " +
+            COL_FORT        + " INTEGER, " +
+            COL_REF         + " INTEGER, " +
+            COL_WILL        + " INTEGER, " +
 			"PRIMARY KEY (" + COL_PartyName + "," + COL_PCName + "), " +
-            "FOREIGN KEY (" + COL_PartyName + ") REFERENCES " + Catalog_Table.TABLE_NAME + "(" + COL_PartyName + ") " +
+            "FOREIGN KEY (" + COL_PartyName + ") REFERENCES " + Parties_Table.TABLE_NAME + "(" + Parties_Table.COL_PartyName + ") " +
                     "ON UPGRADE CASCADE ON DELETE CASCADE" +
 			");";
-
-    public static final String V1_UPGRADE =
-            "ALTER TABLE " + TABLE_NAME +
-            "ADD FOREIGN KEY (" + COL_PartyName + ") REFERENCES " + Catalog_Table.TABLE_NAME + "(" + COL_PartyName + ") " +
-                    "ON UPGRADE CASCADE ON DELETE CASCADE;";
 }

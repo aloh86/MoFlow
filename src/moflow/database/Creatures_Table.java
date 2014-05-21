@@ -25,6 +25,16 @@ public abstract class Creatures_Table implements BaseColumns {
 	public static final String COL_InitBonus  		= "InitBonus";
 	public static final String COL_ArmorClass 		= "ArmorClass";
 	public static final String COL_MaxHP	  		= "MaxHP";
+    public static final String COL_STR        = "str";
+    public static final String COL_DEX        = "dex";
+    public static final String COL_CON        = "con";
+    public static final String COL_INT        = "int";
+    public static final String COL_WIS        = "wis";
+    public static final String COL_CHA        = "cha";
+    public static final String COL_FORT       = "fort";
+    public static final String COL_REF        = "ref";
+    public static final String COL_WILL       = "will";
+
 	
 	public static final String DB_CREATE = 
 			"CREATE TABLE " 	+ TABLE_NAME + " ( " +
@@ -33,6 +43,17 @@ public abstract class Creatures_Table implements BaseColumns {
 			COL_InitBonus		+ " INTEGER NOT NULL, " +
 			COL_ArmorClass		+ " INTEGER NOT NULL, " +
 			COL_MaxHP			+ " INTEGER NOT NULL, " +
-			"PRIMARY KEY (" + COL_Encounter + "," + COL_CreatureName + ")" +
-			");";
+            COL_STR             + " INTEGER, " +
+            COL_DEX             + " INTEGER, " +
+            COL_CON             + " INTEGER, " +
+            COL_INT             + " INTEGER, " +
+            COL_WIS             + " INTEGER, " +
+            COL_CHA             + " INTEGER, " +
+            COL_FORT            + " INTEGER, " +
+            COL_REF             + " INTEGER, " +
+            COL_WILL            + " INTEGER, " +
+            "PRIMARY KEY (" + COL_Encounter + "," + COL_CreatureName + "), " +
+            "FOREIGN KEY (" + COL_Encounter + ") REFERENCES " + Encounters_Table.TABLE_NAME + "(" + Encounters_Table.COL_Encounter + ") " +
+            "ON UPGRADE CASCADE ON DELETE CASCADE" +
+            ");";
 }
