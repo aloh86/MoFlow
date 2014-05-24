@@ -382,10 +382,10 @@ implements OnClickListener, android.view.View.OnClickListener, OnItemLongClickLi
 		
 		cur = database.getPCForGroup( party.getPartyName() );
 		
-		Moflow_PC pc;
+		Moflow_Creature pc;
 		while ( cur.moveToNext() )
 		{
-			pc = new Moflow_PC();
+			pc = new Moflow_Creature();
 			for ( int i = 0; i < cur.getColumnCount(); i++ )
 			{
 				if ( i == 0 )

@@ -275,7 +275,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	private void addNewItemToList( int button ) {
 		if ( button == Dialog.BUTTON_POSITIVE ) {
 			if ( creatureType == 0 ) // if a PC
-				newCreature = new Moflow_PC();
+				newCreature = new Moflow_Creature();
 			else
 				newCreature = new Moflow_Creature();
 			
@@ -554,9 +554,9 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		
 		cur = db.getPCForGroup( partyName );
 		
-		Moflow_PC critter;
+		Moflow_Creature critter;
 		while ( cur.moveToNext() ) {
-			critter = new Moflow_PC();
+			critter = new Moflow_Creature();
 			critter.setName( cur.getString( 0 ) ); // get name column
 			critter.setInitMod( cur.getInt( 1 ) ); // get init column
 			critter.setArmorClass( cur.getInt( 2 ) ); // get ac column

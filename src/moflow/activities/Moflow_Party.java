@@ -182,7 +182,7 @@ public class Moflow_Party implements Parcelable
 	
 		
 	/**
-	 * Constructor for reconstructing a Moflow_PC object from a Parcel
+	 * Constructor for reconstructing a Moflow_Creature object from a Parcel
 	 * @param in the parcel to read from
 	 */
 	@SuppressWarnings("unchecked")

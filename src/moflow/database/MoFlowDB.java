@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import moflow.activities.Conditions;
 import moflow.activities.Moflow_Creature;
-import moflow.activities.Moflow_PC;
 
 /*
 ===============================================================================
@@ -347,7 +346,7 @@ public class MoFlowDB {
 	 * @param pcName PC's name
 	 * @return the number of rows affected
 	 */
-	public int updatePlayerRecord( Moflow_PC updated, String partyName, String pcName ) {
+	public int updatePlayerRecord( Moflow_Creature updated, String partyName, String pcName ) {
 		String whereClause = 
 				Players_Table.COL_PartyName + " = ? AND " +
 				Players_Table.COL_PCName + " = ?";

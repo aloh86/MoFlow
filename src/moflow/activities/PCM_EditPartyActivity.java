@@ -37,9 +37,9 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	
 	private TextView partyNameTV;
 	
-	private ArrayAdapter<Moflow_PC> adapter;
+	private ArrayAdapter<Moflow_Creature> adapter;
 	
-	private ArrayList< Moflow_PC > partyList;
+	private ArrayList< Moflow_Creature > partyList;
 	
 	private AlertDialog itemDialog;
 	private AlertDialog deleteDialog;
@@ -48,7 +48,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	
 	private Moflow_Party party;
 	
-	private Moflow_PC character;
+	private Moflow_Creature character;
 	
 	private boolean editingItem;
 	
@@ -160,7 +160,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	
 	private void handleEditItem( int button ) {
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
-			Moflow_PC oldCharacter = setPCStats( true );
+			Moflow_Creature oldCharacter = setPCStats( true );
 			adapter.notifyDataSetChanged();
 			updateMemberInDB( character, party.getPartyName(), oldCharacter.getCharName() );
 		}
@@ -189,8 +189,8 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		
 		partyNameTV = ( TextView ) findViewById( R.id.partyNameTV );
 		
-		partyList = new ArrayList< Moflow_PC >();
-		adapter = new ArrayAdapter< Moflow_PC >( this, R.layout.list_item, partyList );
+		partyList = new ArrayList< Moflow_Creature >();
+		adapter = new ArrayAdapter< Moflow_Creature >( this, R.layout.list_item, partyList );
 		this.setListAdapter( adapter );
 		
 		// initialize views for the item dialogs
@@ -225,7 +225,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 			partyNameTV.setText( party.getPartyName() );
 			
 			for ( int i = 0; i < party.getPartySize(); i++ )
-				partyList.add( (Moflow_PC) party.getMember( i ) );
+				partyList.add( (Moflow_Creature) party.getMember( i ) );
 			
 			adapter.notifyDataSetChanged();
 		}
@@ -263,13 +263,13 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 		hpField.setText( String.valueOf ( character.getMaxHitPoints() ) );
 	}
 	
-	private Moflow_PC setPCStats( boolean editing ) {	
-		Moflow_PC oldCharacter = null;
+	private Moflow_Creature setPCStats( boolean editing ) {
+        Moflow_Creature oldCharacter = null;
 		
 		if ( !editing ) {
-			character = new Moflow_PC();
+			character = new Moflow_Creature();
 		} else {
-			oldCharacter = ( Moflow_PC ) character.clone();
+			oldCharacter = ( Moflow_Creature ) character.clone();
 		}
 		
 		if ( itemNameField.getText().toString().trim().equals( "" ) )
@@ -344,7 +344,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnF
 	 * @param partyName party that the old character belongs to
 	 * @param oldName the name of the character before it was edited
 	 */
-	private void updateMemberInDB( Moflow_PC updated, String partyName, String oldName ) {
+	private void updateMemberInDB( Moflow_Creature updated, String partyName, String oldName ) {
 		database.updatePlayerRecord( updated, partyName, oldName );
 	}
 }

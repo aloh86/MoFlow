@@ -8,9 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private UpgradeDB udb;
+
 	public DatabaseHelper(Context context, String DBName, CursorFactory factory,
 			int version) {
 		super( context, DBName, factory, version );
+        udb = new UpgradeDB();
 	}
 	
 	@Override
@@ -31,7 +34,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion ) {
         switch ( oldVersion ) {
             case 1:
-                
+                udb.execV1Upgrades( db );
+            default:
         }
 	}
 

@@ -10,9 +10,7 @@ import android.os.Parcelable;
 Moflow_Creature.java
 Alex Oh
 
-Base class for Moflow_PC objects (the PCs) and Moflow_Monster objects (all other
-creatures/monsters.
-player character.
+Representation of a creature (PCs and Monsters).
 ===============================================================================
 */
 public class Moflow_Creature implements Parcelable, Cloneable, Comparable
@@ -46,7 +44,7 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	}
 	
 	/**
-	 * Deep copy a Moflow_PC object.
+	 * Deep copy a Moflow_Creature object.
 	 */
 	public Moflow_Creature clone() {
 		Moflow_Creature twin;
@@ -180,7 +178,7 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 		};
 		
 	/**
-	 * Constructor for reconstructing a Moflow_PC object from a Parcel
+	 * Constructor for reconstructing a Moflow_Creature object from a Parcel
 	 * @param in the parcel to read from
 	 */
 	protected Moflow_Creature( Parcel in )

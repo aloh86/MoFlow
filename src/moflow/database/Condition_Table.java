@@ -25,8 +25,8 @@ public class Condition_Table implements BaseColumns {
 	public static final String COL_PARALYZED	= "Paralyzed";
 	public static final String COL_SHAKEN		= "Shaken";
 	public static final String COL_STUNNED		= "Stunned";
-			
-	
+
+
 	public static final String DB_CREATE =
 			"CREATE TABLE "  + TABLE_NAME + " ( " +
 			_ID				 + " INTEGER PRIMARY KEY, " +
