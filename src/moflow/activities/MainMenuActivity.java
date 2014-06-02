@@ -17,8 +17,8 @@ import moflow.dialogs.HelpDialogFragment;
 ===============================================================================
 MainMenuActivity.java
 
-Activity for the atv_main menu. This Activity starts when the program is first run.
-The atv_main menu is the access point for all of the application's atv_main features:
+Activity for the main menu. This Activity starts when the program is first run.
+The main menu is the access point for all of the application's main features:
 1) PC Manager 2) Encounter Manager 3) Creature Catalog 4) Initiative Tracker
 as well as options and a user manual.
 ===============================================================================
@@ -30,12 +30,12 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 	private HelpDialogFragment helpDlg;
     private DonateDialogFragment donateDlg;
 	/**
-	 * Initializes the atv_main menu.
+	 * Initializes the main menu.
 	 */
 	@Override
 	public void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
-		setContentView( R.layout.atv_main);
+		setContentView( R.layout.main );
 		
 		MainMenuListAdapter gridAdapter = new MainMenuListAdapter( getApplicationContext() );
 
@@ -87,7 +87,7 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id ) {
 		if ( position == Position.PC_MANAGER.ordinal() )
-			startActivity( new Intent( "moflow.activities.PCM_PartyListActivity" ) );
+			startActivity( new Intent( "moflow.activities.PartyListActivity" ) );
 		else if ( position == Position.ENC_MANAGER.ordinal() )
 			startActivity( new Intent( "moflow.activities.EncounterListActivity" ) );
 		else if ( position == Position.CREATURE.ordinal() )

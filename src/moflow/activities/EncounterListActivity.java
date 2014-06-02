@@ -3,7 +3,6 @@ package moflow.activities;
 import java.util.ArrayList;
 
 import moflow.database.MoFlowDB;
-import moflow.activities.R;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -27,6 +26,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import moflow.wolfpup.Creature;
+import moflow.wolfpup.Party;
 
 public class EncounterListActivity extends ListActivity 
 implements OnClickListener, OnItemLongClickListener, android.content.DialogInterface.OnClickListener, OnItemClickListener {
@@ -65,7 +66,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 	public void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		requestWindowFeature( Window.FEATURE_NO_TITLE );
-		setContentView( R.layout.grouplist );
+
 		
 		initializeLayout();
 		initializeDialogs();
@@ -100,7 +101,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 	//////////////////////////////////////////////////////////////////////////
 	private void initializeLayout()
 	{
-		newEncounterButton = ( Button ) findViewById( R.id.addGroupButton );
+		//newEncounterButton = ( Button ) findViewById( R.id.addGroupButton );
 		newEncounterButton.setText( "Create New Encounter" );
 		newEncounterButton.setOnClickListener( this );
 		
@@ -108,7 +109,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 		adapter = new ArrayAdapter< String >( this, R.layout.list_item, encList );
 		this.setListAdapter( adapter );
 		
-		activityNameTV = ( TextView ) findViewById( R.id.activityNameTV );
+		//activityNameTV = ( TextView ) findViewById( R.id.activityNameTV );
 		activityNameTV.setText( "Encounters" );
 		
 		this.registerForContextMenu( this.getListView() );
@@ -122,7 +123,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 		LayoutInflater inflater = this.getLayoutInflater();
 		
 		// setup the dialog for creating a new group
-		groupNameView = inflater.inflate( R.layout.groupname, null );
+		groupNameView = inflater.inflate( R.layout.single_edittext, null );
 		builder.setView( groupNameView );
 		builder.setMessage( "New Encounter" );
 		builder.setPositiveButton( "OK", this );
@@ -130,17 +131,17 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 		newEncounterDialog = builder.create();
 		
 		// setup the dialog for renaming an existing group
-		renameView = inflater.inflate( R.layout.groupname, null );
+		renameView = inflater.inflate( R.layout.single_edittext, null );
 		builder.setView( renameView );
 		builder.setMessage( "Rename Encounter" );
 		builder.setPositiveButton( "OK", this );
 		builder.setNegativeButton( "Cancel", this );
 		renameDialog = builder.create();
 		
-		encNameField = ( EditText ) groupNameView.findViewById( R.id.groupNameField );
+		//encNameField = ( EditText ) groupNameView.findViewById( R.id.groupNameField );
 		encNameField.setHint( "New Encounter Name" );
 		
-		renameField = ( EditText ) renameView.findViewById( R.id.groupNameField );
+		//renameField = ( EditText ) renameView.findViewById( R.id.groupNameField );
 		renameField.setHint( "New Encounter Name" );
 		
 		// setup the delete dialog
@@ -212,13 +213,13 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 		database.deleteEncounterCreatures( encounterToRemove );
 	}
 	
-	private void loadMonstersIntoEncounter( Moflow_Party party ) {
+	private void loadMonstersIntoEncounter( Party party ) {
 		Cursor cur;
 		
 		cur = database.getCreaturesForEncounter( party.getPartyName() );
 		
 		while ( cur.moveToNext() ) {
-			Moflow_Creature creature = new Moflow_Creature();
+			Creature creature = new Creature();
 			
 			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
 				if ( i == 0 ) // name column
@@ -334,7 +335,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 
 	@Override
 	public void onItemClick( AdapterView<?> parent, View view, int position, long id ) {
-		Moflow_Party monsterParty = new Moflow_Party();
+		Party monsterParty = new Party();
 		monsterParty.setPartyName( encList.get( position ) );
 		loadMonstersIntoEncounter( monsterParty );
 		

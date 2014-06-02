@@ -2,13 +2,10 @@ package moflow.adapters;
 
 import java.util.List;
 
-import moflow.activities.CatalogItem;
-import moflow.activities.Moflow_Creature;
-import moflow.adapters.CatalogListAdapter.ViewHolder;
+import moflow.wolfpup.Creature;
 import moflow.activities.R;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +13,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
-	private List< Moflow_Creature > initList;
+public class InitiativeAdapter extends ArrayAdapter<Creature> {
+	private List<Creature> initList;
 	Context mContext;
 	LayoutInflater inflater;
 	
-	public InitiativeAdapter(Context context, int textViewResourceId, List< Moflow_Creature > objects) {
+	public InitiativeAdapter(Context context, int textViewResourceId, List<Creature> objects) {
 		super( context, textViewResourceId, objects );
 		mContext = context;
 		initList = objects;
@@ -47,7 +44,7 @@ public class InitiativeAdapter extends ArrayAdapter< Moflow_Creature > {
 			holder = ( ViewHolder ) convertView.getTag();
 		}
 		
-		Moflow_Creature creature = getItem( position );
+		Creature creature = getItem( position );
 		holder.initItemName.setText( creature.getCharName() );
 		holder.initValue.setText( String.valueOf( creature.getInitiative() ) );
 		holder.initHPCurrent.setText( String.valueOf( creature.getCurrentHP() ) );

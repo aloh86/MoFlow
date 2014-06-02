@@ -13,6 +13,13 @@
     <string name="actbar_donateMsg">
         If you find this app useful please help alleviate global poverty by donating to \nOne Day\'s Wages.</string>
 
+    <!-- Action Bar String-->
+    <string name="actbar_add">Add</string>
+    <string name="actbar_edit">Edit</string>
+    <string name="actbar_discard">Discard</string>
+    <string name="actbar_confirm">Confirm</string>
+    <string name="actbar_cancel">Cancel</string>
+
     <string name="app_name">MoFlow</string>
     <string name="add">Add</string>
     <string name="edit">Edit</string>

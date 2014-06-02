@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Action bar menu to add, edit, delete and confirm or cancel
+those actions for party and encounter managers.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_new"
+          android:icon="@drawable/ic_action_new"
+          android:title="@string/actbar_add"
+          android:showAsAction="always"/>
+
+    <item android:id="@+id/action_edit"
+          android:icon="@drawable/ic_action_edit"
+          android:title="@string/actbar_edit"
+          android:showAsAction="always"/>
+
+    <item android:id="@+id/action_discard"
+          android:icon="@drawable/ic_action_discard"
+          android:title="@string/actbar_discard"
+          android:showAsAction="always"/>
+
+    <!--Confirm and cancel buttons only shown when editing or deleting an item.-->
+    <item android:id="@+id/action_confirm"
+          android:icon="@drawable/ic_action_accept"
+          android:title="@string/actbar_confirm"
+          android:showAsAction="always"
+          android:visible="false"/>
+
+    <item android:id="@+id/action_cancel"
+          android:icon="@drawable/ic_action_cancel"
+          android:title="@string/actbar_cancel"
+          android:showAsAction="always"
+          android:visible="false"/>
+</menu>

@@ -3,7 +3,6 @@ package moflow.activities;
 import java.util.ArrayList;
 
 import moflow.database.MoFlowDB;
-import moflow.activities.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -23,12 +22,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import moflow.wolfpup.Creature;
+import moflow.wolfpup.DeviceInfo;
+import moflow.wolfpup.Party;
+
 /*
 ===============================================================================
 EditEncounterActivity.java
@@ -47,19 +48,19 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	
 	private TextView encounterNameTV;
 	
-	private ArrayAdapter< Moflow_Creature > adapter;
+	private ArrayAdapter<Creature> adapter;
 	private ArrayAdapter< String > catalogAdapter;
 	
-	private ArrayList< Moflow_Creature > creatureList;
+	private ArrayList<Creature> creatureList;
 	private ArrayList< String > catalogList;
 	
 	private AlertDialog itemDialog;
 	private AlertDialog deleteDialog;
 	private AlertDialog catalogDialog;
 	
-	private Moflow_Party creatureParty;
+	private Party creatureParty;
 	
-	private Moflow_Creature creature;
+	private Creature creature;
 	
 	private boolean editingItem;
 	private boolean addingNew;
@@ -124,7 +125,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		newItemButton.setOnClickListener( this );
 		newItemButton.setLayoutParams( new LinearLayout.LayoutParams( 0, LayoutParams.WRAP_CONTENT, 1 ) );
 		
-		if ( DeviceInfo.getSizeInfo( this ) == Configuration.SCREENLAYOUT_SIZE_LARGE )
+		if ( DeviceInfo.getSizeInfo(this) == Configuration.SCREENLAYOUT_SIZE_LARGE )
 			newItemButton.setTextSize( 21 );
 		
 		
@@ -133,8 +134,8 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		
 		encounterNameTV = ( TextView ) findViewById( R.id.partyNameTV );
 		
-		creatureList = new ArrayList< Moflow_Creature >();
-		adapter = new ArrayAdapter< Moflow_Creature >( this, R.layout.list_item, creatureList );
+		creatureList = new ArrayList<Creature>();
+		adapter = new ArrayAdapter<Creature>( this, R.layout.list_item, creatureList );
 		this.setListAdapter( adapter );
 		
 		// initialize views for the item dialogs
@@ -269,7 +270,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		Cursor cur;
 		
 		cur = database.getCreatureFromCatalog( name );
-		creature = new Moflow_Creature();
+		creature = new Creature();
 		
 		while ( cur.moveToNext() ) {
 			// always returns 4 columns:
@@ -292,7 +293,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 		database.insertCreature( encounterName, creatureName, init, ac, hp ); 
 	}
 	
-	private void updateCreatureInDB( Moflow_Creature updated, String oldName, String encounterName ) {
+	private void updateCreatureInDB( Creature updated, String oldName, String encounterName ) {
 		String name = updated.getCharName();
 		int init = updated.getInitMod();
 		int ac = updated.getAC();
@@ -343,7 +344,7 @@ implements OnClickListener, OnFocusChangeListener, OnItemLongClickListener, OnIt
 	
 	private void handleItemFromScratch( final int which ) {
 		if ( which == Dialog.BUTTON_POSITIVE ) {
-			creature = new Moflow_Creature();
+			creature = new Creature();
 			
 			if ( itemNameField.getText().toString().trim().equals( "" ) )
 				itemNameField.setText( "Nameless One" );

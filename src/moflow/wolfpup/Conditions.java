@@ -1,4 +1,4 @@
-package moflow.activities;
+package moflow.wolfpup;
 
 import java.util.HashMap;
 

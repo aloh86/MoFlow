@@ -8,7 +8,6 @@ import java.util.Random;
 
 import moflow.adapters.InitiativeAdapter;
 import moflow.database.MoFlowDB;
-import moflow.activities.R;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,12 +22,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -45,6 +41,7 @@ Keeps track of initiative.
 ===============================================================================
 */
 import android.widget.Toast;
+import moflow.wolfpup.Creature;
 
 public class InitiativeActivity extends ListActivity 
 implements OnClickListener, OnItemClickListener, OnItemLongClickListener, android.content.DialogInterface.OnClickListener, OnFocusChangeListener {
@@ -65,12 +62,12 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	private AlertDialog waitListDialog;
 	private AlertDialog initiativeOptionsDialog;
 	
-	private ArrayList< Moflow_Creature > initList;
-	private ArrayList< Moflow_Creature > waitList;
+	private ArrayList<Creature> initList;
+	private ArrayList<Creature> waitList;
 	
 	private InitiativeAdapter adapter;
 	
-	private Moflow_Creature newCreature;
+	private Creature newCreature;
 	
 	private int creatureType; // 0 for Friendly, 1 for Hostile
 	private int selectedItemPosition;
@@ -188,11 +185,11 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		nextButton = ( Button ) findViewById( R.id.nextButton );
 		nextButton.setOnClickListener( this );
 		
-		initList = new ArrayList< Moflow_Creature >();
+		initList = new ArrayList<Creature>();
 		adapter = new InitiativeAdapter( this, R.layout.init_layout, initList );
 		this.setListAdapter( adapter );
 		
-		waitList = new ArrayList< Moflow_Creature >();
+		waitList = new ArrayList<Creature>();
 		
 		this.getListView().setOnItemClickListener( this );
 		this.getListView().setOnItemLongClickListener( this );
@@ -275,9 +272,9 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	private void addNewItemToList( int button ) {
 		if ( button == Dialog.BUTTON_POSITIVE ) {
 			if ( creatureType == 0 ) // if a PC
-				newCreature = new Moflow_Creature();
+				newCreature = new Creature();
 			else
-				newCreature = new Moflow_Creature();
+				newCreature = new Creature();
 			
 			if ( nameField.getText().toString().trim().equals( "" ) ) {
 				nameField.setText( "Nameless One" );
@@ -350,8 +347,8 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	}
 	
 	private void removeAllPCs() {
-		ListIterator< Moflow_Creature > litr = initList.listIterator();
-		ListIterator< Moflow_Creature > waitLitr = waitList.listIterator();
+		ListIterator<Creature> litr = initList.listIterator();
+		ListIterator<Creature> waitLitr = waitList.listIterator();
 		while( litr.hasNext() ) {
 			if ( !litr.next().isCreature() ) {
 				litr.remove();
@@ -366,8 +363,8 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	}
 	
 	private void removeAllMonsters() {
-		ListIterator< Moflow_Creature > litr = initList.listIterator();
-		ListIterator< Moflow_Creature > waitLitr = waitList.listIterator();
+		ListIterator<Creature> litr = initList.listIterator();
+		ListIterator<Creature> waitLitr = waitList.listIterator();
 		while( litr.hasNext() ) {
 			if ( litr.next().isCreature() ) {
 				litr.remove();
@@ -431,7 +428,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	}
 	
 	private void prepareItemEditDialog() {
-		Moflow_Creature creature = initList.get( selectedItemPosition );
+		Creature creature = initList.get( selectedItemPosition );
 		nameLabel.setText( creature.creatureName );
 		initiativeEditText.setText( String.valueOf( creature.initiative ) );
 		curHPEditText.setText( String.valueOf( creature.currentHP ) );
@@ -440,7 +437,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	}
 	
 	private void setNewStats() {
-		Moflow_Creature creature = initList.get( selectedItemPosition );
+		Creature creature = initList.get( selectedItemPosition );
 		if ( initiativeEditText.getText().toString().equals( "" ) )
 			initiativeEditText.setText( String.valueOf( creature.initiative ) );
 		if ( curHPEditText.getText().toString().equals( "" ) )
@@ -469,7 +466,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		Random rand = new Random();
 		for ( int i = 0; i < initList.size(); i++ ) {
 			if ( !initList.get( i ).isMonster ) {
-				Moflow_Creature critter = initList.get( i );
+				Creature critter = initList.get( i );
 				critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
 			}
 		}
@@ -480,7 +477,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		Random rand = new Random();
 		for ( int i = 0; i < initList.size(); i++ ) {
 			if ( initList.get( i ).isMonster ) {
-				Moflow_Creature critter = initList.get( i );
+				Creature critter = initList.get( i );
 				critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
 			}
 		}
@@ -490,14 +487,14 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 	private void autoRollAll() {
 		Random rand = new Random();
 		for ( int i = 0; i < initList.size(); i++ ) {
-			Moflow_Creature critter = initList.get( i );
+			Creature critter = initList.get( i );
 			critter.initiative = rand.nextInt( 20 ) + critter.initMod + 1;
 		}
 		sortList( true );
 	}
 	
 	private void sortList( boolean descending ) {
-		Comparator< Moflow_Creature > comparator;
+		Comparator<Creature> comparator;
 		if ( descending ) {
 			comparator = Collections.reverseOrder();
 			Collections.sort( initList, comparator );
@@ -554,9 +551,9 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		
 		cur = db.getPCForGroup( partyName );
 		
-		Moflow_Creature critter;
+		Creature critter;
 		while ( cur.moveToNext() ) {
-			critter = new Moflow_Creature();
+			critter = new Creature();
 			critter.setName( cur.getString( 0 ) ); // get name column
 			critter.setInitMod( cur.getInt( 1 ) ); // get init column
 			critter.setArmorClass( cur.getInt( 2 ) ); // get ac column
@@ -587,9 +584,9 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		
 		cur = db.getCreaturesForEncounter( encName );
 		
-		Moflow_Creature critter;
+		Creature critter;
 		while ( cur.moveToNext() ) {
-			critter = new Moflow_Creature();
+			critter = new Creature();
 			critter.setName( cur.getString( 0 ) ); // get name column
 			critter.setInitMod( cur.getInt( 1 ) ); // get init column
 			critter.setArmorClass( cur.getInt( 2 ) ); // get ac column
@@ -621,9 +618,9 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		
 		cur = db.getCreatureFromCatalog( creatureName );
 		
-		Moflow_Creature critter = null;
+		Creature critter = null;
 		while ( cur.moveToNext() ) {
-			critter = new Moflow_Creature();
+			critter = new Creature();
 			critter.setName( cur.getString( 0 ) ); // get name column
 			critter.setInitMod( cur.getInt( 1 ) ); // get init column
 			critter.setArmorClass( cur.getInt( 2 ) ); // get ac column
@@ -659,7 +656,7 @@ implements OnClickListener, OnItemClickListener, OnItemLongClickListener, androi
 		cur = db.getInitListFromDB();
 		
 		while ( cur.moveToNext() ) {
-			Moflow_Creature creature = new Moflow_Creature();
+			Creature creature = new Creature();
 			creature.setInitiative( cur.getInt( INIT ) );
 			creature.setName( cur.getString( NAME ) );
 			creature.setInitMod( cur.getInt( INITBONUS ) );

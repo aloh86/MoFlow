@@ -6,16 +6,16 @@ import android.database.SQLException;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import moflow.activities.Moflow_Party;
+import moflow.wolfpup.Party;
 import moflow.database.MoFlowDB;
 
 public class PartyListRunnable implements Runnable {
 	private Context context;
 	private MoFlowDB db;
-	private ArrayAdapter<Moflow_Party> adapter;
+	private ArrayAdapter<Party> adapter;
 	
 	public PartyListRunnable( Context ctx, MoFlowDB database, 
-			ArrayAdapter<Moflow_Party> adap ) {
+			ArrayAdapter<Party> adap ) {
 		context = ctx;
 		db = database;
 		adapter = adap;
@@ -41,11 +41,11 @@ public class PartyListRunnable implements Runnable {
 		}
 		
 		// else, load the party names
-		Moflow_Party party = null;
+		Party party = null;
 		while( cur.moveToNext() ) {
 			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
 				String colValue = cur.getString( i );
-				party = new Moflow_Party();
+				party = new Party();
 				party.setPartyName( colValue );
 			}
 			adapter.add( party );

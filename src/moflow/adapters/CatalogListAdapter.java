@@ -2,7 +2,7 @@ package moflow.adapters;
 
 import java.util.List;
 
-import moflow.activities.CatalogItem;
+import moflow.wolfpup.CatalogItem;
 import moflow.activities.R;
 
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 public class CatalogListAdapter extends ArrayAdapter< CatalogItem > {

@@ -1,29 +1,29 @@
-package moflow.activities;
+package moflow.wolfpup;
 
 import java.util.ArrayList;
 import android.os.Parcel;
 import android.os.Parcelable;
 /*
 ===============================================================================
-Moflow_Party.java
+Party.java
 Alex Oh
 
-Definition of class Moflow_Party. Groups characters (PCs) by a party name.
+Definition of class Party. Groups characters (PCs) by a party name.
 ===============================================================================
 */
-public class Moflow_Party implements Parcelable 
+public class Party implements Parcelable
 {
 	private String partyName;
-	private ArrayList<Moflow_Creature> party;
+	private ArrayList<Creature> party;
 	
 	
 	//-----------------------------------------------------------------------
 	/**
 	 * Default constructor
 	 */
-	public Moflow_Party()
+	public Party()
 	{
-		party = new ArrayList< Moflow_Creature >();
+		party = new ArrayList<Creature>();
 		partyName = "";
 	}
 	
@@ -31,7 +31,7 @@ public class Moflow_Party implements Parcelable
 	 * Copy constructor
 	 * @return a copy of this
 	 */
-	public Moflow_Party copy( Moflow_Party obj )
+	public Party copy( Party obj )
 	{
 		obj.partyName = partyName;
 		
@@ -72,7 +72,7 @@ public class Moflow_Party implements Parcelable
 	 * @return get party member
 	 * objects.
 	 */
-	public Moflow_Creature getMember( String name )
+	public Creature getMember( String name )
 	{
 		for ( int i = 0; i < party.size(); i++ )
 		{
@@ -90,7 +90,7 @@ public class Moflow_Party implements Parcelable
 	 * Get a member from the party by position.
 	 * @return get party member
 	 */
-	public Moflow_Creature getMember( int position )
+	public Creature getMember( int position )
 	{
 		return party.get( position );
 	}
@@ -101,7 +101,7 @@ public class Moflow_Party implements Parcelable
 	 * Add a player to the party.
 	 * @param pc the character to be added to the party
 	 */
-	public void addMember( Moflow_Creature pc )
+	public void addMember( Creature pc )
 	{
 		party.add( pc );
 	}
@@ -140,7 +140,7 @@ public class Moflow_Party implements Parcelable
 	 * Removes a player character from the party.
 	 * @param name of the player to remove
 	 */
-	public void RemovePC( Moflow_Creature pc )
+	public void RemovePC( Creature pc )
 	{
 		for ( int i = 0; i < party.size(); i++ )
 		{
@@ -165,31 +165,31 @@ public class Moflow_Party implements Parcelable
 	/**
 	 * Required static field CREATOR for Parcelable implementations 
 	 */
-	public static final Parcelable.Creator< Moflow_Party > CREATOR = 
-		new Parcelable.Creator< Moflow_Party >()
+	public static final Parcelable.Creator<Party> CREATOR =
+		new Parcelable.Creator<Party>()
 		{
-			public Moflow_Party createFromParcel( Parcel in )
+			public Party createFromParcel( Parcel in )
 			{
-				return new Moflow_Party( in );
+				return new Party( in );
 			}
 			
-			public Moflow_Party [] newArray( int size )
+			public Party[] newArray( int size )
 			{
-				return new Moflow_Party[ size ];
+				return new Party[ size ];
 			}
 		};
 		
 	
 		
 	/**
-	 * Constructor for reconstructing a Moflow_Creature object from a Parcel
+	 * Constructor for reconstructing a Creature object from a Parcel
 	 * @param in the parcel to read from
 	 */
 	@SuppressWarnings("unchecked")
-	private Moflow_Party( Parcel in )
+	private Party(Parcel in)
 	{	
 		partyName = in.readString();
-		party = in.readArrayList( Moflow_Creature.class.getClassLoader() );
+		party = in.readArrayList( Creature.class.getClassLoader() );
 	}
 	
 	

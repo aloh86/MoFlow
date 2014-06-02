@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import moflow.activities.Conditions;
-import moflow.activities.Moflow_Creature;
+import moflow.wolfpup.Conditions;
+import moflow.wolfpup.Creature;
 
 /*
 ===============================================================================
@@ -59,7 +59,6 @@ public class MoFlowDB {
 	public long insertGroup( String partyName ) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put( Parties_Table.COL_PartyName , partyName );
-		//return db.insert( Parties_Table.TABLE_NAME, null, initialValues );
 		return db.insertWithOnConflict( Parties_Table.TABLE_NAME, null, initialValues, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
@@ -138,7 +137,7 @@ public class MoFlowDB {
 	 * @param creature the creature to insert
 	 * @return tuple position of this entry
 	 */
-	public long insertItemFromInitiative( Moflow_Creature creature ) {
+	public long insertItemFromInitiative( Creature creature ) {
 		ContentValues initVal = new ContentValues();
 		initVal.put( Init_Table.COL_Init, creature.getInitiative() );
 		initVal.put( Init_Table.COL_CreatureName, creature.getCharName() );
@@ -346,7 +345,7 @@ public class MoFlowDB {
 	 * @param pcName PC's name
 	 * @return the number of rows affected
 	 */
-	public int updatePlayerRecord( Moflow_Creature updated, String partyName, String pcName ) {
+	public int updatePlayerRecord( Creature updated, String partyName, String pcName ) {
 		String whereClause = 
 				Players_Table.COL_PartyName + " = ? AND " +
 				Players_Table.COL_PCName + " = ?";
@@ -399,7 +398,7 @@ public class MoFlowDB {
 	 * @param oldCreatureName the name of the record to update
 	 * @return the number of rows affected
 	 */
-	public int updateCreatureInCatalog( Moflow_Creature updated, String oldCreatureName ) {
+	public int updateCreatureInCatalog( Creature updated, String oldCreatureName ) {
 		String whereClause = Catalog_Table.COL_CreatureName + " = ?";
 		String [] whereArgs = { oldCreatureName };
 		

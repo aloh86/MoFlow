@@ -16,35 +16,17 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		
-		<activity
-		android:name=".OptionsScreen"
-		android:label="Options" >
+
+        <activity
+		android:name=".PartyListActivity"
+		android:label="Parties" >
 			<intent-filter>
-				<action android:name="moflow.activities.OptionsScreen" />
+				<action android:name="moflow.activities.PartyListActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-		
-		<activity
-		android:name=".PCM_PartyListActivity"
-		android:label="Party List" >
-			<intent-filter>
-				<action android:name="moflow.activities.PCM_PartyListActivity" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
-		<activity
-		android:name=".PCM_EditPartyActivity"
-		android:label="Edit Party" >
-			<intent-filter>
-				<action android:name="moflow.activities.PCM_EditPartyActivity" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
-		<activity
+
+        <activity
 		android:name=".CreatureCatalogActivity"
 		android:label="Creature Catalog" >
 			<intent-filter>

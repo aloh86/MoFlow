@@ -1,4 +1,4 @@
-package moflow.activities;
+package moflow.wolfpup;
 
 public class CatalogItem {
 	public String name;

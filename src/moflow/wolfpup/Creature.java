@@ -1,7 +1,4 @@
-package moflow.activities;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+package moflow.wolfpup;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,16 +10,16 @@ Alex Oh
 Representation of a creature (PCs and Monsters).
 ===============================================================================
 */
-public class Moflow_Creature implements Parcelable, Cloneable, Comparable
-{	
-	protected int armorClass;
-	protected int initMod;
-	protected int hitPoints;
-	protected int currentHP;
-	protected int initiative;
-	protected boolean isMonster;
-	protected boolean hasInit;
-	protected String creatureName;
+public class Creature implements Parcelable, Cloneable, Comparable
+{
+    public int armorClass;
+    public int initMod;
+    public int hitPoints;
+    public int currentHP;
+    public int initiative;
+    public boolean isMonster;
+	public boolean hasInit;
+    public String creatureName;
 	
 	public Conditions conditions;
 	
@@ -30,7 +27,7 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	/**
 	 * Creates "Blank" PC with all scores set to zero and no name.
 	 */
-	Moflow_Creature()
+	public Creature()
 	{
 		armorClass = 0;		
 		initMod = 0;
@@ -44,12 +41,12 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	}
 	
 	/**
-	 * Deep copy a Moflow_Creature object.
+	 * Deep copy a Creature object.
 	 */
-	public Moflow_Creature clone() {
-		Moflow_Creature twin;
+	public Creature clone() {
+		Creature twin;
 		try {
-			twin = ( Moflow_Creature ) super.clone();
+			twin = (Creature) super.clone();
 			twin.creatureName = creatureName;
 			twin.initMod = initMod;
 			twin.armorClass = armorClass;
@@ -163,25 +160,25 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	/**
 	 * Required static field CREATOR for Parcelable implementations 
 	 */
-	public static final Parcelable.Creator< Moflow_Creature > CREATOR = 
-		new Parcelable.Creator< Moflow_Creature >()
+	public static final Parcelable.Creator<Creature> CREATOR =
+		new Parcelable.Creator<Creature>()
 		{
-			public Moflow_Creature createFromParcel( Parcel in )
+			public Creature createFromParcel( Parcel in )
 			{
-				return new Moflow_Creature( in );
+				return new Creature( in );
 			}
 			
-			public Moflow_Creature [] newArray( int size )
+			public Creature[] newArray( int size )
 			{
-				return new Moflow_Creature[ size ];
+				return new Creature[ size ];
 			}
 		};
 		
 	/**
-	 * Constructor for reconstructing a Moflow_Creature object from a Parcel
+	 * Constructor for reconstructing a Creature object from a Parcel
 	 * @param in the parcel to read from
 	 */
-	protected Moflow_Creature( Parcel in )
+	protected Creature(Parcel in)
 	{		
 		armorClass = in.readInt();
 		
@@ -207,7 +204,7 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	/**
 	 * Flatten this object in to a Parcel.
 	 * @param dest The Parcel in which the object should be written.
-	 * @param Additional flags about how the object should be written.
+	 * @param flags Additional flags about how the object should be written.
 	 */
 	public void writeToParcel( Parcel dest, int flags )
 	{		
@@ -241,7 +238,7 @@ public class Moflow_Creature implements Parcelable, Cloneable, Comparable
 	 */
 	@Override
 	public int compareTo( Object obj ) {
-		Moflow_Creature creature = ( Moflow_Creature ) obj;
+		Creature creature = (Creature) obj;
 		
 		if ( this.initiative == creature.initiative )
 			return 0;

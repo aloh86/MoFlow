@@ -5,7 +5,6 @@ import java.util.Locale;
 
 import moflow.adapters.CatalogListAdapter;
 import moflow.database.MoFlowDB;
-import moflow.activities.R;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -24,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import moflow.wolfpup.CatalogItem;
+import moflow.wolfpup.Creature;
 
 public class CreatureCatalogActivity extends ListActivity 
 implements OnClickListener, android.content.DialogInterface.OnClickListener, OnItemClickListener, OnItemLongClickListener, OnFocusChangeListener {
@@ -45,12 +46,12 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	
 	private View entryView;
 	
-	private ArrayList< CatalogItem > creatureList;
+	private ArrayList<CatalogItem> creatureList;
 	private CatalogListAdapter adapter;
 	
 	private CatalogItem item;
 	
-	private Moflow_Creature creature;
+	private Creature creature;
 	
 	private boolean editingItem;
 	
@@ -64,13 +65,13 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	public void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		requestWindowFeature( Window.FEATURE_NO_TITLE );
-		setContentView( R.layout.grouplist );
+
 		
-		addButton = ( Button ) findViewById( R.id.addGroupButton );
+		//addButton = ( Button ) findViewById( R.id.addGroupButton );
 		addButton.setText( "Add New Creature" );
 		addButton.setOnClickListener( this );
 		
-		activityNameTV = ( TextView ) findViewById( R.id.activityNameTV );
+		//activityNameTV = ( TextView ) findViewById( R.id.activityNameTV );
 		activityNameTV.setText( "Creature Catalog" );
 		
 		initializeDialogs();
@@ -140,7 +141,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		hpField.setText( "0" );
 	}
 	
-	private void prepEditEntryDialog( Moflow_Creature critter ) {
+	private void prepEditEntryDialog( Creature critter ) {
 		nameField.setText( critter.getCharName() );
 		nameField.requestFocus();
 		initField.setText( String.valueOf( critter.getInitMod() ) );
@@ -148,11 +149,11 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		hpField.setText( String.valueOf( critter.getMaxHitPoints() ) );
 	}
 	
-	private Moflow_Creature setCreatureStats( boolean editing ) {
-		Moflow_Creature oldCrit = null;
+	private Creature setCreatureStats( boolean editing ) {
+		Creature oldCrit = null;
 		
 		if ( !editing )
-			creature = new Moflow_Creature();
+			creature = new Creature();
 		else
 			oldCrit = creature.clone();
 		
@@ -253,7 +254,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 	
 	private void handleCreatureEdit( final int button ) {
 		if ( button == DialogInterface.BUTTON_POSITIVE ) {
-			Moflow_Creature oldCritter = setCreatureStats( true );
+			Creature oldCritter = setCreatureStats( true );
 			saveEditedCreatureToDB( creature, oldCritter.getCharName() );
 			creatureList.clear();
 			loadCreaturesFromDB();
@@ -304,12 +305,12 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		cur.close();
 	}
 	
-	private Moflow_Creature getCreatureFromDB( String name ) {
+	private Creature getCreatureFromDB( String name ) {
 		Cursor cur;
 		
 		cur = database.getCreatureFromCatalog( name );
 		
-		creature = new Moflow_Creature();
+		creature = new Creature();
 		
 		while ( cur.moveToNext() ) {
 			for ( int i = 0; i < cur.getColumnCount(); i++ ) {
@@ -327,7 +328,7 @@ implements OnClickListener, android.content.DialogInterface.OnClickListener, OnI
 		return creature;
 	}
 	
-	private void saveEditedCreatureToDB( Moflow_Creature edited, String oldCreatureName ) {
+	private void saveEditedCreatureToDB( Creature edited, String oldCreatureName ) {
 		database.updateCreatureInCatalog( edited, oldCreatureName );
 	}
 	
