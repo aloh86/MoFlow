@@ -33,7 +33,7 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
     private ArrayList< String > deleteList;
     private int indexOfItemToEdit;
     private NameDialogFragment renameDialog;
-    private NameDialogFragment newPartyDialog;
+    private NameDialogFragment newGroupDialog;
 
 	@Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -57,7 +57,7 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
         deleteList = new ArrayList<String>();
 
         renameDialog = new NameDialogFragment( "Rename" );
-        newPartyDialog = new NameDialogFragment( "Party Name" );
+        newGroupDialog = new NameDialogFragment( "Party Name" );
     }
 
     /**
@@ -97,6 +97,7 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
         // Handle presses on the action bar items
         switch ( item.getItemId() ) {
             case R.id.action_new:
+                newGroupDialog.show(getFragmentManager(), "newGroupDialog");
                 break;
             case R.id.action_edit:
                 setEditFlags();
@@ -194,6 +195,10 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
             renameParty( dialog );
             restoreCommonMenu();
         }
+
+        else if ( dialog == newGroupDialog ) {
+            createNewGroup( dialog );
+        }
     }
 
     @Override
@@ -203,7 +208,7 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
 
     private void renameParty( DialogFragment dialog ) {
         EditText et = ( EditText ) dialog.getDialog().findViewById( R.id.nameField );
-        String uniqueName = et.getText().toString();
+        String uniqueName = et.getText().toString().trim();
 
         if ( !uniqueName.isEmpty() ) {
             uniqueName = NameModfier.makeNameUnique(groupList, uniqueName );
@@ -212,4 +217,16 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
             listAdapter.notifyDataSetChanged();
         }
     }
+
+    private void createNewGroup( DialogFragment dialog ) {
+        EditText et = ( EditText ) dialog.getDialog().findViewById( R.id.nameField );
+        String uniqueName = et.getText().toString().trim();
+
+        if ( !uniqueName.isEmpty() ) {
+            uniqueName = NameModfier.makeNameUnique(groupList, uniqueName );
+            dbTransaction.insertNewParty( uniqueName );
+            groupList.add( uniqueName );
+            listAdapter.notifyDataSetChanged();
+        }
+     }
 }
