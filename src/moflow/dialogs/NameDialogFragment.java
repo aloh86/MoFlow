@@ -9,17 +9,24 @@ import android.os.Bundle;
 import moflow.activities.PartyListActivity;
 import moflow.activities.R;
 
+import java.util.jar.Attributes;
+
 /**
  * Created by Alex on 5/28/14.
  */
 public class NameDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
     private SimpleDialogListener simpleDialogListener;
+    private String title;
+
+    public NameDialogFragment( String dialogTitle ) {
+        title = dialogTitle;
+    }
 
     @Override
     public Dialog onCreateDialog( Bundle savedInstanceState ) {
         AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
         builder.setView( getActivity().getLayoutInflater().inflate( R.layout.single_edittext, null ) );
-        builder.setTitle( "Rename" );
+        builder.setTitle( title );
         builder.setPositiveButton( "Ok", this );
         builder.setNegativeButton( "Cancel", this );
 

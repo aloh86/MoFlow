@@ -2,7 +2,6 @@ package moflow.activities;
 
 import android.app.DialogFragment;
 import android.app.ListActivity;
-import android.content.DialogInterface;
 import android.view.*;
 
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import moflow.utility.DBTransaction;
 import moflow.utility.NameModfier;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /*
 ===============================================================================
@@ -30,24 +28,25 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
     private DBTransaction dbTransaction;
     private boolean editMode;
     private boolean deleteMode;
-    private ArrayList< String > partyList;
+    private ArrayList< String > groupList;
     private ArrayAdapter< String > listAdapter;
     private ArrayList< String > deleteList;
     private int indexOfItemToEdit;
     private NameDialogFragment renameDialog;
+    private NameDialogFragment newPartyDialog;
 
 	@Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
         dbTransaction = new DBTransaction( this );
-        partyList = dbTransaction.getAllParties();
+        groupList = dbTransaction.getAllParties();
 
         // fill the list with parties from database
         listAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                partyList  );
+                groupList);
         setListAdapter( listAdapter );
 
         getListView().setOnItemClickListener(this);
@@ -57,7 +56,8 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
 
         deleteList = new ArrayList<String>();
 
-        renameDialog = new NameDialogFragment();
+        renameDialog = new NameDialogFragment( "Rename" );
+        newPartyDialog = new NameDialogFragment( "Party Name" );
     }
 
     /**
@@ -108,7 +108,7 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
                 editOrDeleteItems();
                 break;
             case R.id.action_cancel:
-                setCancelFlags();
+                restoreCommonMenu();
                 break;
             default:
                 return super.onOptionsItemSelected( item );
@@ -121,7 +121,7 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
         listAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_checked,
-                partyList  );
+                groupList);
         setListAdapter( listAdapter );
         getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
         invalidateOptionsMenu();
@@ -133,20 +133,20 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
         listAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_checked,
-                partyList  );
+                groupList);
         setListAdapter( listAdapter );
         getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
         invalidateOptionsMenu();
     }
 
-    private void setCancelFlags() {
+    private void restoreCommonMenu() {
         editMode = false;
         deleteMode = false;
 
         listAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                partyList  );
+                groupList);
         setListAdapter( listAdapter );
 
         getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
@@ -167,9 +167,9 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
             }
             else { // delete mode
                 if ( true == getListView().isItemChecked( position) )
-                    deleteList.add( partyList.get( position ) );
+                    deleteList.add( groupList.get( position ) );
                 else
-                    deleteList.remove( partyList.get( position ) );
+                    deleteList.remove(groupList.get(position));
             }
         }
     }
@@ -179,7 +179,8 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
             renameDialog.show( getFragmentManager(), "renameDialog" );
         }
         else if ( deleteMode ) {
-            //  TODO delete from database
+            dbTransaction.deleteParties( deleteList );
+
             for ( int i = 0; i < deleteList.size(); i++ ) {
                 listAdapter.remove( deleteList.get( i ) );
             }
@@ -191,25 +192,24 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
     public void onDialogPositiveClick( DialogFragment dialog ) {
         if ( dialog == renameDialog ) {
             renameParty( dialog );
-            setCancelFlags();
+            restoreCommonMenu();
         }
     }
 
     @Override
     public void onDialogNegativeClick( DialogFragment dialog ) {
-        editMode = false;
-        deleteMode = false;
-        invalidateOptionsMenu();
+        restoreCommonMenu();
     }
 
     private void renameParty( DialogFragment dialog ) {
         EditText et = ( EditText ) dialog.getDialog().findViewById( R.id.nameField );
-        String name = et.getText().toString().trim();
-        name = NameModfier.makeNameUnique( partyList, name );
+        String uniqueName = et.getText().toString();
 
-        partyList.set( indexOfItemToEdit, name );
-        listAdapter.notifyDataSetChanged();
-
-        // TODO change name in database
+        if ( !uniqueName.isEmpty() ) {
+            uniqueName = NameModfier.makeNameUnique(groupList, uniqueName );
+            dbTransaction.renameParty(uniqueName, groupList.get(indexOfItemToEdit));
+            groupList.set(indexOfItemToEdit, uniqueName);
+            listAdapter.notifyDataSetChanged();
+        }
     }
 }

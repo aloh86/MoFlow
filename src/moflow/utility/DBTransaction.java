@@ -2,7 +2,6 @@ package moflow.utility;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.widget.Toast;
 import moflow.database.MoFlowDB;
@@ -26,7 +25,11 @@ public class DBTransaction {
         }
     }
 
-    // Retrieval Queries
+    public void closeDB() {
+        db.close();
+    }
+
+    // Retrieval
 
     public ArrayList< String > getAllParties() {
         cur = db.getAllParties();
@@ -42,7 +45,22 @@ public class DBTransaction {
         return partyList;
     }
 
-    public void closeDB() {
-        db.close();
+    // Insertion
+    public long insertNewParty( String partyName ) {
+        return db.insertParty( partyName );
+    }
+
+    // Deletion
+
+    public void deleteParties( final ArrayList< String > parties ) {
+        for ( int i = 0; i < parties.size(); i++ ) {
+            db.deletePartyRecord( parties.get( i ) );
+        }
+    }
+
+    // Modification
+
+    public void renameParty( String newName, String oldName ) {
+        db.updatePartyRecord( newName, oldName );
     }
 }

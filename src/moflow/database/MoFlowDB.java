@@ -56,7 +56,7 @@ public class MoFlowDB {
 	 * @param partyName The name of the PC group.
 	 * @return tuple position of this entry
 	 */
-	public long insertGroup( String partyName ) {
+	public long insertParty(String partyName) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put( Parties_Table.COL_PartyName , partyName );
 		return db.insertWithOnConflict( Parties_Table.TABLE_NAME, null, initialValues, SQLiteDatabase.CONFLICT_IGNORE );

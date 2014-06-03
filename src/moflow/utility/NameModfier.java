@@ -1,5 +1,7 @@
 package moflow.utility;
 
+import android.os.PatternMatcher;
+
 import java.util.ArrayList;
 
 /**
@@ -10,7 +12,7 @@ public class NameModfier {
         int count = 0;
 
         for ( int i = 0; i < nameList.size(); i++ ) {
-            if ( nameList.get( i ).equalsIgnoreCase( name ) )
+            if ( nameList.get( i ).toLowerCase().matches( "^" + name.trim().toLowerCase() + "( \\d)?" ) )
                 ++count;
         }
 
