@@ -18,10 +18,10 @@
 		</activity>
 
         <activity
-		android:name=".PartyListActivity"
+		android:name=".GroupListActivity"
 		android:label="Parties" >
 			<intent-filter>
-				<action android:name="moflow.activities.PartyListActivity" />
+				<action android:name="moflow.activities.GroupListActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>

@@ -209,7 +209,7 @@ implements OnClickListener, OnItemLongClickListener, android.content.DialogInter
 	}
 	
 	private void deleteEncounterFromDB( String encounterToRemove ) {
-		database.deleteEncounter( encounterToRemove );
+		database.deleteEncounterRecord(encounterToRemove);
 		database.deleteEncounterCreatures( encounterToRemove );
 	}
 	

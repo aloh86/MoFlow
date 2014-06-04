@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.*;
 import moflow.dialogs.NameDialogFragment;
 import moflow.dialogs.SimpleDialogListener;
+import moflow.utility.CommonKey;
 import moflow.utility.DBTransaction;
 import moflow.utility.NameModfier;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 /*
 ===============================================================================
-PartyListActivity.java
+GroupListActivity.java
 
 Activity for listing the existing parties in the Parties table in the database.
 The user can create a new party and edit or delete an existing party. When
@@ -23,7 +24,7 @@ the user 'taps' on a party, PCM_EditPartyActivity is called, where the party
 members can be added, edited, or removed.
 ===============================================================================
 */
-public class PartyListActivity extends ListActivity implements AdapterView.OnItemClickListener, SimpleDialogListener
+public class GroupListActivity extends ListActivity implements AdapterView.OnItemClickListener, SimpleDialogListener
 {
     private DBTransaction dbTransaction;
     private boolean editMode;
@@ -34,13 +35,17 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
     private int indexOfItemToEdit;
     private NameDialogFragment renameDialog;
     private NameDialogFragment newGroupDialog;
+    private String groupType;
 
 	@Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
+        groupType = getIntent().getExtras().getString( CommonKey.KEY_GROUP_TYPE );
+
         dbTransaction = new DBTransaction( this );
-        groupList = dbTransaction.getAllParties();
+
+        groupList = dbTransaction.getGroupList( groupType );
 
         // fill the list with parties from database
         listAdapter = new ArrayAdapter<String>(
@@ -57,7 +62,7 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
         deleteList = new ArrayList<String>();
 
         renameDialog = new NameDialogFragment( "Rename" );
-        newGroupDialog = new NameDialogFragment( "Party Name" );
+        newGroupDialog = new NameDialogFragment( "Name" );
     }
 
     /**
@@ -157,17 +162,13 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
     @Override
     public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
         if ( editMode || deleteMode ) {
-            // isItemChecked gets state of click immediately. So, if it is checked,
-            // and user clicks item, it is now unchecked. Visually, if you step through with
-            // the debugger, you'll see that the item is still checked, but it's actual state
-            // is unchecked.
             getListView().setItemChecked( position, getListView().isItemChecked( position ) );
 
             if ( editMode ) {
                 indexOfItemToEdit = position;
             }
             else { // delete mode
-                if ( true == getListView().isItemChecked( position) )
+                if ( getListView().isItemChecked( position) )
                     deleteList.add( groupList.get( position ) );
                 else
                     deleteList.remove(groupList.get(position));
@@ -180,20 +181,20 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
             renameDialog.show( getFragmentManager(), "renameDialog" );
         }
         else if ( deleteMode ) {
-            dbTransaction.deleteParties( deleteList );
+            dbTransaction.deleteGroupListItems(deleteList, groupType);
 
             for ( int i = 0; i < deleteList.size(); i++ ) {
                 listAdapter.remove( deleteList.get( i ) );
             }
         }
         listAdapter.notifyDataSetChanged();
+        restoreCommonMenu();
     }
 
     @Override
     public void onDialogPositiveClick( DialogFragment dialog ) {
         if ( dialog == renameDialog ) {
             renameParty( dialog );
-            restoreCommonMenu();
         }
 
         else if ( dialog == newGroupDialog ) {
@@ -212,7 +213,9 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
 
         if ( !uniqueName.isEmpty() ) {
             uniqueName = NameModfier.makeNameUnique(groupList, uniqueName );
-            dbTransaction.renameParty(uniqueName, groupList.get(indexOfItemToEdit));
+
+            dbTransaction.renameGroup(uniqueName, groupList.get(indexOfItemToEdit), groupType);
+
             groupList.set(indexOfItemToEdit, uniqueName);
             listAdapter.notifyDataSetChanged();
         }
@@ -224,7 +227,7 @@ public class PartyListActivity extends ListActivity implements AdapterView.OnIte
 
         if ( !uniqueName.isEmpty() ) {
             uniqueName = NameModfier.makeNameUnique(groupList, uniqueName );
-            dbTransaction.insertNewParty( uniqueName );
+            dbTransaction.insertNewGroup( uniqueName, groupType );
             groupList.add( uniqueName );
             listAdapter.notifyDataSetChanged();
         }

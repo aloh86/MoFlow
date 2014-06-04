@@ -524,7 +524,7 @@ public class MoFlowDB {
 	 * @param encounterName the encounter to delete
 	 * @return the number of rows affected
 	 */
-	public int deleteEncounter( String encounterName ) {
+	public int deleteEncounterRecord(String encounterName) {
 		String whereClause = Encounters_Table.COL_Encounter + " = ?";
 		String [] whereArgs = { encounterName };
 		return db.delete( Encounters_Table.TABLE_NAME, whereClause, whereArgs );

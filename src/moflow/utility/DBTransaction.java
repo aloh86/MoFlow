@@ -31,36 +31,48 @@ public class DBTransaction {
 
     // Retrieval
 
-    public ArrayList< String > getAllParties() {
-        cur = db.getAllParties();
+    public ArrayList< String > getGroupList( String groupType ) {
+        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+            cur = db.getAllParties();
+        else
+            cur = db.getAllEncounters();
 
-        ArrayList< String > partyList = new ArrayList<String>();
+        ArrayList< String > groupList = new ArrayList<String>();
 
         while ( cur.moveToNext() ) {
             // there is only 1 column in the parties table, hence 0 for getString
-            partyList.add( cur.getString( 0 ) );
+            groupList.add( cur.getString( 0 ) );
         }
         cur.close();
 
-        return partyList;
+        return groupList;
     }
 
     // Insertion
-    public long insertNewParty( String partyName ) {
-        return db.insertParty( partyName );
+    public void insertNewGroup( String groupName, String groupType ) {
+        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+            db.insertParty( groupName );
+        else
+            db.insertEncounter( groupName );
     }
 
     // Deletion
 
-    public void deleteParties( final ArrayList< String > parties ) {
-        for ( int i = 0; i < parties.size(); i++ ) {
-            db.deletePartyRecord( parties.get( i ) );
+    public void deleteGroupListItems( final ArrayList< String > toDelete, String groupType ) {
+        for ( int i = 0; i < toDelete.size(); i++ ) {
+            if ( groupType.equals( CommonKey.VAL_PARTY ) )
+                db.deletePartyRecord( toDelete.get( i ) );
+            else
+                db.deleteEncounterRecord( toDelete.get( i ) );
         }
     }
 
     // Modification
 
-    public void renameParty( String newName, String oldName ) {
-        db.updatePartyRecord( newName, oldName );
+    public void renameGroup( String newName, String oldName, String groupType ) {
+        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+            db.updatePartyRecord( newName, oldName );
+        else
+            db.updateEncounterRecord( newName, oldName );
     }
 }

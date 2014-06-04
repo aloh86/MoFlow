@@ -6,10 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import moflow.activities.PartyListActivity;
 import moflow.activities.R;
-
-import java.util.jar.Attributes;
 
 /**
  * Created by Alex on 5/28/14.

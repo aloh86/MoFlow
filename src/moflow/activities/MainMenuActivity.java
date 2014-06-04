@@ -13,6 +13,7 @@ import android.widget.Toast;
 import moflow.adapters.*;
 import moflow.dialogs.DonateDialogFragment;
 import moflow.dialogs.HelpDialogFragment;
+import moflow.utility.CommonKey;
 /*
 ===============================================================================
 MainMenuActivity.java
@@ -86,10 +87,16 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 	 */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id ) {
-		if ( position == Position.PC_MANAGER.ordinal() )
-			startActivity( new Intent( "moflow.activities.PartyListActivity" ) );
-		else if ( position == Position.ENC_MANAGER.ordinal() )
-			startActivity( new Intent( "moflow.activities.EncounterListActivity" ) );
+        Intent intent = new Intent( "moflow.activities.GroupListActivity" );
+
+		if ( position == Position.PC_MANAGER.ordinal() ) {
+            intent.putExtra( CommonKey.KEY_GROUP_TYPE, CommonKey.VAL_PARTY );
+			startActivityForResult(intent, 1); // not using request code, can be any value
+        }
+		else if ( position == Position.ENC_MANAGER.ordinal() ) {
+            intent.putExtra( CommonKey.KEY_GROUP_TYPE, CommonKey.VAL_ENC );
+            startActivityForResult(intent, 1); // not using request code, can be any value
+        }
 		else if ( position == Position.CREATURE.ordinal() )
 			startActivity( new Intent( "moflow.activities.CreatureCatalogActivity" ) );
 		else if ( position == Position.INIT.ordinal() )
