@@ -18,10 +18,8 @@ import java.util.ArrayList;
 ===============================================================================
 GroupListActivity.java
 
-Activity for listing the existing parties in the Parties table in the database.
-The user can create a new party and edit or delete an existing party. When
-the user 'taps' on a party, PCM_EditPartyActivity is called, where the party
-members can be added, edited, or removed.
+Activity for listing the existing parties/encounters. The user can create a new
+party/encounter and edit or delete an existing party/encounter.
 ===============================================================================
 */
 public class GroupListActivity extends ListActivity implements AdapterView.OnItemClickListener, SimpleDialogListener
@@ -41,7 +39,11 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-        groupType = getIntent().getExtras().getString( CommonKey.KEY_GROUP_TYPE );
+        try {
+            groupType = getIntent().getExtras().getString( CommonKey.KEY_GROUP_TYPE );
+        } catch ( NullPointerException npe ) {
+            Toast.makeText( this, "onCreate: groupType Extra could not be found.", Toast.LENGTH_LONG );
+        }
 
         dbTransaction = new DBTransaction( this );
 
@@ -61,6 +63,8 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
 
         deleteList = new ArrayList<String>();
 
+        indexOfItemToEdit = -1;
+
         renameDialog = new NameDialogFragment( "Rename" );
         newGroupDialog = new NameDialogFragment( "Name" );
     }
@@ -76,20 +80,29 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         return super.onCreateOptionsMenu( menu );
     }
 
+    /**
+     * Show the appropriate action bar item depending on the mode.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onPrepareOptionsMenu( Menu menu ) {
-        if ( editMode || deleteMode ) {
-            menu.findItem( R.id.action_new  ).setVisible( false );
-            menu.findItem( R.id.action_edit  ).setVisible( false );
-            menu.findItem( R.id.action_discard  ).setVisible( false );
-            menu.findItem( R.id.action_confirm  ).setVisible( true );
-            menu.findItem( R.id.action_cancel  ).setVisible( true );
-        } else {
-            menu.findItem( R.id.action_new  ).setVisible( true );
-            menu.findItem( R.id.action_edit  ).setVisible( true );
-            menu.findItem( R.id.action_discard  ).setVisible( true );
-            menu.findItem( R.id.action_confirm  ).setVisible( false );
-            menu.findItem( R.id.action_cancel  ).setVisible( false );
+        try {
+            if ( editMode || deleteMode ) {
+                menu.findItem( R.id.action_new  ).setVisible( false );
+                menu.findItem( R.id.action_edit  ).setVisible( false );
+                menu.findItem( R.id.action_discard  ).setVisible( false );
+                menu.findItem( R.id.action_confirm  ).setVisible( true );
+                menu.findItem( R.id.action_cancel  ).setVisible( true );
+            } else {
+                menu.findItem( R.id.action_new  ).setVisible( true );
+                menu.findItem( R.id.action_edit  ).setVisible( true );
+                menu.findItem( R.id.action_discard  ).setVisible( true );
+                menu.findItem( R.id.action_confirm  ).setVisible( false );
+                menu.findItem( R.id.action_cancel  ).setVisible( false );
+            }
+        } catch ( NullPointerException npe ) {
+            Toast.makeText( this, "onPrepareOptionsMenu: view ID not found.", Toast.LENGTH_LONG );
         }
         return super.onPrepareOptionsMenu( menu );
     }
@@ -105,10 +118,10 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
                 newGroupDialog.show(getFragmentManager(), "newGroupDialog");
                 break;
             case R.id.action_edit:
-                setEditFlags();
+                editPrep();
                 break;
             case R.id.action_discard:
-                setDiscardFlags();
+                discardPrep();
                 break;
             case R.id.action_confirm:
                 editOrDeleteItems();
@@ -122,7 +135,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         return true;
     }
 
-    private void setEditFlags() {
+    private void editPrep() {
         editMode = true;
         listAdapter = new ArrayAdapter<String>(
                 this,
@@ -133,7 +146,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         invalidateOptionsMenu();
     }
 
-    private void setDiscardFlags() {
+    private void discardPrep() {
         deleteMode = true;
 
         listAdapter = new ArrayAdapter<String>(
@@ -148,6 +161,8 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
     private void restoreCommonMenu() {
         editMode = false;
         deleteMode = false;
+        deleteList.clear();
+        indexOfItemToEdit = -1;
 
         listAdapter = new ArrayAdapter<String>(
                 this,
@@ -159,6 +174,13 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         invalidateOptionsMenu();
     }
 
+    /**
+     * Handle list item clicks
+     * @param listView
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
         if ( editMode || deleteMode ) {
@@ -176,21 +198,30 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         }
     }
 
+    /**
+     * Handles confirmation action bar button
+     */
     public void editOrDeleteItems() {
-        if ( editMode ) {
-            renameDialog.show( getFragmentManager(), "renameDialog" );
-        }
-        else if ( deleteMode ) {
-            dbTransaction.deleteGroupListItems(deleteList, groupType);
-
-            for ( int i = 0; i < deleteList.size(); i++ ) {
-                listAdapter.remove( deleteList.get( i ) );
+        if ( indexOfItemToEdit < 0 || deleteList.isEmpty() ) {
+            if ( editMode ) {
+                renameDialog.show( getFragmentManager(), "renameDialog" );
             }
+            else if ( deleteMode ) {
+                dbTransaction.deleteGroupListItems(deleteList, groupType);
+
+                for ( String name : deleteList ) {
+                    listAdapter.remove( name );
+                }
+            }
+            listAdapter.notifyDataSetChanged();
         }
-        listAdapter.notifyDataSetChanged();
         restoreCommonMenu();
     }
 
+    /**
+     * Handler for positive dialog click
+     * @param dialog
+     */
     @Override
     public void onDialogPositiveClick( DialogFragment dialog ) {
         if ( dialog == renameDialog ) {
@@ -202,11 +233,19 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         }
     }
 
+    /**
+     * Handler for negative dialog click
+     * @param dialog
+     */
     @Override
     public void onDialogNegativeClick( DialogFragment dialog ) {
         restoreCommonMenu();
     }
 
+    /**
+     * Renames party and saves new name to database
+     * @param dialog
+     */
     private void renameParty( DialogFragment dialog ) {
         EditText et = ( EditText ) dialog.getDialog().findViewById( R.id.nameField );
         String uniqueName = et.getText().toString().trim();
@@ -221,6 +260,10 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         }
     }
 
+    /**
+     * Creates new group and saves new party to database
+     * @param dialog
+     */
     private void createNewGroup( DialogFragment dialog ) {
         EditText et = ( EditText ) dialog.getDialog().findViewById( R.id.nameField );
         String uniqueName = et.getText().toString().trim();
