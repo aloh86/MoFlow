@@ -98,9 +98,11 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
             startActivityForResult(intent, 1); // not using request code, can be any value
         }
 		else if ( position == Position.CREATURE.ordinal() )
-			startActivity( new Intent( "moflow.activities.CreatureCatalogActivity" ) );
+			;
 		else if ( position == Position.INIT.ordinal() )
-			startActivity( new Intent( "moflow.activities.InitiativeActivity" ) );
+			;
+        else if ( position == Position.OPTIONS.ordinal() )
+            startActivity( new Intent( "moflow.activities.SettingsActivity" ) );
 	}
 
     private void startEmailIntent() {

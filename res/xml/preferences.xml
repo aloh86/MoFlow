@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="header_optional"
+        android:title="@string/prefHeader_optionalInfo">
+        <CheckBoxPreference
+                android:key="pref_score"
+                android:title="@string/title_scores"
+                android:defaultValue="false" />
+        <CheckBoxPreference
+                android:key="pref_saveThrow"
+                android:title="@string/title_3e4e_Saves"
+                android:summary="@string/summary_3e4e_Saves"
+                android:defaultValue="false" />
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:key="header_catalog"
+            android:title="@string/prefHeader_catalog">
+            <ListPreference
+                android:key="pref_catalogEdition"
+                android:title="@string/title_catalogMonsterEdition"
+                android:dialogTitle="Choose Edition"
+                android:summary="@string/summary_catalog"
+                android:entries="@array/prefArray_catalogEditionsEntries"
+                android:entryValues="@array/prefArray_catalogEditionsValues"
+                android:defaultValue="3">
+            </ListPreference>
+    </PreferenceCategory>
+</PreferenceScreen>

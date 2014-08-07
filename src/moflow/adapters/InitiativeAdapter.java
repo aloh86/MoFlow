@@ -31,7 +31,7 @@ public class InitiativeAdapter extends ArrayAdapter<Creature> {
 		
 		if ( convertView == null ) {
 			holder = new ViewHolder();
-			convertView = inflater.inflate( R.layout.init_item, null );
+			//convertView = inflater.inflate( R.layout.init_item, null );
 			
 			holder.initItemName = ( TextView )convertView.findViewById( R.id.initItemName );
 			holder.initValue = ( TextView ) convertView.findViewById( R.id.initValue );
@@ -45,21 +45,21 @@ public class InitiativeAdapter extends ArrayAdapter<Creature> {
 		}
 		
 		Creature creature = getItem( position );
-		holder.initItemName.setText( creature.getCharName() );
+		holder.initItemName.setText( creature.getCreatureName() );
 		holder.initValue.setText( String.valueOf( creature.getInitiative() ) );
-		holder.initHPCurrent.setText( String.valueOf( creature.getCurrentHP() ) );
+		holder.initHPCurrent.setText( String.valueOf( creature.getCurrentHitPoints() ) );
 		holder.initHPMax.setText( String.valueOf( creature.getMaxHitPoints() ) );
-		holder.initItemAC.setText( String.valueOf( creature.getAC() ) );
+		holder.initItemAC.setText( String.valueOf( creature.getArmorClass() ) );
 		
-		if ( creature.isCreature() )
+		if ( creature.isMonster() )
 			holder.initItemName.setTextColor( Color.RED );
 		else
 			holder.initItemName.setTextColor( Color.GREEN );
 		
-		setCurrentHPTextColor( creature.getCurrentHP(), creature.getMaxHitPoints(), holder.initHPCurrent );
+		setCurrentHPTextColor( creature.getCurrentHitPoints(), creature.getMaxHitPoints(), holder.initHPCurrent );
 		holder.initHPMax.setTextColor( Color.GREEN );
 		
-		if ( creature.getHasInit() ) 
+		if ( creature.hasInit() )
 			convertView.setBackgroundColor( Color.parseColor( "#694489" ) );
 		else
 			convertView.setBackgroundColor( Color.BLACK );

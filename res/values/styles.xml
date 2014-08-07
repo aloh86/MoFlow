@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="statEntry">
-    	<item name="android:layout_width">40dp</item>
+    	<item name="android:layout_width">fill_parent</item>
     	<item name="android:layout_height">wrap_content</item>
-    	<item name="android:layout_marginRight">5dp</item>
-    	<item name="android:numeric">integer|decimal</item>
-    	<item name="android:maxLength">2</item>
+    	<item name="android:numeric">integer</item>
+    	<item name="android:maxLength">4</item>
     	<item name="android:singleLine">true</item>
-    	<item name="android:text">0</item>
     	<item name="android:selectAllOnFocus">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="statLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">5dp</item>
+    </style>
+
+    <style name="savingThrowWrapper">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginRight">20dp</item>
+    </style>
+
+    <style name="wrapContent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
     
     <style name="manualHeader">

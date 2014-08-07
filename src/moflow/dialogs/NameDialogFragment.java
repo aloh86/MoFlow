@@ -26,8 +26,10 @@ public class NameDialogFragment extends DialogFragment implements DialogInterfac
         builder.setTitle( title );
         builder.setPositiveButton( "Ok", this );
         builder.setNegativeButton( "Cancel", this );
+        Dialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside( false );
 
-        return builder.create();
+        return dialog;
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener

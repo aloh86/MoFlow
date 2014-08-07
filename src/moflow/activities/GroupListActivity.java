@@ -128,6 +128,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
                 break;
             case R.id.action_cancel:
                 restoreCommonMenu();
+                indexOfItemToEdit = -1;
                 break;
             default:
                 return super.onOptionsItemSelected( item );
@@ -136,33 +137,35 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
     }
 
     private void editPrep() {
-        editMode = true;
-        listAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_checked,
-                groupList);
-        setListAdapter( listAdapter );
-        getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
-        invalidateOptionsMenu();
+        if ( listAdapter.getCount() > 0 ) {
+            editMode = true;
+            listAdapter = new ArrayAdapter<String>(
+                    this,
+                    android.R.layout.simple_list_item_checked,
+                    groupList);
+            setListAdapter( listAdapter );
+            getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
+            invalidateOptionsMenu();
+        }
     }
 
     private void discardPrep() {
-        deleteMode = true;
-
-        listAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_checked,
-                groupList);
-        setListAdapter( listAdapter );
-        getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
-        invalidateOptionsMenu();
+        if ( listAdapter.getCount() > 0 ) {
+            deleteMode = true;
+            listAdapter = new ArrayAdapter<String>(
+                    this,
+                    android.R.layout.simple_list_item_checked,
+                    groupList);
+            setListAdapter( listAdapter );
+            getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
+            invalidateOptionsMenu();
+        }
     }
 
     private void restoreCommonMenu() {
         editMode = false;
         deleteMode = false;
         deleteList.clear();
-        indexOfItemToEdit = -1;
 
         listAdapter = new ArrayAdapter<String>(
                 this,
@@ -202,19 +205,17 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
      * Handles confirmation action bar button
      */
     public void editOrDeleteItems() {
-        if ( indexOfItemToEdit < 0 || deleteList.isEmpty() ) {
-            if ( editMode ) {
-                renameDialog.show( getFragmentManager(), "renameDialog" );
-            }
-            else if ( deleteMode ) {
-                dbTransaction.deleteGroupListItems(deleteList, groupType);
-
-                for ( String name : deleteList ) {
-                    listAdapter.remove( name );
-                }
-            }
-            listAdapter.notifyDataSetChanged();
+        if ( editMode ) {
+            renameDialog.show( getFragmentManager(), "renameDialog" );
         }
+        else if ( deleteMode && !deleteList.isEmpty() ) {
+            dbTransaction.deleteGroupListItems(deleteList, groupType);
+
+            for ( String name : deleteList ) {
+                listAdapter.remove( name );
+            }
+        }
+        listAdapter.notifyDataSetChanged();
         restoreCommonMenu();
     }
 
@@ -239,7 +240,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
      */
     @Override
     public void onDialogNegativeClick( DialogFragment dialog ) {
-        restoreCommonMenu();
+        indexOfItemToEdit = -1;
     }
 
     /**
@@ -273,6 +274,8 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
             dbTransaction.insertNewGroup( uniqueName, groupType );
             groupList.add( uniqueName );
             listAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText( this, "Party name required.", Toast.LENGTH_LONG ).show();
         }
      }
 }

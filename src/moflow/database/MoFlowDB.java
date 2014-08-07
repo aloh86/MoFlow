@@ -140,12 +140,12 @@ public class MoFlowDB {
 	public long insertItemFromInitiative( Creature creature ) {
 		ContentValues initVal = new ContentValues();
 		initVal.put( Init_Table.COL_Init, creature.getInitiative() );
-		initVal.put( Init_Table.COL_CreatureName, creature.getCharName() );
+		initVal.put( Init_Table.COL_CreatureName, creature.getCreatureName() );
 		initVal.put( Init_Table.COL_InitBonus, creature.getInitMod() );
-		initVal.put( Init_Table.COL_ArmorClass, creature.getAC() );
-		initVal.put( Init_Table.COL_CurrentHP, creature.getCurrentHP() );
+		initVal.put( Init_Table.COL_ArmorClass, creature.getArmorClass() );
+		initVal.put( Init_Table.COL_CurrentHP, creature.getCurrentHitPoints() );
 		initVal.put( Init_Table.COL_MaxHP, creature.getMaxHitPoints() );
-		initVal.put( Init_Table.COL_Type, ( creature.isCreature() == false ? 0 : 1 ) ); // 0 = PC, 1 = Creature
+		initVal.put( Init_Table.COL_Type, ( creature.isMonster() == false ? 0 : 1 ) ); // 0 = PC, 1 = Creature
 		
 		return db.insert( Init_Table.TABLE_NAME, null, initVal );
 	}
@@ -353,9 +353,9 @@ public class MoFlowDB {
 		
 		ContentValues initVal = new ContentValues();
 		initVal.put( Players_Table.COL_PartyName, partyName );
-		initVal.put( Players_Table.COL_PCName, updated.getCharName() );
+		initVal.put( Players_Table.COL_PCName, updated.getCreatureName() );
 		initVal.put( Players_Table.COL_InitBonus, updated.getInitMod() );
-		initVal.put( Players_Table.COL_ArmorClass, updated.getAC() );
+		initVal.put( Players_Table.COL_ArmorClass, updated.getArmorClass() );
 		initVal.put( Players_Table.COL_MaxHP, updated.getMaxHitPoints() );
 		
 		return db.update( Players_Table.TABLE_NAME, initVal, whereClause, whereArgs );
@@ -403,9 +403,9 @@ public class MoFlowDB {
 		String [] whereArgs = { oldCreatureName };
 		
 		ContentValues initVal = new ContentValues();
-		initVal.put( Catalog_Table.COL_CreatureName, updated.getCharName() );
+		initVal.put( Catalog_Table.COL_CreatureName, updated.getCreatureName() );
 		initVal.put( Catalog_Table.COL_InitBonus, updated.getInitMod() );
-		initVal.put( Catalog_Table.COL_ArmorClass, updated.getAC() );
+		initVal.put( Catalog_Table.COL_ArmorClass, updated.getArmorClass() );
 		initVal.put( Catalog_Table.COL_MaxHP, updated.getMaxHitPoints() );
 		
 		return db.update( Catalog_Table.TABLE_NAME, initVal, whereClause, whereArgs );

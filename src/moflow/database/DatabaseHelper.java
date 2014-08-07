@@ -13,14 +13,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public DatabaseHelper(Context context, String DBName, CursorFactory factory,
 			int version) {
 		super( context, DBName, factory, version );
-        udb = new UpgradeDB();
+       // udb = new UpgradeDB();
 	}
 	
 	@Override
 	public void onCreate( SQLiteDatabase db ) {
 		try {
+            db.execSQL( Parties_Table.DB_CREATE );
 			db.execSQL( Players_Table.DB_CREATE );
-			db.execSQL( Parties_Table.DB_CREATE );
 			db.execSQL( Encounters_Table.DB_CREATE );
 			db.execSQL( Creatures_Table.DB_CREATE );
 			db.execSQL( Catalog_Table.DB_CREATE );
@@ -34,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion ) {
         switch ( oldVersion ) {
             case 1:
-                udb.execV1Upgrades( db );
+                //udb.execV1Upgrades( db );
             default:
         }
 	}

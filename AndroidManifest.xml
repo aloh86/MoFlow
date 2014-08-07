@@ -18,8 +18,7 @@
 		</activity>
 
         <activity
-		android:name=".GroupListActivity"
-		android:label="Parties" >
+		android:name=".GroupListActivity" >
 			<intent-filter>
 				<action android:name="moflow.activities.GroupListActivity" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -27,40 +26,13 @@
 		</activity>
 
         <activity
-		android:name=".CreatureCatalogActivity"
-		android:label="Creature Catalog" >
-			<intent-filter>
-				<action android:name="moflow.activities.CreatureCatalogActivity" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
-		<activity
-		android:name=".EncounterListActivity"
-		android:label="Encounters" >
-			<intent-filter>
-				<action android:name="moflow.activities.EncounterListActivity" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
-		<activity
-		android:name=".EditEncounterActivity"
-		android:label="Edit Encounter" >
-			<intent-filter>
-				<action android:name="moflow.activities.EditEncounterActivity" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
-		<activity
-		android:name=".InitiativeActivity"
-		android:label="Initiative" >
-			<intent-filter>
-				<action android:name="moflow.activities.InitiativeActivity" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
+                android:name=".SettingsActivity"
+                android:label="Settings" >
+            <intent-filter>
+                <action android:name="moflow.activities.SettingsActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
     </application>
 </manifest>

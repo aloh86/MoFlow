@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import moflow.activities.R;
 
 public class MainMenuListAdapter extends BaseAdapter {
 	private Context mContext;
@@ -14,11 +15,12 @@ public class MainMenuListAdapter extends BaseAdapter {
 			moflow.activities.R.drawable.skull,
 			moflow.activities.R.drawable.gazer,
 			moflow.activities.R.drawable.init_icon,
+            R.drawable.manual
 	};
 
 	private String [] icoText = {
 			"Create Player Characters", "Create Encounters", "Creature Catalog",
-			"Initiative"
+			"Initiative", "Options"
 	};
 	
 	public MainMenuListAdapter( Context c ) {

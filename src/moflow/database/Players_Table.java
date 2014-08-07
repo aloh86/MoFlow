@@ -46,6 +46,6 @@ public abstract class Players_Table implements BaseColumns {
             COL_WILL        + " INTEGER NOT NULL DEFAULT 0, " +
 			"PRIMARY KEY (" + COL_PartyName + "," + COL_PCName + "), " +
             "FOREIGN KEY (" + COL_PartyName + ") REFERENCES " + Parties_Table.TABLE_NAME + "(" + Parties_Table.COL_PartyName + ") " +
-                    "ON UPGRADE CASCADE ON DELETE CASCADE" +
+                    "ON UPDATE CASCADE ON DELETE CASCADE" +
 			");";
 }

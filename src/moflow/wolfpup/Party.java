@@ -76,7 +76,7 @@ public class Party implements Parcelable
 	{
 		for ( int i = 0; i < party.size(); i++ )
 		{
-			if ( party.get( i ).getCharName().equals( name ) )
+			if ( party.get( i ).getCreatureName().equals( name ) )
 				return party.get( i );
 		}
 		
@@ -128,7 +128,7 @@ public class Party implements Parcelable
 	{
 		for ( int i = 0; i < party.size(); i++ )
 		{
-			if ( party.get( i ).getCharName().equals( playerName ) )
+			if ( party.get( i ).getCreatureName().equals( playerName ) )
 				party.remove( i );
 		}
 	}

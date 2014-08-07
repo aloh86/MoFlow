@@ -54,6 +54,6 @@ public abstract class Creatures_Table implements BaseColumns {
             COL_WILL        + " INTEGER NOT NULL DEFAULT 0, " +
             "PRIMARY KEY (" + COL_Encounter + "," + COL_CreatureName + "), " +
             "FOREIGN KEY (" + COL_Encounter + ") REFERENCES " + Encounters_Table.TABLE_NAME + "(" + Encounters_Table.COL_Encounter + ") " +
-            "ON UPGRADE CASCADE ON DELETE CASCADE" +
+            "ON UPDATE CASCADE ON DELETE CASCADE" +
             ");";
 }

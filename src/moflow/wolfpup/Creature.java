@@ -2,6 +2,7 @@ package moflow.wolfpup;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 /*
 ===============================================================================
 Moflow_Creature.java
@@ -10,34 +11,56 @@ Alex Oh
 Representation of a creature (PCs and Monsters).
 ===============================================================================
 */
-public class Creature implements Parcelable, Cloneable, Comparable
-{
-    public int armorClass;
-    public int initMod;
-    public int hitPoints;
-    public int currentHP;
-    public int initiative;
-    public boolean isMonster;
-	public boolean hasInit;
-    public String creatureName;
-	
-	public Conditions conditions;
-	
+public class Creature implements Parcelable, Cloneable, Comparable {
+    // "core" info
+    private String creatureName;
+    private int armorClass;
+    private int initMod;
+    private int maxHitPoints;
+
+    // ability scores
+    private int strength;
+    private int dexterity;
+    private int constitution;
+    private int intelligence;
+    private int wisdom;
+    private int charisma;
+
+    // saving throws
+    private int fort;
+    private int reflex;
+    private int will;
+
+    // initiative state info
+    private int currentHitPoints;
+    private int initiative;
+    private boolean isMonster;
+    private boolean hasInit;
 
 	/**
 	 * Creates "Blank" PC with all scores set to zero and no name.
 	 */
-	public Creature()
-	{
-		armorClass = 0;		
+	public Creature() {
+        creatureName = "";
+		armorClass = 0;
 		initMod = 0;
-		hitPoints = 0;
-		currentHP = hitPoints;
+        maxHitPoints = 0;
+
+        strength = 0;
+        dexterity = 0;
+        constitution = 0;
+        intelligence = 0;
+        wisdom = 0;
+        charisma = 0;
+
+        fort = 0;
+        reflex = 0;
+        will = 0;
+
+        currentHitPoints = maxHitPoints;
 		initiative = 0;
 		isMonster = true;
-		creatureName = "";
 		hasInit = false;
-		conditions = new Conditions();
 	}
 	
 	/**
@@ -48,9 +71,20 @@ public class Creature implements Parcelable, Cloneable, Comparable
 		try {
 			twin = (Creature) super.clone();
 			twin.creatureName = creatureName;
+            twin.armorClass = armorClass;
 			twin.initMod = initMod;
-			twin.armorClass = armorClass;
-			twin.hitPoints = hitPoints;
+			twin.maxHitPoints = maxHitPoints;
+
+            twin.strength = strength;
+            twin.dexterity = dexterity;
+            twin.constitution = constitution;
+            twin.intelligence = intelligence;
+            twin.wisdom = wisdom;
+            twin.charisma = charisma;
+
+            twin.fort = fort;
+            twin.reflex = reflex;
+            twin.will = will;
 		} catch ( CloneNotSupportedException e ) {
 			throw new Error();
 		}
@@ -58,100 +92,73 @@ public class Creature implements Parcelable, Cloneable, Comparable
 		return twin;
 	}
 	
-	/**
-	 * Get character's armor class
-	 * @return armor class value
-	 */
-	public int getAC() 		  { return armorClass; }
+    /*
+	=========================================================================
+	Accessor
+	=========================================================================
+	*/
+    public String getCreatureName() { return creatureName; }
+    public int    getArmorClass() { return armorClass; }
+    public int    getInitMod() { return initMod; }
+    public int    getMaxHitPoints() { return maxHitPoints; }
+
+    public int    getStrength() { return strength; }
+    public int    getDexterity() { return dexterity; }
+    public int    getConstitution() { return constitution; }
+    public int    getIntelligence() { return intelligence; }
+    public int    getWisdom() { return wisdom; }
+    public int    getCharisma() { return charisma; }
+
+    public int    getFortitude() { return fort; }
+    public int    getReflex() { return reflex; }
+    public int    getWill() { return will; }
+
+    public int    getCurrentHitPoints() { return currentHitPoints; }
+    public int    getInitiative() { return initiative; }
+    public boolean isMonster() { return isMonster; }
+    public boolean hasInit() { return hasInit; }
+
+    /*
+	=========================================================================
+	Mutator
+	=========================================================================
+	*/
+    public void setCreatureName( String name ) {
+        name.trim();
+
+        if ( name.length() > 50 ) {
+            creatureName = name.substring( 0, 50 );
+        } else
+            creatureName = name;
+    }
+
+    public void setArmorClass( int AC ) { armorClass = AC; }
+    public void setInitMod( int mod ) { initMod = mod; }
+    public void setMaxHitPoints( int points ) { maxHitPoints = points; }
+
+    public void setStrength( int score ) { strength = validateScore( score ); }
+    public void setDexterity( int score ) { dexterity = validateScore( score ); }
+    public void setConstitution( int score ) { constitution = validateScore( score ); }
+    public void setIntelligence( int score ) { intelligence = validateScore( score ); }
+    public void setWisdom( int score ) { wisdom = validateScore( score ); }
+    public void setCharisma( int score ) { charisma = validateScore( score ); }
+
+    public void setFortitude( int mod ) { fort = mod; }
+    public void setReflex( int mod ) { reflex = mod; }
+    public void setWill( int mod ) { will = mod; }
+
+    public void setCurrentHitPoints( int hp ) { currentHitPoints = hp; }
+    public void setInitiative( int init ) { initiative = init; }
+    public void setAsMonster( boolean val ) { isMonster = val; }
+    public void setHasInit( boolean hasInitiative ) { hasInit = hasInitiative; }
 	
-	/**
-	 * Get character's initiative modifier
-	 * @return initiative modifier
-	 */
-	public int getInitMod()   { return initMod;	  }
-	
-	/**
-	 * Get character's hit points
-	 * @return hit point total
-	 */
-	public int getMaxHitPoints() { return hitPoints; }
-	
-	/**
-	 * Get current amount of character's hit points
-	 * @return current hit point value
-	 */
-	public int getCurrentHP() { return currentHP; }
-	
-	/**
-	 * Get character's name
-	 * @return character name
-	 */
-	public String getCharName() { return creatureName; }
-	
-	/**
-	 * Get character's initiative
-	 * @return initiative value
-	 */
-	public int getInitiative() { return initiative; }
-	
-	/**
-	 * Get has-init state.
-	 * @return true if creature has initiative, false otherwise.
-	 */
-	public boolean getHasInit() { return hasInit; }
-	
-	/**
-	 * Determine whether item is a "monster" creature or a player character.
-	 * @return true if monster creature, false if player character
-	 */
-	public boolean isCreature() { return isMonster; }
-	
-	/**
-	 * Set creature's has init state
-	 * @param has true to set initiative, false otherwise
-	 */
-	public void setHasInit( boolean has ) { hasInit = has; }
-	
-	/**
-	 * Mutator for character name
-	 * @param name new name
-	 */
-	public void setName( String name ) { creatureName = name; }
-	
-	/**
-	 * Mutator for armor class
-	 * @param AC armor class value
-	 */
-	public void setArmorClass( int AC ) { armorClass = AC; }
-	
-	/**
-	 * Mutator for initiative modifier
-	 * @param mod initiative modifier
-	 */
-	public void setInitMod( int mod ) { initMod = mod; }
-	
-	/**
-	 * Mutator for max hit points. 
-	 * @param hp hit point value
-	 */
-	public void setHitPoints( int hp ) { hitPoints = hp; }
-	
-	/**
-	 * Mutator for current hit points.
-	 */
-	public void setCurrentHP( int hp ) { currentHP = hp; }
-	
-	/**
-	 * Mutator for initiative.
-	 * @param init initiative value
-	 */
-	public void setInitiative( int init ) { initiative = init; }
-	
-	public void setAsMonster( int type ) { 
-		isMonster = ( type == 0 ? false : true ); // 0 = PC, 1 = monster 
-	}
-	
-	
+	private int validateScore( int score ) {
+        if ( score >= 0 )
+            return score;
+
+        return 0;
+    }
+
 	/*
 	=========================================================================
 	Parcelable implementation
@@ -178,16 +185,26 @@ public class Creature implements Parcelable, Cloneable, Comparable
 	 * Constructor for reconstructing a Creature object from a Parcel
 	 * @param in the parcel to read from
 	 */
-	protected Creature(Parcel in)
-	{		
+	protected Creature( Parcel in )
+	{
+        creatureName = in.readString();
 		armorClass = in.readInt();
-		
 		initMod = in.readInt();
-		hitPoints = in.readInt();
-		currentHP = in.readInt();
+		maxHitPoints = in.readInt();
+
+        strength = in.readInt();
+        dexterity = in.readInt();
+        constitution = in.readInt();
+        intelligence = in.readInt();
+        wisdom = in.readInt();
+        charisma = in.readInt();
+
+        fort = in.readInt();
+        reflex = in.readInt();
+        will = in.readInt();
+
+        currentHitPoints = in.readInt();
 		initiative = in.readInt();
-		
-		creatureName = in.readString();
 	}
 	
 	/**
@@ -207,15 +224,25 @@ public class Creature implements Parcelable, Cloneable, Comparable
 	 * @param flags Additional flags about how the object should be written.
 	 */
 	public void writeToParcel( Parcel dest, int flags )
-	{		
+	{
+        dest.writeString( creatureName );
 		dest.writeInt( armorClass );
-		
 		dest.writeInt( initMod );
-		dest.writeInt( hitPoints );
-		dest.writeInt( currentHP );
+		dest.writeInt( maxHitPoints );
+
+        dest.writeInt( strength );
+        dest.writeInt( dexterity );
+        dest.writeInt( constitution );
+        dest.writeInt( intelligence );
+        dest.writeInt( wisdom );
+        dest.writeInt( charisma );
+
+        dest.writeInt( fort );
+        dest.writeInt( reflex );
+        dest.writeInt( will );
+
+		dest.writeInt( currentHitPoints );
 		dest.writeFloat( initiative );
-		
-		dest.writeString( creatureName );
 	}
 	
 	/*
@@ -227,7 +254,7 @@ public class Creature implements Parcelable, Cloneable, Comparable
 	public String toString()
 	{
 		return creatureName + "\n" +
-		"Hit Points: " + hitPoints + "\n" +
+		"Hit Points: " + maxHitPoints + "\n" +
 		"AC: " + armorClass +
 		"  Init Bonus: " + initMod;
 	}
