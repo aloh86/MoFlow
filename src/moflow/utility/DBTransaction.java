@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.widget.Toast;
 import moflow.database.MoFlowDB;
+import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,22 @@ import java.util.ArrayList;
 public class DBTransaction {
     private MoFlowDB db;
     private Cursor cur;
+
+    // column order
+    private final int PARTY_NAME = 0;
+    private final int PC_NAME = 1;
+    private final int INIT_BONUS = 2;
+    private final int ARMOR_CLASS = 3;
+    private final int MAX_HP = 4;
+    private final int STR = 5;
+    private final int DEX = 6;
+    private final int CON = 7;
+    private final int INT = 8;
+    private final int WIS = 9;
+    private final int CHA = 10;
+    private final int FORT = 11;
+    private final int REF = 12;
+    private final int WILL = 13;
 
     public DBTransaction(Context ctx) {
         db = new MoFlowDB( ctx );
@@ -41,14 +58,47 @@ public class DBTransaction {
 
         while ( cur.moveToNext() ) {
             // there is only 1 column in the parties table, hence 0 for getString
-            groupList.add( cur.getString( 0 ) );
+            groupList.add( cur.getString( PARTY_NAME ) );
         }
         cur.close();
 
         return groupList;
     }
 
+    public ArrayList< Creature > getGroupItemList( String groupType, String groupName ) {
+        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+            cur = db.getPCForGroup( groupName );
+        else
+            cur = db.getCreaturesForEncounter( groupName );
+
+        ArrayList< Creature > creatureList = new ArrayList();
+
+        int columns = cur.getColumnCount();
+
+        while ( cur.moveToNext() ) {
+            Creature critter = new Creature();
+            critter.setCreatureName( cur.getString( PC_NAME ) );
+            critter.setInitMod( cur.getInt( INIT_BONUS ) );
+            critter.setArmorClass( cur.getInt( ARMOR_CLASS ) );
+            critter.setMaxHitPoints( cur.getInt( MAX_HP ) );
+            critter.setStrength( cur.getInt( STR ) );
+            critter.setDexterity( cur.getInt( DEX ) );
+            critter.setConstitution( cur.getInt( CON ) );
+            critter.setIntelligence( cur.getInt( INT ) );
+            critter.setWisdom( cur.getInt( WIS ) );
+            critter.setCharisma( cur.getInt( CHA ) );
+            critter.setFortitude( cur.getInt( FORT ) );
+            critter.setReflex( cur.getInt( REF ) );
+            critter.setWill( cur.getInt( WILL ) );
+
+            creatureList.add( critter );
+        }
+
+        return creatureList;
+    }
+
     // Insertion
+
     public void insertNewGroup( String groupName, String groupType ) {
         if ( groupType.equals( CommonKey.VAL_PARTY ) )
             db.insertParty( groupName );

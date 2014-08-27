@@ -2,6 +2,7 @@ package moflow.activities;
 
 import android.app.DialogFragment;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.view.*;
 
 import android.os.Bundle;
@@ -198,7 +199,14 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
                 else
                     deleteList.remove(groupList.get(position));
             }
+        } else {
+            Intent intent = new Intent( "moflow.activities.EditGroupActivity" );
+            intent.putExtra( CommonKey.KEY_GROUP_TYPE, groupType );
+            intent.putExtra( CommonKey.KEY_GROUP_NAME, listAdapter.getItem( position ) );
+            startActivityForResult( intent, 1 );
         }
+
+
     }
 
     /**

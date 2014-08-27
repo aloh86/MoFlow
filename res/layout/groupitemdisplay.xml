@@ -7,47 +7,50 @@
         android:layout_height="fill_parent">
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_alignParentLeft="true"
-            android:text="@string/sample"/>
-
-    <RelativeLayout
+            android:id="@+id/display_creatureName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp">
-        <TextView
-                android:id="@+id/display_static_maxHPLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="@string/display_maxHPLabel"/>
-        <TextView
-                android:id="@+id/display_maxHPLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/display_static_maxHPLabel"
-                android:text="@string/sample"/>
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:text="@string/sample"/>
 
-        <TextView
-                android:id="@+id/display_static_initBonusLabel"
+    <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+        <TableRow
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/display_initBonusLabel"
-                android:text="@string/display_initBonusLabel"/>
-        <TextView
-                android:id="@+id/display_initBonusLabel"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:id="@+id/display_static_armorClassLabel"
+                    style="@style/displayTableCell"
+                    android:text="@string/display_armorClassLabel"/>
+            <TextView
+                    android:id="@+id/display_static_maxHPLabel"
+                    style="@style/displayTableCell"
+                    android:text="@string/display_maxHPLabel"/>
+            <TextView
+                    android:id="@+id/display_static_initBonusLabel"
+                    style="@style/displayTableCell"
+                    android:text="@string/display_initBonusLabel"/>
+        </TableRow>
+        <TableRow
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="5dp"
-                android:text="@string/sample"/>
-    </RelativeLayout>
+                android:layout_height="wrap_content">
+            <TextView
+                    android:id="@+id/display_armorClassLabel"
+                    style="@style/displayTableCell"
+                    android:text="@string/sample"/>
+            <TextView
+                    android:id="@+id/display_maxHPLabel"
+                    style="@style/displayTableCell"
+                    android:text="@string/sample"/>
+            <TextView
+                    android:id="@+id/display_initBonusLabel"
+                    style="@style/displayTableCell"
+                    android:text="@string/sample"/>
+        </TableRow>
+    </TableLayout>
 
     <LinearLayout
             android:id="@+id/display_abilityScoresLayout"

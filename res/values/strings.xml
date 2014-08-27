@@ -41,8 +41,9 @@
     <string name="armorClassHint">Armor Class</string>
 
     <!-- Creature Stat Display Strings -->
-    <string name="display_maxHPLabel">Max Hit Points:</string>
-    <string name="display_initBonusLabel">Init Bonus:</string>
+    <string name="display_armorClassLabel">Armor Class</string>
+    <string name="display_maxHPLabel">Max Hit Points</string>
+    <string name="display_initBonusLabel">Init Bonus</string>
     <string name="strLabel">STR:</string>
     <string name="dexLabel">DEX:</string>
     <string name="conLabel">CON:</string>
@@ -59,9 +60,6 @@
     <string name="prefHeader_optionalInfo">Optional Info</string>
     <string name="prefHeader_catalog">Creature Catalog</string>
 
-    <!-- Sample Text -->
-    <string name="sample">temp</string>
-
     <string name="title_scores">Enable Ability Scores</string>
     <string name="title_3e4e_Saves">Enable Saving Throws</string>
     <string name="title_catalogMonsterEdition">Monster Edition</string>
@@ -69,4 +67,12 @@
     <string name="summary_3e4e_Saves">Enable display and input of 3e/4e saving throw/defenses Fortitude, Reflex, and Will.</string>
     <string name="summary_catalog">Choose an edition to load monsters into Creature Catalog.</string>
 
+    <!--Context Menu-->
+    <string name="menu_moveUp">Move Up</string>
+    <string name="menu_itemWait">Hold action</string>
+    <string name="menu_itemRemove">Delete</string>
+    <string name="menu_moveDown">Move Down</string>
+
+    <!-- Sample Text -->
+    <string name="sample">temp</string>
 </resources>

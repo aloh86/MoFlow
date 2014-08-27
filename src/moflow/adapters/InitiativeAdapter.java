@@ -17,21 +17,19 @@ public class InitiativeAdapter extends ArrayAdapter<Creature> {
 	private List<Creature> initList;
 	Context mContext;
 	LayoutInflater inflater;
-	
+
 	public InitiativeAdapter(Context context, int textViewResourceId, List<Creature> objects) {
 		super( context, textViewResourceId, objects );
 		mContext = context;
 		initList = objects;
 		inflater = ( LayoutInflater ) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
 	}
-	
+	/*
 	public View getView( int position, View convertView, ViewGroup parent ) {
 		ViewHolder holder = null;
-		int type = getItemViewType( position );
 		
 		if ( convertView == null ) {
 			holder = new ViewHolder();
-			//convertView = inflater.inflate( R.layout.init_item, null );
 			
 			holder.initItemName = ( TextView )convertView.findViewById( R.id.initItemName );
 			holder.initValue = ( TextView ) convertView.findViewById( R.id.initValue );
@@ -84,11 +82,12 @@ public class InitiativeAdapter extends ArrayAdapter<Creature> {
 			hpTV.setTextColor( Color.GREEN );
 	}
 
-	public static class ViewHolder {
+	private static class ViewHolder {
 		public TextView initItemName;
 		public TextView initValue;
 		public TextView initHPCurrent;
 		public TextView initHPMax;
 		public TextView initItemAC;
 	}
+	*/
 }

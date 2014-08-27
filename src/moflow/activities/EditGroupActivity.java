@@ -4,9 +4,11 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+import moflow.adapters.DisplayItemAdapter;
 import moflow.dialogs.NameDialogFragment;
 import moflow.utility.CommonKey;
 import moflow.utility.DBTransaction;
+import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
 
@@ -18,12 +20,13 @@ public class EditGroupActivity extends ListActivity {
     private DBTransaction dbTransaction;
     private boolean editMode;
     private boolean deleteMode;
-    private ArrayList< String > groupList;
-    private ArrayAdapter< String > listAdapter;
+    private ArrayList< Creature > groupList;
+    private ArrayAdapter< Creature > listAdapter;
     private ArrayList< String > deleteList;
     private int indexOfItemToEdit;
     private NameDialogFragment renameDialog;
     private String groupType;
+    private String groupName;
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -31,19 +34,21 @@ public class EditGroupActivity extends ListActivity {
 
         try {
             groupType = getIntent().getExtras().getString( CommonKey.KEY_GROUP_TYPE );
+            groupName = getIntent().getExtras().getString( CommonKey.KEY_GROUP_NAME );
         } catch ( NullPointerException npe ) {
-            Toast.makeText(this, "onCreate: groupType Extra could not be found.", Toast.LENGTH_LONG);
+            Toast.makeText(this, "onCreate: intent extras could not be extracted.", Toast.LENGTH_LONG);
         }
 
         dbTransaction = new DBTransaction( this );
 
-        groupList = dbTransaction.getGroupList( groupType );
+        groupList = dbTransaction.getGroupItemList( groupType, groupName );
 
         // fill the list with parties from database
-        listAdapter = new ArrayAdapter<String>(
+        listAdapter = new DisplayItemAdapter(
                 this,
-                android.R.layout.simple_list_item_1,
-                groupList);
+                R.layout.groupitemdisplay,
+                groupList,
+                false );
         setListAdapter( listAdapter );
 
         //getListView().setOnItemClickListener(this);

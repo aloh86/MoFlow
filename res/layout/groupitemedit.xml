@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/nameHint"
             android:maxLength="50"
-            android:nextFocusDown="@id/creatureMaxHitPointsEditText"/>
+            android:nextFocusDown="@+id/creatureArmorClassEditText"/>
 
     <LinearLayout
             android:layout_width="fill_parent"
@@ -32,25 +32,24 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/armorClassHint"
-                    android:nextFocusDown="@id/creatureMaxHitPointsEditText"
-                    android:nextFocusRight="@id/creatureMaxHitPointsEditText"/>
+                    android:nextFocusRight="@+id/creatureMaxHitPointsEditText"/>
             <EditText
                     android:id="@+id/creatureMaxHitPointsEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/maxHPHint"
-                    android:nextFocusDown="@id/creatureInitBonusEditText"
-                    android:nextFocusRight="@id/creatureInitBonusEditText"
-                    android:nextFocusLeft="@id/creatureArmorClassEditText"/>
+                    android:nextFocusDown="@+id/creatureInitBonusEditText"
+                    android:nextFocusRight="@+id/creatureInitBonusEditText"
+                    android:nextFocusLeft="@+id/creatureArmorClassEditText"/>
             <EditText
                     android:id="@+id/creatureInitBonusEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/initBonusHint"
-                    android:nextFocusDown="@id/creatureStrEditText"
-                    android:nextFocusLeft="@id/creatureMaxHitPointsEditText"/>
+                    android:nextFocusDown="@+id/creatureStrEditText"
+                    android:nextFocusLeft="@+id/creatureMaxHitPointsEditText"/>
         </LinearLayout>
 
         <LinearLayout
@@ -76,20 +75,20 @@
                             android:id="@+id/creatureStrEditText"
                             style="@style/statEntry"
                             android:hint="@string/strHint"
-                            android:nextFocusDown="@id/creatureDexEditText"
-                            android:nextFocusRight="@id/creatureIntEditText"/>
+                            android:nextFocusDown="@+id/creatureDexEditText"
+                            android:nextFocusRight="@+id/creatureIntEditText"/>
                     <EditText
                             android:id="@+id/creatureDexEditText"
                             style="@style/statEntry"
                             android:hint="@string/dexHint"
-                            android:nextFocusDown="@id/creatureConEditText"
-                            android:nextFocusRight="@id/creatureWisEditText"/>
+                            android:nextFocusDown="@+id/creatureConEditText"
+                            android:nextFocusRight="@+id/creatureWisEditText"/>
                     <EditText
                             android:id="@+id/creatureConEditText"
                             style="@style/statEntry"
                             android:hint="@string/conHint"
-                            android:nextFocusDown="@id/creatureIntEditText"
-                            android:nextFocusRight="@id/creatureChaEditText"/>
+                            android:nextFocusDown="@+id/creatureIntEditText"
+                            android:nextFocusRight="@+id/creatureChaEditText"/>
                 </LinearLayout>
                 <LinearLayout
                         android:layout_width="fill_parent"
@@ -100,20 +99,20 @@
                             android:id="@+id/creatureIntEditText"
                             style="@style/statEntry"
                             android:hint="@string/intHint"
-                            android:nextFocusDown="@id/creatureWisEditText"
-                            android:nextFocusLeft="@id/creatureStrEditText"/>
+                            android:nextFocusDown="@+id/creatureWisEditText"
+                            android:nextFocusLeft="@+id/creatureStrEditText"/>
                     <EditText
                             android:id="@+id/creatureWisEditText"
                             style="@style/statEntry"
                             android:hint="@string/wisHint"
-                            android:nextFocusDown="@id/creatureChaEditText"
-                            android:nextFocusLeft="@id/creatureDexEditText"/>
+                            android:nextFocusDown="@+id/creatureChaEditText"
+                            android:nextFocusLeft="@+id/creatureDexEditText"/>
                     <EditText
                             android:id="@+id/creatureChaEditText"
                             style="@style/statEntry"
                             android:hint="@string/chaHint"
-                            android:nextFocusDown="@id/creatureFortEditText"
-                            android:nextFocusLeft="@id/creatureConEditText"/>
+                            android:nextFocusDown="@+id/creatureFortEditText"
+                            android:nextFocusLeft="@+id/creatureConEditText"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -136,21 +135,21 @@
                         style="@style/statEntry"
                         android:layout_weight="1"
                         android:hint="@string/fortHint"
-                        android:nextFocusDown="@id/creatureRefEditText"
-                        android:nextFocusRight="@id/creatureRefEditText"/>
+                        android:nextFocusDown="@+id/creatureRefEditText"
+                        android:nextFocusRight="@+id/creatureRefEditText"/>
                 <EditText
                         android:id="@+id/creatureRefEditText"
                         style="@style/statEntry"
                         android:layout_weight="1"
                         android:hint="@string/refHint"
-                        android:nextFocusDown="@id/creatureWillEditText"
-                        android:nextFocusRight="@id/creatureWillEditText"/>
+                        android:nextFocusDown="@+id/creatureWillEditText"
+                        android:nextFocusRight="@+id/creatureWillEditText"/>
                 <EditText
                         android:id="@+id/creatureWillEditText"
                         style="@style/statEntry"
                         android:layout_weight="1"
                         android:hint="@string/willHint"
-                        android:nextFocusLeft="@id/creatureRefEditText"/>
+                        android:nextFocusLeft="@+id/creatureRefEditText"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
