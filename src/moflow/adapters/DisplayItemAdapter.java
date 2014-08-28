@@ -2,8 +2,10 @@ package moflow.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.audiofx.BassBoost;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -24,18 +26,21 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
     private Context mContext;
     private List<Creature> groupList;
     private boolean isInitiativeScreen;
+    LayoutInflater inflater;
 
     public DisplayItemAdapter(Context context, int resource, List<Creature> objects, boolean isInitScreen) {
         super(context, resource, objects);
         mContext = context;
         groupList = objects;
         isInitiativeScreen = isInitScreen;
+        inflater = ( LayoutInflater ) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
     }
 
     public View getView( int position, View convertView, ViewGroup parent ) {
         ViewHolder holder = null;
 
         if ( convertView == null ) {
+            convertView = inflater.inflate( R.layout.groupitemdisplay, null );
             holder = new ViewHolder( convertView );
             convertView.setTag( holder );
         } else {
@@ -127,6 +132,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
 
         public ViewHolder( View convertView ) {
             creatureName = ( TextView ) convertView.findViewById(R.id.display_creatureName);
+            creatureName.setTextColor( Color.GREEN );
             armorClass = ( TextView ) convertView.findViewById( R.id.display_armorClassLabel );
             maxHitPoints = ( TextView ) convertView.findViewById( R.id.display_maxHPLabel );
             initScore = ( TextView ) convertView.findViewById( R.id.display_initBonusLabel );

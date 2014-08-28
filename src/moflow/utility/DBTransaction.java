@@ -16,7 +16,7 @@ public class DBTransaction {
     private MoFlowDB db;
     private Cursor cur;
 
-    // column order
+    // column order of players table
     private final int PARTY_NAME = 0;
     private final int PC_NAME = 1;
     private final int INIT_BONUS = 2;
@@ -73,23 +73,23 @@ public class DBTransaction {
 
         ArrayList< Creature > creatureList = new ArrayList();
 
-        int columns = cur.getColumnCount();
+        final int ADJUST = -1;
 
         while ( cur.moveToNext() ) {
             Creature critter = new Creature();
-            critter.setCreatureName( cur.getString( PC_NAME ) );
-            critter.setInitMod( cur.getInt( INIT_BONUS ) );
-            critter.setArmorClass( cur.getInt( ARMOR_CLASS ) );
-            critter.setMaxHitPoints( cur.getInt( MAX_HP ) );
-            critter.setStrength( cur.getInt( STR ) );
-            critter.setDexterity( cur.getInt( DEX ) );
-            critter.setConstitution( cur.getInt( CON ) );
-            critter.setIntelligence( cur.getInt( INT ) );
-            critter.setWisdom( cur.getInt( WIS ) );
-            critter.setCharisma( cur.getInt( CHA ) );
-            critter.setFortitude( cur.getInt( FORT ) );
-            critter.setReflex( cur.getInt( REF ) );
-            critter.setWill( cur.getInt( WILL ) );
+            critter.setCreatureName( cur.getString( PC_NAME + ADJUST ) );
+            critter.setInitMod( cur.getInt( INIT_BONUS + ADJUST ) );
+            critter.setArmorClass( cur.getInt( ARMOR_CLASS + ADJUST ) );
+            critter.setMaxHitPoints( cur.getInt( MAX_HP + ADJUST ) );
+            critter.setStrength( cur.getInt( STR + ADJUST ) );
+            critter.setDexterity( cur.getInt( DEX + ADJUST ) );
+            critter.setConstitution( cur.getInt( CON + ADJUST ) );
+            critter.setIntelligence( cur.getInt( INT + ADJUST ) );
+            critter.setWisdom( cur.getInt( WIS + ADJUST ) );
+            critter.setCharisma( cur.getInt( CHA + ADJUST ) );
+            critter.setFortitude( cur.getInt( FORT + ADJUST ) );
+            critter.setReflex( cur.getInt( REF + ADJUST ) );
+            critter.setWill( cur.getInt( WILL + ADJUST ) );
 
             creatureList.add( critter );
         }

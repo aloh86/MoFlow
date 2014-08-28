@@ -36,7 +36,7 @@ public class EditGroupActivity extends ListActivity {
             groupType = getIntent().getExtras().getString( CommonKey.KEY_GROUP_TYPE );
             groupName = getIntent().getExtras().getString( CommonKey.KEY_GROUP_NAME );
         } catch ( NullPointerException npe ) {
-            Toast.makeText(this, "onCreate: intent extras could not be extracted.", Toast.LENGTH_LONG);
+            Toast.makeText(this, "onCreate: intent extras could not be extracted.", Toast.LENGTH_LONG).show();
         }
 
         dbTransaction = new DBTransaction( this );

@@ -9,7 +9,7 @@ import moflow.activities.R;
  */
 public class SettingsFragment extends PreferenceFragment {
     public static final String ABILITY_SCORES_KEY = "pref_score";
-    public static final String SAVING_THROW_KEY = "prev_saveThrow";
+    public static final String SAVING_THROW_KEY = "pref_saveThrow";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

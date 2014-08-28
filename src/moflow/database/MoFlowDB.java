@@ -225,7 +225,16 @@ public class MoFlowDB {
 				Players_Table.COL_PCName, 
 				Players_Table.COL_InitBonus,
 				Players_Table.COL_ArmorClass,
-				Players_Table.COL_MaxHP 
+				Players_Table.COL_MaxHP,
+                Players_Table.COL_STR,
+                Players_Table.COL_DEX,
+                Players_Table.COL_CON,
+                Players_Table.COL_INT,
+                Players_Table.COL_WIS,
+                Players_Table.COL_CHA,
+                Players_Table.COL_FORT,
+                Players_Table.COL_REF,
+                Players_Table.COL_WILL
 				};
 		String [] selectionArgs = { groupName };
 		return db.query(

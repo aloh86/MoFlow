@@ -26,6 +26,14 @@
 		</activity>
 
         <activity
+                android:name=".EditGroupActivity" >
+            <intent-filter>
+                <action android:name="moflow.activities.EditGroupActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
                 android:name=".SettingsActivity"
                 android:label="Settings" >
             <intent-filter>
