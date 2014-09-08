@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="editCreatureDialogTextView">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="editCreatureDialogEditText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="statEntry">
     	<item name="android:layout_width">fill_parent</item>
-    	<item name="android:layout_height">wrap_content</item>
-    	<item name="android:numeric">integer</item>
+    	<item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1</item>
+    	<item name="android:numeric">signed</item>
     	<item name="android:maxLength">4</item>
     	<item name="android:singleLine">true</item>
     	<item name="android:selectAllOnFocus">true</item>

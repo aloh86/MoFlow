@@ -205,8 +205,6 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
             intent.putExtra( CommonKey.KEY_GROUP_NAME, listAdapter.getItem( position ) );
             startActivityForResult( intent, 1 );
         }
-
-
     }
 
     /**
@@ -217,7 +215,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
             renameDialog.show( getFragmentManager(), "renameDialog" );
         }
         else if ( deleteMode && !deleteList.isEmpty() ) {
-            dbTransaction.deleteGroupListItems(deleteList, groupType);
+            dbTransaction.deleteGroup(deleteList, groupType);
 
             for ( String name : deleteList ) {
                 listAdapter.remove( name );

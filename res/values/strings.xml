@@ -25,8 +25,8 @@
     <!-- Party and Encounter Item Edit Strings -->
     <string name="nameHint">Name</string>
     <string name="healthInitLabel">Basics</string>
-    <string name="maxHPHint">Max HP</string>
-    <string name="initBonusHint">Init Bonus</string>
+    <string name="maxHPHint">HP</string>
+    <string name="initBonusHint">Init</string>
     <string name="abilityScoresLabel">Ability Scores</string>
     <string name="strHint">STR</string>
     <string name="dexHint">DEX</string>
@@ -34,16 +34,22 @@
     <string name="intHint">INT</string>
     <string name="wisHint">WIS</string>
     <string name="chaHint">CHA</string>
+    <string name="strength">Strength</string>
+    <string name="dexterity">Dexterity</string>
+    <string name="constitution">Constitution</string>
+    <string name="intelligence">Intelligence</string>
+    <string name="wisdom">Wisdom</string>
+    <string name="charisma">Charisma</string>
     <string name="savingThrowLabel">Saving Throws</string>
     <string name="fortHint">FORT</string>
     <string name="refHint">REF</string>
     <string name="willHint">WILL</string>
-    <string name="armorClassHint">Armor Class</string>
+    <string name="armorClassHint">AC</string>
 
     <!-- Creature Stat Display Strings -->
     <string name="display_armorClassLabel">Armor Class</string>
     <string name="display_maxHPLabel">Max Hit Points</string>
-    <string name="display_initBonusLabel">Init Bonus</string>
+    <string name="display_initBonusLabel">Initiative Bonus</string>
     <string name="strLabel">STR:</string>
     <string name="dexLabel">DEX:</string>
     <string name="conLabel">CON:</string>
@@ -72,6 +78,10 @@
     <string name="menu_itemWait">Hold action</string>
     <string name="menu_itemRemove">Delete</string>
     <string name="menu_moveDown">Move Down</string>
+
+    <!--Context Menu-->
+    <string name="scratchCreature">New Creature</string>
+    <string name="importCatalogCreature">Import from Catalog</string>
 
     <!-- Sample Text -->
     <string name="sample">temp</string>

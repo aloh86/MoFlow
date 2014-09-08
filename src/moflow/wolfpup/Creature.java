@@ -253,10 +253,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	@Override
 	public String toString()
 	{
-		return creatureName + "\n" +
-		"Hit Points: " + maxHitPoints + "\n" +
-		"AC: " + armorClass +
-		"  Init Bonus: " + initMod;
+		return creatureName;
 	}
 
 	/**

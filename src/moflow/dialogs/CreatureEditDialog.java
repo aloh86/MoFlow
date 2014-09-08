@@ -125,42 +125,70 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         if ( !showSavingThrows )
             savingThrowsLayout.setVisibility( View.GONE );
 
+        if ( critter != null ) {
+            setFields();
+        }
+
         return view;
     }
 
+    private void setFields() {
+        creatureName.setText( critter.getCreatureName() );
+        armorClass.setText( String.valueOf(critter.getArmorClass()) );
+        maxHP.setText( String.valueOf( critter.getMaxHitPoints() ) );
+        initBonus.setText( String.valueOf( critter.getInitMod() ) );
+
+        strength.setText( String.valueOf( critter.getStrength() ) );
+        dexterity.setText( String.valueOf( critter.getDexterity() ) );
+        constitution.setText( String.valueOf( critter.getConstitution() ) );
+        intelligence.setText( String.valueOf( critter.getIntelligence() ) );
+        wisdom.setText( String.valueOf( critter.getWisdom() ) );
+        charisma.setText( String.valueOf( critter.getCharisma() ) );
+
+        fort.setText( String.valueOf( critter.getFortitude() ) );
+        ref.setText( String.valueOf( critter.getReflex() ) );
+        will.setText( String.valueOf( critter.getWill() ) );
+    }
+
     // Gets the new stats for the creature when dialog is used for editing an existing creature.
-    private Creature getModifiedCritter() {
-        critter.setCreatureName( creatureName.getText().toString().trim() );
-        critter.setArmorClass(Integer.parseInt(armorClass.getText().toString()));
-        critter.setMaxHitPoints( Integer.parseInt( maxHP.getText().toString() ) );
-        critter.setInitMod( Integer.parseInt( initBonus.getText().toString() ) );
+    public Creature getCritter() {
+        Creature thing = new Creature();
 
-        critter.setStrength( Integer.parseInt( strength.getText().toString() ) );
-        critter.setDexterity( Integer.parseInt( dexterity.getText().toString() ));
-        critter.setConstitution( Integer.parseInt( constitution.getText().toString() ) );
-        critter.setIntelligence( Integer.parseInt( intelligence.getText().toString() ) );
-        critter.setWisdom( Integer.parseInt( wisdom.getText().toString() ) );
-        critter.setCharisma( Integer.parseInt( charisma.getText().toString() ) );
+        thing.setCreatureName( creatureName.getText().toString().trim() );
+        thing.setArmorClass(Integer.parseInt(armorClass.getText().toString()));
+        thing.setMaxHitPoints( Integer.parseInt( maxHP.getText().toString() ) );
+        thing.setInitMod( Integer.parseInt( initBonus.getText().toString() ) );
 
-        critter.setFortitude( Integer.parseInt( fort.getText().toString() ) );
-        critter.setReflex( Integer.parseInt( ref.getText().toString() ) );
-        critter.setWill( Integer.parseInt( will.getText().toString() ) );
+        if ( showAbilityScores ) {
+            thing.setStrength( Integer.parseInt( strength.getText().toString() ) );
+            thing.setDexterity( Integer.parseInt( dexterity.getText().toString() ));
+            thing.setConstitution( Integer.parseInt( constitution.getText().toString() ) );
+            thing.setIntelligence( Integer.parseInt( intelligence.getText().toString() ) );
+            thing.setWisdom( Integer.parseInt( wisdom.getText().toString() ) );
+            thing.setCharisma( Integer.parseInt( charisma.getText().toString() ) );
+        }
 
-        return critter;
+        if ( showSavingThrows ) {
+            thing.setFortitude( Integer.parseInt( fort.getText().toString() ) );
+            thing.setReflex( Integer.parseInt( ref.getText().toString() ) );
+            thing.setWill( Integer.parseInt( will.getText().toString() ) );
+        }
+
+        return thing;
     }
 
     /**
      * Make sure fields are not empty.
      * @return true if any fields are empty, false otherwise
      */
-    public boolean checkEmptyFields() {
-        boolean valid = true;
+    public boolean isEmptyFields() {
+        boolean valid = false;
 
         if ( creatureName.getText().toString().isEmpty() ||
                 armorClass.getText().toString().isEmpty() ||
                 maxHP.getText().toString().isEmpty() ||
                 initBonus.getText().toString().isEmpty() )
-            valid = false;
+            valid = true;
 
         if ( showAbilityScores ) {
             if ( strength.getText().toString().isEmpty() ||
@@ -169,14 +197,14 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
                     intelligence.getText().toString().isEmpty() ||
                     wisdom.getText().toString().isEmpty() ||
                     charisma.getText().toString().isEmpty() )
-                valid = false;
+                valid = true;
         }
 
         if ( showSavingThrows ) {
             if ( fort.getText().toString().isEmpty() ||
                     ref.getText().toString().isEmpty() ||
                     will.getText().toString().isEmpty() )
-                valid = false;
+                valid = true;
         }
 
         return valid;

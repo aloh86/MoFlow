@@ -106,14 +106,30 @@ public class DBTransaction {
             db.insertEncounter( groupName );
     }
 
+    public void insertNewCreature( String groupName, Creature critter, String groupType ) {
+        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+            db.insertPlayer( groupName, critter );
+        else
+            db.insertCreature( groupName, critter );
+    }
+
     // Deletion
 
-    public void deleteGroupListItems( final ArrayList< String > toDelete, String groupType ) {
+    public void deleteGroup( final ArrayList< String > toDelete, String groupType ) {
         for ( int i = 0; i < toDelete.size(); i++ ) {
             if ( groupType.equals( CommonKey.VAL_PARTY ) )
                 db.deletePartyRecord( toDelete.get( i ) );
             else
                 db.deleteEncounterRecord( toDelete.get( i ) );
+        }
+    }
+
+    public void deleteCreatureFromGroup( final ArrayList< Creature > toDelete, String groupName, String groupType ) {
+        for ( int i = 0; i < toDelete.size(); i++ ) {
+            if ( groupType.equals( CommonKey.VAL_PARTY ) )
+                db.deletePC( groupName, toDelete.get( i ).getCreatureName() );
+            else
+                db.deleteCreature( groupName, toDelete.get( i ).getCreatureName() );
         }
     }
 

@@ -37,6 +37,7 @@ public class MoFlowDB {
 	 */
 	public MoFlowDB open() throws SQLException {
 		db = DBHelper.getWritableDatabase();
+        db.execSQL( "PRAGMA foreign_keys = ON" );
 		return this;
 	}
 	
@@ -65,20 +66,26 @@ public class MoFlowDB {
 	/**
 	 * Inserts a new player entry into the Players table.
 	 * @param party party name that the PC is in.
-	 * @param pcName the pc's name.
-	 * @param init the pc's init bonus.
-	 * @param AC the pc's armor class.
-	 * @param hp the pc's max hit points
+	 * @param critter the creature to insert
 	 * @return tuple position of this entry
 	 */
-	public long insertPlayer( String party, String pcName, int init, int AC, 
-			int hp ) {
+	public long insertPlayer( String party, Creature critter ) {
 		ContentValues initVal = new ContentValues();
 		initVal.put( Players_Table.COL_PartyName, party );
-		initVal.put( Players_Table.COL_PCName, pcName );
-		initVal.put( Players_Table.COL_InitBonus, init );
-		initVal.put( Players_Table.COL_ArmorClass, AC );
-		initVal.put( Players_Table.COL_MaxHP, hp );
+		initVal.put( Players_Table.COL_PCName, critter.getCreatureName() );
+		initVal.put( Players_Table.COL_InitBonus, critter.getInitMod() );
+		initVal.put( Players_Table.COL_ArmorClass, critter.getArmorClass() );
+		initVal.put( Players_Table.COL_MaxHP, critter.getMaxHitPoints() );
+        initVal.put( Players_Table.COL_STR, critter.getStrength() );
+        initVal.put( Players_Table.COL_DEX, critter.getDexterity() );
+        initVal.put( Players_Table.COL_CON, critter.getConstitution() );
+        initVal.put( Players_Table.COL_INT, critter.getIntelligence() );
+        initVal.put( Players_Table.COL_WIS, critter.getWisdom() );
+        initVal.put( Players_Table.COL_CHA, critter.getCharisma() );
+        initVal.put( Players_Table.COL_FORT, critter.getFortitude() );
+        initVal.put( Players_Table.COL_REF, critter.getReflex() );
+        initVal.put( Players_Table.COL_WILL, critter.getWill() );
+
 		//return db.insert( Players_Table.TABLE_NAME, null, initVal );
 		return db.insertWithOnConflict( Players_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
@@ -114,20 +121,26 @@ public class MoFlowDB {
 	/**
 	 * Insert a creature entry into the Creature table
 	 * @param encounterName The name of the encounter creature is in.
-	 * @param name name of creature
-	 * @param init creature's initiative bonus
-	 * @param ac creature's armor class
-	 * @param hp creature's hit points
+	 * @param critter the Creature to insert
 	 * @return tuple position of this entry
 	 */
-	public long insertCreature( String encounterName, String name, int init, int ac, 
-			int hp ) {
+	public long insertCreature( String encounterName, Creature critter ) {
 		ContentValues initVal = new ContentValues();
 		initVal.put( Creatures_Table.COL_Encounter, encounterName );
-		initVal.put( Creatures_Table.COL_CreatureName, name );
-		initVal.put( Creatures_Table.COL_InitBonus, init );
-		initVal.put( Creatures_Table.COL_ArmorClass, ac );
-		initVal.put( Creatures_Table.COL_MaxHP, hp );
+		initVal.put( Creatures_Table.COL_CreatureName, critter.getCreatureName() );
+		initVal.put( Creatures_Table.COL_InitBonus, critter.getInitMod() );
+		initVal.put( Creatures_Table.COL_ArmorClass, critter.getArmorClass() );
+		initVal.put( Creatures_Table.COL_MaxHP, critter.getMaxHitPoints() );
+        initVal.put( Creatures_Table.COL_MaxHP, critter.getMaxHitPoints() );
+        initVal.put( Creatures_Table.COL_STR, critter.getStrength() );
+        initVal.put( Creatures_Table.COL_DEX, critter.getDexterity() );
+        initVal.put( Creatures_Table.COL_CON, critter.getConstitution() );
+        initVal.put( Creatures_Table.COL_INT, critter.getIntelligence() );
+        initVal.put( Creatures_Table.COL_WIS, critter.getWisdom() );
+        initVal.put( Creatures_Table.COL_CHA, critter.getCharisma() );
+        initVal.put( Creatures_Table.COL_FORT, critter.getFortitude() );
+        initVal.put( Creatures_Table.COL_REF, critter.getReflex() );
+        initVal.put( Creatures_Table.COL_WILL, critter.getWill() );
 		
 		return db.insertWithOnConflict( Creatures_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
@@ -173,8 +186,7 @@ public class MoFlowDB {
 		initVal.put( Condition_Table.COL_PARALYZED, condition.getState( Conditions.PARALYZED ) );
 		initVal.put( Condition_Table.COL_SHAKEN, condition.getState( Conditions.SHAKEN ) );
 		initVal.put( Condition_Table.COL_STUNNED, condition.getState( Conditions.STUNNED ) );
-		
-		db.execSQL( "PRAGMA foreign_keys = ON" );
+
 		return db.insertWithOnConflict( Condition_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 	
@@ -296,7 +308,16 @@ public class MoFlowDB {
 				Creatures_Table.COL_CreatureName,
 				Creatures_Table.COL_InitBonus,
 				Creatures_Table.COL_ArmorClass,
-				Creatures_Table.COL_MaxHP
+				Creatures_Table.COL_MaxHP,
+                Creatures_Table.COL_STR,
+                Creatures_Table.COL_DEX,
+                Creatures_Table.COL_CON,
+                Creatures_Table.COL_INT,
+                Creatures_Table.COL_WIS,
+                Creatures_Table.COL_CHA,
+                Creatures_Table.COL_FORT,
+                Creatures_Table.COL_REF,
+                Creatures_Table.COL_WILL
 				};
 		String whereClause = Creatures_Table.COL_Encounter + " = ?";
 		String [] whereArgs = { encounterName };

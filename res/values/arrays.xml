@@ -11,4 +11,9 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+
+    <string-array name="newCreatureDialogChoices">
+        <item>New</item>
+        <item>Import from Catalog</item>
+    </string-array>
 </resources>
