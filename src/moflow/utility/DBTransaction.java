@@ -141,4 +141,11 @@ public class DBTransaction {
         else
             db.updateEncounterRecord( newName, oldName );
     }
+
+    public void updateExistingCreature( Creature critter, String groupName, String creatureNamePreChange, String groupType ) {
+        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+            db.updatePlayerRecord( critter, groupName, creatureNamePreChange );
+        else
+            db.updateCreatureRecord( critter, groupName, creatureNamePreChange );
+    }
 }

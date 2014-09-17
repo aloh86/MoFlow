@@ -77,7 +77,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
     public boolean onCreateOptionsMenu( Menu menu ) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate( R.menu.abm_common_actions, menu );
+        inflater.inflate( R.menu.actionbar_add, menu );
         return super.onCreateOptionsMenu( menu );
     }
 

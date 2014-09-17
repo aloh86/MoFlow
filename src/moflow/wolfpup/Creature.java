@@ -3,6 +3,8 @@ package moflow.wolfpup;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Comparator;
+
 /*
 ===============================================================================
 Moflow_Creature.java
@@ -271,4 +273,13 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 		else
 			return 1;
 	}
+
+    public static Comparator< Creature > nameComparator() {
+        return new Comparator<Creature>() {
+            @Override
+            public int compare(Creature lhs, Creature rhs) {
+                return lhs.getCreatureName().compareToIgnoreCase( rhs.getCreatureName() );
+            }
+        };
+    }
 }

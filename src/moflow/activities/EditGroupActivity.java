@@ -13,10 +13,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 import moflow.adapters.DisplayItemAdapter;
 import moflow.dialogs.CreatureEditDialog;
-import moflow.dialogs.NameDialogFragment;
 import moflow.dialogs.SimpleDialogListener;
 import moflow.utility.CommonKey;
 import moflow.utility.DBTransaction;
+import moflow.utility.NameModifier;
 import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
@@ -24,7 +24,8 @@ import java.util.ArrayList;
 /**
  * Created by Alex on 8/2/14.
  */
-public class EditGroupActivity extends ListActivity implements AdapterView.OnItemClickListener, SimpleDialogListener, DialogInterface.OnClickListener {
+public class EditGroupActivity extends ListActivity
+        implements AdapterView.OnItemClickListener, SimpleDialogListener, DialogInterface.OnClickListener {
 
     private DBTransaction dbTransaction;
     private boolean editMode;
@@ -84,7 +85,7 @@ public class EditGroupActivity extends ListActivity implements AdapterView.OnIte
     public boolean onCreateOptionsMenu( Menu menu ) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate( R.menu.abm_common_actions, menu );
+        inflater.inflate( R.menu.actionbar_add, menu );
         return super.onCreateOptionsMenu( menu );
     }
 
@@ -225,19 +226,30 @@ public class EditGroupActivity extends ListActivity implements AdapterView.OnIte
         if ( dialog == newCreatureDialog ) {
             if ( !newCreatureDialog.isEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
+                critter.setCreatureName( NameModifier.makeNameUnique2(groupList, critter.getCreatureName()) );
                 groupList.add( critter );
                 dbTransaction.insertNewCreature( groupName, critter, groupType );
+                listAdapter.sort( Creature.nameComparator() );
                 listAdapter.notifyDataSetChanged();
             } else
                 invalidFieldMessage();
         }
-
-        newCreatureDialog.dismiss();
+        if ( dialog == editCreatureDialog ) {
+            if ( !editCreatureDialog.isEmptyFields() ) {
+                String oldName = groupList.get( indexOfItemToEdit ).getCreatureName();
+                Creature thing = editCreatureDialog.getCritter();
+                thing.setCreatureName( NameModifier.makeNameUnique2( groupList, thing.getCreatureName() ) );
+                groupList.set( indexOfItemToEdit, thing );
+                dbTransaction.updateExistingCreature( thing, groupName, oldName, groupType );
+                listAdapter.sort( Creature.nameComparator() );
+                listAdapter.notifyDataSetChanged();
+            } else
+                invalidFieldMessage();
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        newCreatureDialog.dismiss();
     }
 
     private void invalidFieldMessage() {

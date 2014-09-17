@@ -372,7 +372,7 @@ public class MoFlowDB {
 	 * Updates a player record in the Players table
 	 * @param updated the updated PC
 	 * @param partyName the party name the PC belongs to
-	 * @param pcName PC's name
+	 * @param pcName PC's name before change
 	 * @return the number of rows affected
 	 */
 	public int updatePlayerRecord( Creature updated, String partyName, String pcName ) {
@@ -387,6 +387,16 @@ public class MoFlowDB {
 		initVal.put( Players_Table.COL_InitBonus, updated.getInitMod() );
 		initVal.put( Players_Table.COL_ArmorClass, updated.getArmorClass() );
 		initVal.put( Players_Table.COL_MaxHP, updated.getMaxHitPoints() );
+        initVal.put( Players_Table.COL_STR, updated.getStrength() );
+        initVal.put( Players_Table.COL_DEX, updated.getDexterity() );
+        initVal.put( Players_Table.COL_CON, updated.getConstitution() );
+        initVal.put( Players_Table.COL_INT, updated.getIntelligence() );
+        initVal.put( Players_Table.COL_WIS, updated.getWisdom() );
+        initVal.put( Players_Table.COL_CHA, updated.getCharisma() );
+        initVal.put( Players_Table.COL_FORT, updated.getFortitude() );
+        initVal.put( Players_Table.COL_REF, updated.getReflex() );
+        initVal.put( Players_Table.COL_WILL, updated.getWill() );
+
 		
 		return db.update( Players_Table.TABLE_NAME, initVal, whereClause, whereArgs );
 	}
@@ -475,26 +485,31 @@ public class MoFlowDB {
 	
 	/**
 	 * Update a creature in the Creatures table.
-	 * @param name update name of creature
 	 * @param oldName old name of creature
-	 * @param encounter the encounter creature belongs to
-	 * @param init updated init of creature
-	 * @param ac updated armor class of creature
-	 * @param hp updated max hit points of creature
+	 * @param encounterName the encounter creature belongs to
+     * @param updated the updated Creature object
 	 * @return the number of rows affected
 	 */
-	public int updateCreatureRecord( String name, String oldName, String encounter, int init,
-			int ac, int hp ) {
+	public int updateCreatureRecord( Creature updated, String encounterName, String oldName ) {
 		String whereClause = 
 				Creatures_Table.COL_Encounter + " = ? AND " +
 				Creatures_Table.COL_CreatureName + " = ?";
-		String [] whereArgs = { encounter, oldName };
+		String [] whereArgs = { encounterName, oldName };
 		
 		ContentValues initVal = new ContentValues();
-		initVal.put( Creatures_Table.COL_CreatureName, name );
-		initVal.put( Creatures_Table.COL_InitBonus, init );
-		initVal.put( Creatures_Table.COL_ArmorClass, ac );
-		initVal.put( Creatures_Table.COL_MaxHP, hp );
+		initVal.put( Creatures_Table.COL_CreatureName,updated.getCreatureName() );
+		initVal.put( Creatures_Table.COL_InitBonus, updated.getInitMod() );
+		initVal.put( Creatures_Table.COL_ArmorClass, updated.getArmorClass() );
+		initVal.put( Creatures_Table.COL_MaxHP, updated.getMaxHitPoints() );
+        initVal.put( Creatures_Table.COL_STR, updated.getStrength() );
+        initVal.put( Creatures_Table.COL_DEX, updated.getDexterity() );
+        initVal.put( Creatures_Table.COL_CON, updated.getConstitution() );
+        initVal.put( Creatures_Table.COL_INT, updated.getIntelligence() );
+        initVal.put( Creatures_Table.COL_WIS, updated.getWisdom() );
+        initVal.put( Creatures_Table.COL_CHA, updated.getCharisma() );
+        initVal.put( Creatures_Table.COL_FORT, updated.getFortitude() );
+        initVal.put( Creatures_Table.COL_REF, updated.getReflex() );
+        initVal.put( Creatures_Table.COL_WILL, updated.getWill() );
 		
 		return db.updateWithOnConflict( Creatures_Table.TABLE_NAME, initVal, whereClause, whereArgs, SQLiteDatabase.CONFLICT_IGNORE );
 	}
