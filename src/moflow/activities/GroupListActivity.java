@@ -12,8 +12,10 @@ import moflow.dialogs.SimpleDialogListener;
 import moflow.utility.CommonKey;
 import moflow.utility.DBTransaction;
 import moflow.utility.NameModifier;
+import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /*
 ===============================================================================
@@ -23,7 +25,7 @@ Activity for listing the existing parties/encounters. The user can create a new
 party/encounter and edit or delete an existing party/encounter.
 ===============================================================================
 */
-public class GroupListActivity extends ListActivity implements AdapterView.OnItemClickListener, SimpleDialogListener
+public class GroupListActivity extends ListActivity implements AdapterView.OnItemClickListener, SimpleDialogListener, AbsListView.MultiChoiceModeListener
 {
     private DBTransaction dbTransaction;
     private boolean editMode;
@@ -46,6 +48,8 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
             Toast.makeText( this, "onCreate: groupType Extra could not be found.", Toast.LENGTH_LONG );
         }
 
+        this.setTitle( groupType.equals( CommonKey.VAL_PARTY ) ? "Parties" : "Encounters" );
+
         dbTransaction = new DBTransaction( this );
 
         groupList = dbTransaction.getGroupList( groupType );
@@ -58,6 +62,8 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         setListAdapter( listAdapter );
 
         getListView().setOnItemClickListener(this);
+        getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE_MODAL );
+        getListView().setMultiChoiceModeListener( this );
   
         editMode = false;
         deleteMode = false;
@@ -82,29 +88,6 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
     }
 
     /**
-     * Show the appropriate action bar item depending on the mode.
-     * @param menu
-     * @return
-     */
-    @Override
-    public boolean onPrepareOptionsMenu( Menu menu ) {
-        try {
-            if ( editMode || deleteMode ) {
-                menu.findItem( R.id.action_new  ).setVisible( false );
-                menu.findItem( R.id.action_discard  ).setVisible( false );
-
-            } else {
-                menu.findItem( R.id.action_new  ).setVisible( true );
-                menu.findItem( R.id.action_discard  ).setVisible( true );
-
-            }
-        } catch ( NullPointerException npe ) {
-            Toast.makeText( this, "onPrepareOptionsMenu: view ID not found.", Toast.LENGTH_LONG );
-        }
-        return super.onPrepareOptionsMenu( menu );
-    }
-
-    /**
      * Action bar item handling.
      */
     @Override
@@ -114,61 +97,13 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
             case R.id.action_new:
                 newGroupDialog.show(getFragmentManager(), "newGroupDialog");
                 break;
-            case R.id.action_discard:
-                discardPrep();
+            case R.id.action_help:
+                Toast.makeText( this, "Long-click to edit or delete an item. Tap an item to open.", Toast.LENGTH_LONG ).show();
                 break;
-//            case R.id.action_confirm:
-//                editOrDeleteItems();
-//                break;
-//            case R.id.action_cancel:
-//                restoreCommonMenu();
-//                indexOfItemToEdit = -1;
-//                break;
             default:
                 return super.onOptionsItemSelected( item );
         }
-        return true;
-    }
-
-    private void editPrep() {
-        if ( listAdapter.getCount() > 0 ) {
-            editMode = true;
-            listAdapter = new ArrayAdapter<String>(
-                    this,
-                    android.R.layout.simple_list_item_checked,
-                    groupList);
-            setListAdapter( listAdapter );
-            getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
-            invalidateOptionsMenu();
-        }
-    }
-
-    private void discardPrep() {
-        if ( listAdapter.getCount() > 0 ) {
-            deleteMode = true;
-            listAdapter = new ArrayAdapter<String>(
-                    this,
-                    android.R.layout.simple_list_item_checked,
-                    groupList);
-            setListAdapter( listAdapter );
-            getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
-            invalidateOptionsMenu();
-        }
-    }
-
-    private void restoreCommonMenu() {
-        editMode = false;
-        deleteMode = false;
-        deleteList.clear();
-
-        listAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                groupList);
-        setListAdapter( listAdapter );
-
-        getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
-        invalidateOptionsMenu();
+        return false;
     }
 
     /**
@@ -180,42 +115,10 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
      */
     @Override
     public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
-        if ( editMode || deleteMode ) {
-            getListView().setItemChecked( position, getListView().isItemChecked( position ) );
-
-            if ( editMode ) {
-                indexOfItemToEdit = position;
-            }
-            else { // delete mode
-                if ( getListView().isItemChecked( position) )
-                    deleteList.add( groupList.get( position ) );
-                else
-                    deleteList.remove(groupList.get(position));
-            }
-        } else {
             Intent intent = new Intent( "moflow.activities.EditGroupActivity" );
             intent.putExtra( CommonKey.KEY_GROUP_TYPE, groupType );
             intent.putExtra( CommonKey.KEY_GROUP_NAME, listAdapter.getItem( position ) );
             startActivityForResult( intent, 1 );
-        }
-    }
-
-    /**
-     * Handles confirmation action bar button
-     */
-    public void editOrDeleteItems() {
-        if ( editMode ) {
-            renameDialog.show( getFragmentManager(), "renameDialog" );
-        }
-        else if ( deleteMode && !deleteList.isEmpty() ) {
-            dbTransaction.deleteGroup(deleteList, groupType);
-
-            for ( String name : deleteList ) {
-                listAdapter.remove( name );
-            }
-        }
-        listAdapter.notifyDataSetChanged();
-        restoreCommonMenu();
     }
 
     /**
@@ -249,13 +152,17 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
     private void renameParty( DialogFragment dialog ) {
         EditText et = ( EditText ) dialog.getDialog().findViewById( R.id.nameField );
         String uniqueName = et.getText().toString().trim();
+        String oldName = listAdapter.getItem( indexOfItemToEdit );
+
+        if ( uniqueName.equals( oldName ) )
+            return;
 
         if ( !uniqueName.isEmpty() ) {
             uniqueName = NameModifier.makeNameUnique(groupList, uniqueName);
 
             dbTransaction.renameGroup(uniqueName, groupList.get(indexOfItemToEdit), groupType);
-
             groupList.set(indexOfItemToEdit, uniqueName);
+            Collections.sort( groupList );
             listAdapter.notifyDataSetChanged();
         }
     }
@@ -272,9 +179,79 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
             uniqueName = NameModifier.makeNameUnique(groupList, uniqueName );
             dbTransaction.insertNewGroup( uniqueName, groupType );
             groupList.add( uniqueName );
+            Collections.sort( groupList );
             listAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText( this, "Party name required.", Toast.LENGTH_LONG ).show();
+            Toast.makeText(this, "Party name required.", Toast.LENGTH_LONG).show();
         }
      }
+
+    @Override
+    public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked) {
+        if ( checked )
+            deleteList.add( listAdapter.getItem( position ) );
+        else
+            deleteList.remove( listAdapter.getItem( position ) );
+
+        MenuItem item = actionMode.getMenu().findItem( R.id.action_edit );
+
+        if ( deleteList.size() > 1 ) {
+            indexOfItemToEdit = -1;
+            item.setEnabled(false);
+            item.getIcon().setAlpha( 128 );
+        } else if ( deleteList.size() == 1 ) {
+            indexOfItemToEdit = position;
+            item.setEnabled( true );
+            item.getIcon().setAlpha( 255 );
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+        listAdapter = null;
+        listAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_checked,
+                groupList);
+        setListAdapter( listAdapter );
+        MenuInflater inflater = actionMode.getMenuInflater();
+        inflater.inflate( R.menu.actionbar_del, menu );
+        menu.findItem( R.id.action_edit ).setVisible( true );
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+        switch ( menuItem.getItemId() ) {
+            case R.id.action_discard:
+                deleteSelectedItems();
+                listAdapter.notifyDataSetChanged();
+                actionMode.finish();
+                return true;
+            case R.id.action_edit:
+                renameDialog.show( getFragmentManager(), "renameDialog" );
+                actionMode.finish();
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode actionMode) {
+        deleteList.clear();
+    }
+
+    private void deleteSelectedItems() {
+        dbTransaction.deleteGroup(deleteList, groupType);
+
+        for ( String s : deleteList ) {
+            listAdapter.remove( s );
+        }
+    }
 }

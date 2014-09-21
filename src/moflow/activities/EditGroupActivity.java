@@ -28,7 +28,6 @@ public class EditGroupActivity extends ListActivity
     private ArrayAdapter< Creature > listAdapter;
     private ArrayList< Creature > deleteList;
     private int indexOfItemToEdit;
-    private Creature creatureToEdit;
     private CreatureEditDialog newCreatureDialog;
     private CreatureEditDialog editCreatureDialog;
     private Dialog newCreatureChoiceDialog;
@@ -43,6 +42,8 @@ public class EditGroupActivity extends ListActivity
         } catch ( NullPointerException npe ) {
             Toast.makeText(this, "onCreate: intent extras could not be extracted.", Toast.LENGTH_LONG).show();
         }
+
+        this.setTitle( groupName );
 
         dbTransaction = new DBTransaction( this );
 
@@ -64,8 +65,6 @@ public class EditGroupActivity extends ListActivity
 
         indexOfItemToEdit = -1;
 
-        creatureToEdit = null;
-
         AlertDialog.Builder builder = new AlertDialog.Builder( this );
         builder.setTitle( "New Creature" )
                 .setItems( R.array.newCreatureDialogChoices, this );
@@ -84,16 +83,6 @@ public class EditGroupActivity extends ListActivity
     }
 
     /**
-     * Show the appropriate action bar item depending on the mode.
-     * @param menu
-     * @return
-     */
-    @Override
-    public boolean onPrepareOptionsMenu( Menu menu ) {
-        return super.onPrepareOptionsMenu( menu );
-    }
-
-    /**
      * Action bar item handling.
      */
     @Override
@@ -103,10 +92,13 @@ public class EditGroupActivity extends ListActivity
             case R.id.action_new:
                 chooseNewCreatureOptions();
                 break;
+            case R.id.action_help:
+                Toast.makeText( this, "Long-click to delete an item. Tap an item to edit.", Toast.LENGTH_LONG ).show();
+                break;
             default:
                 return super.onOptionsItemSelected( item );
         }
-        return true;
+        return false;
     }
 
 
