@@ -21,17 +21,17 @@ public class NameModifier {
         if ( matchList.size() == 0 )
             return name;
 
-        int count = 1;
+        int count = 0;
+        String temp = name;
         boolean unique = false;
 
         while ( !unique ) {
             for ( String n : matchList ) {
-                if ( n.equalsIgnoreCase( name + " " + String.valueOf( count ) ) )
+                if ( n.equalsIgnoreCase( name ) ) {
                     ++count;
-                else {
-                    name = name + " " + String.valueOf( count );
+                    name = temp + " " + String.valueOf( count );
+                } else
                     unique = true;
-                }
             }
         }
 

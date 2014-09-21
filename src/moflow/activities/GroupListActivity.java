@@ -11,7 +11,7 @@ import moflow.dialogs.NameDialogFragment;
 import moflow.dialogs.SimpleDialogListener;
 import moflow.utility.CommonKey;
 import moflow.utility.DBTransaction;
-import moflow.utility.NameModfier;
+import moflow.utility.NameModifier;
 
 import java.util.ArrayList;
 
@@ -91,16 +91,12 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         try {
             if ( editMode || deleteMode ) {
                 menu.findItem( R.id.action_new  ).setVisible( false );
-                menu.findItem( R.id.action_edit  ).setVisible( false );
                 menu.findItem( R.id.action_discard  ).setVisible( false );
-                menu.findItem( R.id.action_confirm  ).setVisible( true );
-                menu.findItem( R.id.action_cancel  ).setVisible( true );
+
             } else {
                 menu.findItem( R.id.action_new  ).setVisible( true );
-                menu.findItem( R.id.action_edit  ).setVisible( true );
                 menu.findItem( R.id.action_discard  ).setVisible( true );
-                menu.findItem( R.id.action_confirm  ).setVisible( false );
-                menu.findItem( R.id.action_cancel  ).setVisible( false );
+
             }
         } catch ( NullPointerException npe ) {
             Toast.makeText( this, "onPrepareOptionsMenu: view ID not found.", Toast.LENGTH_LONG );
@@ -118,19 +114,16 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
             case R.id.action_new:
                 newGroupDialog.show(getFragmentManager(), "newGroupDialog");
                 break;
-            case R.id.action_edit:
-                editPrep();
-                break;
             case R.id.action_discard:
                 discardPrep();
                 break;
-            case R.id.action_confirm:
-                editOrDeleteItems();
-                break;
-            case R.id.action_cancel:
-                restoreCommonMenu();
-                indexOfItemToEdit = -1;
-                break;
+//            case R.id.action_confirm:
+//                editOrDeleteItems();
+//                break;
+//            case R.id.action_cancel:
+//                restoreCommonMenu();
+//                indexOfItemToEdit = -1;
+//                break;
             default:
                 return super.onOptionsItemSelected( item );
         }
@@ -258,7 +251,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         String uniqueName = et.getText().toString().trim();
 
         if ( !uniqueName.isEmpty() ) {
-            uniqueName = NameModfier.makeNameUnique(groupList, uniqueName );
+            uniqueName = NameModifier.makeNameUnique(groupList, uniqueName);
 
             dbTransaction.renameGroup(uniqueName, groupList.get(indexOfItemToEdit), groupType);
 
@@ -276,7 +269,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         String uniqueName = et.getText().toString().trim();
 
         if ( !uniqueName.isEmpty() ) {
-            uniqueName = NameModfier.makeNameUnique(groupList, uniqueName );
+            uniqueName = NameModifier.makeNameUnique(groupList, uniqueName );
             dbTransaction.insertNewGroup( uniqueName, groupType );
             groupList.add( uniqueName );
             listAdapter.notifyDataSetChanged();

@@ -258,6 +258,32 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 		return creatureName;
 	}
 
+    @Override
+    public boolean equals( Object o ) {
+        Creature c = ( Creature )o;
+
+        if ( this.creatureName == c.creatureName &&
+                this.armorClass == c.armorClass &&
+                this.maxHitPoints == c.maxHitPoints &&
+                this.initMod == c.initMod &&
+                this.strength == c.strength &&
+                this.dexterity == c.dexterity &&
+                this.constitution == c.constitution &&
+                this.intelligence == c.intelligence &&
+                this.wisdom == c.wisdom &&
+                this.charisma == c.charisma &&
+                this.fort == c.fort &&
+                this.reflex == c.reflex &&
+                this.will == c.will &&
+                this.currentHitPoints == c.currentHitPoints &&
+                this.initiative == c.initiative &&
+                this.isMonster == c.isMonster &&
+                this.hasInit == c.hasInit )
+            return true;
+
+        return false;
+    }
+
 	/**
 	 * If this creature is equal to, return 0. If less than, return -1.
 	 * If greater than, return 1.

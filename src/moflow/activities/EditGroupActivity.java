@@ -3,14 +3,8 @@ package moflow.activities;
 import android.app.*;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 import moflow.adapters.DisplayItemAdapter;
 import moflow.dialogs.CreatureEditDialog;
 import moflow.dialogs.SimpleDialogListener;
@@ -25,19 +19,18 @@ import java.util.ArrayList;
  * Created by Alex on 8/2/14.
  */
 public class EditGroupActivity extends ListActivity
-        implements AdapterView.OnItemClickListener, SimpleDialogListener, DialogInterface.OnClickListener {
+        implements AdapterView.OnItemClickListener, SimpleDialogListener, DialogInterface.OnClickListener, AbsListView.MultiChoiceModeListener {
 
+    private String groupType;
+    private String groupName;
     private DBTransaction dbTransaction;
-    private boolean editMode;
-    private boolean deleteMode;
     private ArrayList< Creature > groupList;
     private ArrayAdapter< Creature > listAdapter;
     private ArrayList< Creature > deleteList;
     private int indexOfItemToEdit;
+    private Creature creatureToEdit;
     private CreatureEditDialog newCreatureDialog;
     private CreatureEditDialog editCreatureDialog;
-    private String groupType;
-    private String groupName;
     private Dialog newCreatureChoiceDialog;
 
     @Override
@@ -61,21 +54,22 @@ public class EditGroupActivity extends ListActivity
                 R.layout.groupitemdisplay,
                 groupList,
                 false );
-        setListAdapter( listAdapter );
+        setListAdapter(listAdapter);
 
         getListView().setOnItemClickListener( this );
-
-        editMode = false;
-        deleteMode = false;
+        getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE_MODAL );
+        getListView().setMultiChoiceModeListener( this );
 
         deleteList = new ArrayList<Creature>();
 
         indexOfItemToEdit = -1;
 
+        creatureToEdit = null;
+
         AlertDialog.Builder builder = new AlertDialog.Builder( this );
         builder.setTitle( "New Creature" )
                 .setItems( R.array.newCreatureDialogChoices, this );
-        newCreatureChoiceDialog = builder.create();
+        newCreatureChoiceDialog = builder.create(); // used in encounter manager to choose between new or catalog creature.
     }
 
     /**
@@ -96,23 +90,6 @@ public class EditGroupActivity extends ListActivity
      */
     @Override
     public boolean onPrepareOptionsMenu( Menu menu ) {
-        try {
-            if ( editMode || deleteMode ) {
-                menu.findItem( R.id.action_new  ).setVisible( false );
-                menu.findItem( R.id.action_edit  ).setVisible( false );
-                menu.findItem( R.id.action_discard  ).setVisible( false );
-                menu.findItem( R.id.action_confirm  ).setVisible( true );
-                menu.findItem( R.id.action_cancel  ).setVisible( true );
-            } else {
-                menu.findItem( R.id.action_new  ).setVisible( true );
-                menu.findItem( R.id.action_edit  ).setVisible( true );
-                menu.findItem( R.id.action_discard  ).setVisible( true );
-                menu.findItem( R.id.action_confirm  ).setVisible( false );
-                menu.findItem( R.id.action_cancel  ).setVisible( false );
-            }
-        } catch ( NullPointerException npe ) {
-            Toast.makeText( this, "onPrepareOptionsMenu: view ID not found.", Toast.LENGTH_LONG ).show();
-        }
         return super.onPrepareOptionsMenu( menu );
     }
 
@@ -126,85 +103,12 @@ public class EditGroupActivity extends ListActivity
             case R.id.action_new:
                 chooseNewCreatureOptions();
                 break;
-            case R.id.action_edit:
-                editPrep();
-                break;
-            case R.id.action_discard:
-                discardPrep();
-                break;
-            case R.id.action_confirm:
-                editOrDeleteItems();
-                break;
-            case R.id.action_cancel:
-                restoreCommonMenu();
-                indexOfItemToEdit = -1;
-                break;
             default:
                 return super.onOptionsItemSelected( item );
         }
         return true;
     }
 
-    private void editPrep() {
-        if ( listAdapter.getCount() > 0 ) {
-            editMode = true;
-            listAdapter = new ArrayAdapter<Creature>(
-                    this,
-                    android.R.layout.simple_list_item_checked,
-                    groupList);
-            setListAdapter( listAdapter );
-            getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
-            invalidateOptionsMenu();
-        }
-    }
-
-    private void discardPrep() {
-        if ( listAdapter.getCount() > 0 ) {
-            deleteMode = true;
-            listAdapter = new ArrayAdapter<Creature>(
-                    this,
-                    android.R.layout.simple_list_item_checked,
-                    groupList);
-            setListAdapter( listAdapter );
-            getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
-            invalidateOptionsMenu();
-        }
-    }
-
-    private void restoreCommonMenu() {
-        editMode = false;
-        deleteMode = false;
-        deleteList.clear();
-
-        listAdapter = new DisplayItemAdapter(
-                this,
-                R.layout.groupitemdisplay,
-                groupList,
-                false);
-        setListAdapter( listAdapter );
-
-        getListView().setChoiceMode( ListView.CHOICE_MODE_SINGLE );
-        invalidateOptionsMenu();
-    }
-
-    /**
-     * Handles confirmation action bar button
-     */
-    public void editOrDeleteItems() {
-        if ( editMode ) {
-            editCreatureDialog = new CreatureEditDialog( "Edit", groupList.get( indexOfItemToEdit ) );
-            editCreatureDialog.show( getFragmentManager(), "renameDialog" );
-        }
-        else if ( deleteMode && !deleteList.isEmpty() ) {
-            dbTransaction.deleteCreatureFromGroup( deleteList, groupName, groupType );
-
-            for ( Creature thing : deleteList ) {
-                listAdapter.remove( thing );
-            }
-        }
-        listAdapter.notifyDataSetChanged();
-        restoreCommonMenu();
-    }
 
     private void chooseNewCreatureOptions() {
         if ( groupType.equals( CommonKey.VAL_ENC ) )
@@ -215,15 +119,15 @@ public class EditGroupActivity extends ListActivity
 
 
     private void newCreatureFromScratch() {
-
-        newCreatureDialog = new CreatureEditDialog( "Rename" );
-        newCreatureDialog.show(getFragmentManager(), "editCreatureDialog");
+        String type = ( groupType == CommonKey.VAL_PARTY ? "PC" : "Creature" );
+        newCreatureDialog = new CreatureEditDialog( "New " + type );
+        newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
     }
 
-
+    // Positive click handler for new or edit creature dialog
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        if ( dialog == newCreatureDialog ) {
+        if ( dialog == newCreatureDialog) {
             if ( !newCreatureDialog.isEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
                 critter.setCreatureName( NameModifier.makeNameUnique2(groupList, critter.getCreatureName()) );
@@ -234,20 +138,30 @@ public class EditGroupActivity extends ListActivity
             } else
                 invalidFieldMessage();
         }
+
         if ( dialog == editCreatureDialog ) {
             if ( !editCreatureDialog.isEmptyFields() ) {
-                String oldName = groupList.get( indexOfItemToEdit ).getCreatureName();
                 Creature thing = editCreatureDialog.getCritter();
-                thing.setCreatureName( NameModifier.makeNameUnique2( groupList, thing.getCreatureName() ) );
-                groupList.set( indexOfItemToEdit, thing );
-                dbTransaction.updateExistingCreature( thing, groupName, oldName, groupType );
-                listAdapter.sort( Creature.nameComparator() );
-                listAdapter.notifyDataSetChanged();
+
+                if ( thing.equals( groupList.get( indexOfItemToEdit ) ) ) {
+                    return;
+                } else {
+                    String oldName = groupList.get( indexOfItemToEdit ).getCreatureName();
+
+                    if ( !oldName.equals( thing.getCreatureName() ) )
+                        thing.setCreatureName( NameModifier.makeNameUnique2( groupList, thing.getCreatureName() ) );
+
+                    groupList.set( indexOfItemToEdit, thing );
+                    dbTransaction.updateExistingCreature( thing, groupName, oldName, groupType );
+                    listAdapter.sort( Creature.nameComparator() );
+                    listAdapter.notifyDataSetChanged();
+                }
             } else
                 invalidFieldMessage();
         }
     }
 
+    // Negative click handler for new or edit creature dialog
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
     }
@@ -256,23 +170,16 @@ public class EditGroupActivity extends ListActivity
         Toast.makeText( this, "All fields must be filled.", Toast.LENGTH_LONG ).show();
     }
 
+    // Activity ListView item click handler
     @Override
     public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
-        if ( editMode || deleteMode ) {
-            getListView().setItemChecked( position, getListView().isItemChecked( position ) );
-
-            if ( editMode ) {
-                indexOfItemToEdit = position;
-            }
-            else { // delete mode
-                if ( getListView().isItemChecked( position) )
-                    deleteList.add( groupList.get( position ) );
-                else
-                    deleteList.remove(groupList.get(position));
-            }
-        }
+        Creature c = listAdapter.getItem( position );
+        editCreatureDialog = new CreatureEditDialog( "Edit", c );
+        editCreatureDialog.show( getFragmentManager(), "editCreatureDialog" );
+        indexOfItemToEdit = position;
     }
 
+    // New or Catalog Creature dialog onClick handler for encounter manager
     @Override
     public void onClick( DialogInterface dialogInterface, int which ) {
         final int SCRATCH = 0;
@@ -281,8 +188,74 @@ public class EditGroupActivity extends ListActivity
             if ( which == SCRATCH ) {
                 newCreatureFromScratch();
             } else {
-
+                // TODO: open the catalog
             }
+        }
+    }
+
+    // Contextual Action Mode
+    @Override
+    public void onItemCheckedStateChanged( ActionMode actionMode, int position, long id, boolean checked ) {
+        if ( checked )
+            deleteList.add( listAdapter.getItem( position ) );
+        else
+            deleteList.remove( listAdapter.getItem( position ) );
+    }
+
+    // Contextual Action Mode
+    @Override
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+        listAdapter = null;
+        listAdapter = new ArrayAdapter<Creature>(
+                this,
+                android.R.layout.simple_list_item_checked,
+                groupList);
+        setListAdapter( listAdapter );
+        MenuInflater inflater = actionMode.getMenuInflater();
+        inflater.inflate( R.menu.actionbar_del, menu );
+
+        return true;
+    }
+
+
+    // Contextual Action Mode
+    @Override
+    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+        return false;
+    }
+
+    // Contextual Action Mode
+    @Override
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+        switch ( menuItem.getItemId() ) {
+            case R.id.action_discard:
+                deleteSelectedItems();
+                listAdapter.notifyDataSetChanged();
+                actionMode.finish();
+                return true;
+        }
+        return false;
+    }
+
+    // Contextual Action Mode
+    @Override
+    public void onDestroyActionMode(ActionMode actionMode) {
+        deleteList.clear();
+
+        listAdapter = null;
+        listAdapter = new DisplayItemAdapter(
+                this,
+                R.layout.groupitemdisplay,
+                groupList,
+                false );
+        setListAdapter(listAdapter);
+    }
+
+    private void deleteSelectedItems() {
+        dbTransaction.deleteCreatureFromGroup( deleteList, groupName, groupType );
+
+        for ( Creature c : deleteList ) {
+            listAdapter.remove( c );
         }
     }
 }
