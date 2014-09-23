@@ -1,13 +1,10 @@
-package moflow.test.utility;
+package moflow.utility;
 
 import junit.framework.TestCase;
 import moflow.utility.HitDie;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 /**
  * Created by Alex on 9/22/14.
  */
@@ -22,6 +19,7 @@ public class HitDieTest extends TestCase {
         assertTrue( resultsWithinRange( 10, 60, results ) );
     }
 
+    @Test
     public void test_hitDieUnspecifiedRepetition() throws AssertionError
     {
         String expression = "d8";
@@ -30,6 +28,7 @@ public class HitDieTest extends TestCase {
         assertTrue( resultsWithinRange( 1, 8, results ) );
     }
 
+    @Test
     public void test_hitDieSpecifiedRepetitionWithModifier() throws AssertionError
     {
         String expression = "10d6+20";
@@ -38,12 +37,22 @@ public class HitDieTest extends TestCase {
         assertTrue( resultsWithinRange( 30, 80, results ) );
     }
 
+    @Test
     public void test_hitDieUnspecifiedRepetitionWithModifier() throws AssertionError
     {
         String expression = "d4+10";
         HitDie die = new HitDie( expression );
         ArrayList<Integer> results = collectResults( 100, die );
         assertTrue( resultsWithinRange( 11, 14, results ) );
+    }
+
+    @Test
+    public void test_hitDieWithNegativeModifier() throws AssertionError
+    {
+        String expression = "d100-50";
+        HitDie die = new HitDie( expression );
+        ArrayList<Integer> results = collectResults( 100, die );
+        assertTrue( resultsWithinRange( 1, 50, results ) );
     }
 
     private ArrayList<Integer> collectResults( int maxRolls, HitDie die )
@@ -55,7 +64,7 @@ public class HitDieTest extends TestCase {
         }
         return results;
     }
-    
+
     private boolean resultsWithinRange( int min, int max, ArrayList<Integer> results )
     {
         for ( int i = 0; i < results.size(); i++ )
@@ -63,7 +72,7 @@ public class HitDieTest extends TestCase {
             if ( results.get( i ) < min && results.get( i ) > max )
                 return false;
         }
-         return true;
+        return true;
     }
 
     @Test
