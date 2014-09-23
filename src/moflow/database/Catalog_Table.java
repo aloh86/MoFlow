@@ -37,7 +37,7 @@ public class Catalog_Table implements BaseColumns {
 			COL_CreatureName + " VARCHAR(50) NOT NULL, " + 
 			COL_InitBonus 	 + " INTEGER NOT NULL, " +
 			COL_ArmorClass 	 + " INTEGER NOT NULL, " +
-			COL_MaxHP		 + " INTEGER NOT NULL, " +
+			COL_MaxHP		 + " VARCHAR(50) NOT NULL, " +
             COL_STR         + " INTEGER NOT NULL DEFAULT 0, " +
             COL_DEX         + " INTEGER NOT NULL DEFAULT 0, " +
             COL_CON         + " INTEGER NOT NULL DEFAULT 0, " +

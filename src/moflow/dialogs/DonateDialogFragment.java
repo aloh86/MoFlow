@@ -19,12 +19,14 @@ import java.util.regex.Pattern;
 public class DonateDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
 
     @Override
-    public Dialog onCreateDialog( Bundle savedInstanceState ) {
+    public Dialog onCreateDialog( Bundle savedInstanceState )
+    {
         TextView msg = new TextView( getActivity() );
         msg.setText( R.string.actbar_donateMsg );
         msg.setGravity( Gravity.CENTER );
 
-        Linkify.TransformFilter siteURL = new Linkify.TransformFilter() {
+        Linkify.TransformFilter siteURL = new Linkify.TransformFilter()
+        {
             public final String transformUrl(final Matcher match, String url) {
                 return new String("http://onedayswages.org");
             }
@@ -41,7 +43,7 @@ public class DonateDialogFragment extends DialogFragment implements DialogInterf
     }
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
+    public void onClick( DialogInterface dialogInterface, int i ) {
         // DO NOTHING
     }
 }
