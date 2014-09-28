@@ -97,6 +97,19 @@ public class DBTransaction {
         return creatureList;
     }
 
+    public ArrayList<String> getCatalogItemList()
+    {
+        cur = db.getCatalog();
+        ArrayList<String> list = new ArrayList<String>();
+
+        while ( cur.moveToNext() )
+        {
+            list.add( cur.getString( 0 ) );
+        }
+
+        return list;
+    }
+
     // Insertion
 
     public void insertNewGroup( String groupName, String groupType ) {

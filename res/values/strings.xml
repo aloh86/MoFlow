@@ -8,6 +8,7 @@
     <!-- Main Menu Strings -->
     <string name="actbar_help">Help</string>
     <string name="actbar_featreq">Feature Request</string>
+    <string name="actbar_bugReport">Bug Report</string>
     <string name="actbar_donate">Donate</string>
     <string name="actbar_helpWebContact">help@wolfpupsoftware.com</string>
     <string name="actbar_helpYoutube">Wolfpup YouTube Channel</string>
@@ -21,6 +22,8 @@
     <string name="actbar_discard">Discard</string>
     <string name="actbar_confirm">Confirm</string>
     <string name="actbar_cancel">Cancel</string>
+    <string name="search_title">Search Catalog</string>
+    <string name="search_hint">i.e. Skeleton</string>
 
     <!-- Party and Encounter Item Edit Strings -->
     <string name="nameHint">Name</string>
@@ -71,7 +74,7 @@
     <string name="title_catalogMonsterEdition">Monster Edition</string>
 
     <string name="summary_3e4e_Saves">Enable display and input of 3e/4e saving throw/defenses Fortitude, Reflex, and Will.</string>
-    <string name="summary_catalog">Choose an edition to load monsters into Creature Catalog.</string>
+    <string name="summary_catalog">Choose a version to load monsters into Creature Catalog.</string>
 
     <!--Context Menu-->
     <string name="menu_moveUp">Move Up</string>

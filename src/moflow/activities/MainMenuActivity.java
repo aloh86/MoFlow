@@ -87,18 +87,21 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 	 */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id ) {
-        Intent intent = new Intent( "moflow.activities.GroupListActivity" );
-
 		if ( position == Position.PC_MANAGER.ordinal() ) {
+            Intent intent = new Intent( "moflow.activities.GroupListActivity" );
             intent.putExtra( CommonKey.KEY_GROUP_TYPE, CommonKey.VAL_PARTY );
 			startActivityForResult(intent, 1); // not using request code, can be any value
         }
 		else if ( position == Position.ENC_MANAGER.ordinal() ) {
+            Intent intent = new Intent( "moflow.activities.GroupListActivity" );
             intent.putExtra( CommonKey.KEY_GROUP_TYPE, CommonKey.VAL_ENC );
             startActivityForResult(intent, 1); // not using request code, can be any value
         }
-		else if ( position == Position.CREATURE.ordinal() )
-			;
+		else if ( position == Position.CREATURE.ordinal() ) {
+            Intent intent = new Intent( "moflow.activities.CatalogActivity" );
+            intent.putExtra( CommonKey.KEY_PARENT_ACTIVITY, CommonKey.VAL_MAIN );
+            startActivityForResult(intent, 1); // not using request code, can be any value
+        }
 		else if ( position == Position.INIT.ordinal() )
 			;
         else if ( position == Position.OPTIONS.ordinal() )

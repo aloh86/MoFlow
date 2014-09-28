@@ -3,7 +3,7 @@
       package="moflow.activities"
       android:versionCode="3"
       android:versionName="1.2">
-    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="19" />
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19" />
 
     <application android:icon="@drawable/gazer" android:label="@string/app_name" android:theme="@android:style/Theme.Holo">
 		
@@ -31,6 +31,23 @@
                 <action android:name="moflow.activities.EditGroupActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+
+        <activity
+                android:name=".CatalogActivity" >
+            <intent-filter>
+                <action android:name="moflow.activities.CatalogActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"
+                        android:launchMode="singleTop"/>
+            </intent-filter>
+
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@xml/searchable" />
+
         </activity>
 
         <activity

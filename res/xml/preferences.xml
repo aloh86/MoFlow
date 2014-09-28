@@ -15,16 +15,17 @@
                 android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory
-            android:key="header_catalog"
-            android:title="@string/prefHeader_catalog">
-            <ListPreference
-                android:key="pref_catalogEdition"
-                android:title="@string/title_catalogMonsterEdition"
-                android:dialogTitle="Choose Edition"
-                android:summary="@string/summary_catalog"
-                android:entries="@array/prefArray_catalogEditionsEntries"
-                android:entryValues="@array/prefArray_catalogEditionsValues"
-                android:defaultValue="3">
-            </ListPreference>
+        android:key="header_catalog"
+        android:title="@string/prefHeader_catalog">
+        <ListPreference
+            android:key="pref_catalogEdition"
+            android:title="@string/title_catalogMonsterEdition"
+            android:dialogTitle="Choose Edition"
+            android:summary="@string/summary_catalog"
+            android:entries="@array/prefArray_catalogEditionsEntries"
+            android:entryValues="@array/prefArray_catalogEditionsValues"
+            android:defaultValue="5">
+        </ListPreference>
+
     </PreferenceCategory>
 </PreferenceScreen>
