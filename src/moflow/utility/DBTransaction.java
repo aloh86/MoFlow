@@ -126,6 +126,13 @@ public class DBTransaction {
             db.insertCreature( groupName, critter );
     }
 
+    public void insertCreaturesFromFile( ArrayList<String []> creatures, int version ) {
+        if ( version == 5 ) {
+            for ( String [] s : creatures )
+                db.insertFileCreatureInCatalog5e( s );
+        }
+    }
+
     // Deletion
 
     public void deleteGroup( final ArrayList< String > toDelete, String groupType ) {
@@ -144,6 +151,10 @@ public class DBTransaction {
             else
                 db.deleteCreature( groupName, toDelete.get( i ).getCreatureName() );
         }
+    }
+
+    public void deleteNonCustomCreatures() {
+        db.deleteNonCustomCreatures();
     }
 
     // Modification

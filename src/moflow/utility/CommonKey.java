@@ -16,4 +16,7 @@ public class CommonKey {
     public static final String VAL_MAIN = "mainMenu";
     public static final String VAL_INIT = "initiative";
 
+    public static final String ABILITY_SCORES_KEY = "pref_score";
+    public static final String SAVING_THROW_KEY = "pref_saveThrow";
+    public static final String CATALOG_VERSION_KEY = "pref_catalogEdition";
 }

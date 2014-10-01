@@ -1,14 +1,16 @@
 package moflow.wolfpup;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.ListPreference;
+import android.preference.PreferenceManager;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import moflow.activities.R;
-import org.w3c.dom.Text;
+import moflow.threads.LoadCatalogTask;
 
 /**
  * Created by Alex on 9/27/14.
@@ -17,25 +19,25 @@ public class CustomCatalogListPreference extends ListPreference {
 
     Context mContext;
 
+    public CustomCatalogListPreference( Context context, AttributeSet attrs ) {
+        super( context, attrs );
+        mContext = context;
+    }
+
     public CustomCatalogListPreference( Context context ) {
         super(context);
-        setLayoutResource( R.layout.custpref_catalog_list );
+        mContext = context;
     }
 
     @Override
-    protected View onCreateView( ViewGroup parent ) {
+    public View onCreateView( ViewGroup parent ) {
         super.onCreateView( parent );
         LayoutInflater inflater = ( LayoutInflater ) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        View view = inflater.inflate( R.layout.custpref_catalog_list, parent );
+        return inflater.inflate( R.layout.custpref_catalog_list, null );
+    }
 
-        TextView title = new TextView( mContext );
-        title.setText( this.getTitle() );
-
-        TextView summary = new TextView( mContext );
-        summary.setText( this.getSummary() );
-
-        //ProgressBar progBar = ( ProgressBar ) view.findViewById( R.id.catalogLoadProgressBar );
-
-        return view;
+    @Override
+    protected void onBindView( View view ) {
+        super.onBindView( view );
     }
 }

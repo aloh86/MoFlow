@@ -3,7 +3,6 @@ package moflow.adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.media.audiofx.BassBoost;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import moflow.activities.R;
-import moflow.fragment.SettingsFragment;
-import moflow.wolfpup.AbilityScoreMod;
+import moflow.utility.AbilityScoreMod;
+import moflow.utility.CommonKey;
 import moflow.wolfpup.Creature;
 
 import java.util.List;
@@ -64,7 +63,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
             holder.initScore.setText( String.valueOf( creature.getInitiative() ) );
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( mContext );
-        boolean showAbilityScores = sharedPref.getBoolean( SettingsFragment.ABILITY_SCORES_KEY, false  );
+        boolean showAbilityScores = sharedPref.getBoolean( CommonKey.ABILITY_SCORES_KEY, false  );
 
         if ( showAbilityScores ) {
             holder.strScore.setText( String.valueOf( creature.getStrength() ) );
@@ -93,7 +92,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         } else
             holder.abilityScoresLayout.setVisibility( View.GONE );
 
-        boolean showSavingThrows = sharedPref.getBoolean( SettingsFragment.SAVING_THROW_KEY, false );
+        boolean showSavingThrows = sharedPref.getBoolean( CommonKey.SAVING_THROW_KEY, false );
 
         if ( showSavingThrows ) {
             holder.fortScore.setText( String.valueOf( creature.getFortitude() ) );

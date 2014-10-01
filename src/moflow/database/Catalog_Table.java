@@ -32,7 +32,6 @@ public class Catalog_Table implements BaseColumns {
     public static final String COL_REF        = "ref";
     public static final String COL_WILL       = "will";
     public static final String COL_CUSTOM     = "custom";
-    public static final String COL_CR         = "challenge";
 	
 	public static final String DB_CREATE =
 			"CREATE TABLE "  + TABLE_NAME + " ( " +
@@ -49,8 +48,7 @@ public class Catalog_Table implements BaseColumns {
             COL_FORT        + " INTEGER NOT NULL DEFAULT 0, " +
             COL_REF         + " INTEGER NOT NULL DEFAULT 0, " +
             COL_WILL        + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_CR          + " REAL NOT NULL DEFAULT 0, " +
             COL_CUSTOM      + " INTEGER NOT NULL DEFAULT 0, " +
-			"PRIMARY KEY (" + COL_CreatureName +  ") " + 
+			"PRIMARY KEY (" + COL_CreatureName + ") " +
 			");";
 }

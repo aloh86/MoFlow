@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import moflow.utility.AbilityScoreMod;
 import moflow.wolfpup.Conditions;
 import moflow.wolfpup.Creature;
 
@@ -92,20 +93,48 @@ public class MoFlowDB {
 	
 	/**
 	 * Insert a single creature into the catalog
-	 * @param name name of creature
-	 * @param init init bonus of creature
-	 * @param AC ac of creature
-	 * @param hp hit points of creature
+     * @param  creature the creature to insert
 	 * @return tuple position of this entry
 	 */
-	public long insertCreatureInCatalog( String name, int init, int AC, int hp ) {
+	public long insertCreatureInCatalog( Creature creature ) {
 		ContentValues initVal = new ContentValues();
-		initVal.put( Catalog_Table.COL_CreatureName, name );
-		initVal.put( Catalog_Table.COL_InitBonus, init );
-		initVal.put( Catalog_Table.COL_ArmorClass, AC );
-		initVal.put( Catalog_Table.COL_MaxHP, hp );
+		initVal.put( Catalog_Table.COL_CreatureName, creature.getCreatureName() );
+		initVal.put( Catalog_Table.COL_InitBonus, creature.getInitMod() );
+		initVal.put( Catalog_Table.COL_ArmorClass, creature.getArmorClass() );
+		initVal.put( Catalog_Table.COL_MaxHP, creature.getMaxHitPoints() );
+        initVal.put( Catalog_Table.COL_STR, creature.getStrength() );
+        initVal.put( Catalog_Table.COL_DEX, creature.getDexterity() );
+        initVal.put( Catalog_Table.COL_CON, creature.getConstitution() );
+        initVal.put( Catalog_Table.COL_INT, creature.getIntelligence() );
+        initVal.put( Catalog_Table.COL_WIS, creature.getWisdom() );
+        initVal.put( Catalog_Table.COL_CHA, creature.getCharisma() );
+        initVal.put( Catalog_Table.COL_FORT, creature.getFortitude() );
+        initVal.put( Catalog_Table.COL_REF, creature.getReflex() );
+        initVal.put( Catalog_Table.COL_WILL, creature.getWill() );
 		return db.insertWithOnConflict( Catalog_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
+
+    /**
+     * Inserting creatures from fifth edition creatures file
+     * @param creature creatures to insert
+     * @return
+     */
+    public long insertFileCreatureInCatalog5e( String [] creature ) {
+        // 0 = name, 1 = armor class, 2 = hit die, 3 -> 8 = ability scores
+        ContentValues initVal = new ContentValues();
+        initVal.put( Catalog_Table.COL_CreatureName, creature[ 0 ] );
+        initVal.put(Catalog_Table.COL_InitBonus, AbilityScoreMod.get345AbilityScoreMod( Integer.valueOf( creature[4] )  ) ); // getting the ability score mod since no init bonus in the catalog file
+        initVal.put( Catalog_Table.COL_ArmorClass, Integer.valueOf( creature[ 1 ] ) );
+        initVal.put( Catalog_Table.COL_MaxHP, creature[ 2 ] );
+        initVal.put( Catalog_Table.COL_STR, Integer.valueOf( creature[ 3 ] ) );
+        initVal.put( Catalog_Table.COL_DEX, Integer.valueOf( creature[ 4 ] ) );
+        initVal.put( Catalog_Table.COL_CON, Integer.valueOf( creature[ 5 ] ) );
+        initVal.put( Catalog_Table.COL_INT, Integer.valueOf( creature[ 6 ] ) );
+        initVal.put( Catalog_Table.COL_WIS, Integer.valueOf( creature[ 7 ] ) );
+        initVal.put( Catalog_Table.COL_CHA, Integer.valueOf( creature[ 8 ] ) );
+        initVal.put( Catalog_Table.COL_CUSTOM, 0 ); // 0 means that this creature was loaded from file, not a user's custom creature.
+        return db.insertWithOnConflict( Catalog_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
+    }
 	
 	/**
 	 * Inserts an encounter into the Encounter table.
@@ -265,10 +294,7 @@ public class MoFlowDB {
 	 */
 	public Cursor getCatalog() {
 		String [] columns = {
-				Catalog_Table.COL_CreatureName,
-				Catalog_Table.COL_InitBonus,
-				Catalog_Table.COL_ArmorClass,
-				Catalog_Table.COL_MaxHP
+				Catalog_Table.COL_CreatureName
 				};
 		return db.query(
 				Catalog_Table.TABLE_NAME,
@@ -628,4 +654,8 @@ public class MoFlowDB {
 		String [] whereArgs = { String.valueOf( 1 ) };
 		return db.delete( Init_Table.TABLE_NAME, whereClause, whereArgs );
 	}
+
+    public void deleteNonCustomCreatures() {
+        db.execSQL( "DELETE FROM " + Catalog_Table.TABLE_NAME + " WHERE CUSTOM = 0;" );
+    }
 }

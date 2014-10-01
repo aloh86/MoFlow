@@ -4,14 +4,22 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import moflow.dialogs.CreatureEditDialog;
 import moflow.utility.CommonKey;
 import moflow.utility.DBTransaction;
-import moflow.wolfpup.Creature;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -60,6 +68,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
 
         //handleIntent( getIntent() );
     }
+
 
     @Override
     protected void onNewIntent( Intent intent ) {
@@ -115,5 +124,46 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     @Override
     public void onDestroyActionMode(ActionMode actionMode) {
 
+    }
+
+    private void loadCatalog() {
+        final Resources resources = getResources();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int catalogVersion = Integer.parseInt(sharedPreferences.getString( CommonKey.CATALOG_VERSION_KEY, "-1" ) );
+        InputStream inputStream = getInputStreamBasedOnVersion(resources, catalogVersion);
+        ArrayList<String[]> critters = new ArrayList<String[]>();
+
+        if ( inputStream == null ) {
+            dbTransaction.deleteNonCustomCreatures();
+            Toast.makeText( this, "Catalog version " + catalogVersion + " not available.", Toast.LENGTH_SHORT ).show();
+            return;
+        }
+
+        BufferedReader reader = new BufferedReader( new InputStreamReader( inputStream ) );
+
+        try {
+            String line;
+            while ( ( line = reader.readLine() ) != null ) {
+                String [] strings = TextUtils.split(line, ",");
+                critters.add( strings );
+            }
+        } catch ( IOException e ) {
+            Log.e("moflow.runnable.LoadCatalogTask", "readLine() failed to read input.");
+        } finally {
+            try {
+                reader.close();
+            } catch ( IOException e ) {
+                Log.e( "moflow.runnable.LoadCatalogTask", "BufferedReader failed to closed." );
+            }
+        }
+        dbTransaction.deleteNonCustomCreatures();
+        dbTransaction.insertCreaturesFromFile( critters, catalogVersion );
+    }
+
+    private InputStream getInputStreamBasedOnVersion( Resources res, int version ) {
+        if ( version == 5 )
+            return res.openRawResource( R.raw.fivecc );
+
+        return null;
     }
 }

@@ -76,6 +76,9 @@
     <string name="summary_3e4e_Saves">Enable display and input of 3e/4e saving throw/defenses Fortitude, Reflex, and Will.</string>
     <string name="summary_catalog">Choose a version to load monsters into Creature Catalog.</string>
 
+    <string name="openSourceHelp">This c</string>
+    <string name="openSourceHelpCatalog">This catalog is not available! MoFlow is a free and open source project. Help implement this catalog at github.</string>
+
     <!--Context Menu-->
     <string name="menu_moveUp">Move Up</string>
     <string name="menu_itemWait">Hold action</string>
