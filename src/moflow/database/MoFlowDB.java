@@ -123,15 +123,15 @@ public class MoFlowDB {
         // 0 = name, 1 = armor class, 2 = hit die, 3 -> 8 = ability scores
         ContentValues initVal = new ContentValues();
         initVal.put( Catalog_Table.COL_CreatureName, creature[ 0 ] );
-        initVal.put(Catalog_Table.COL_InitBonus, AbilityScoreMod.get345AbilityScoreMod( Integer.valueOf( creature[4] )  ) ); // getting the ability score mod since no init bonus in the catalog file
-        initVal.put( Catalog_Table.COL_ArmorClass, Integer.valueOf( creature[ 1 ] ) );
+        initVal.put(Catalog_Table.COL_InitBonus, AbilityScoreMod.get345AbilityScoreMod( creature[4] ) ); // getting the ability score mod since no init bonus in the catalog file
+        initVal.put( Catalog_Table.COL_ArmorClass, creature[ 1 ]);
         initVal.put( Catalog_Table.COL_MaxHP, creature[ 2 ] );
-        initVal.put( Catalog_Table.COL_STR, Integer.valueOf( creature[ 3 ] ) );
-        initVal.put( Catalog_Table.COL_DEX, Integer.valueOf( creature[ 4 ] ) );
-        initVal.put( Catalog_Table.COL_CON, Integer.valueOf( creature[ 5 ] ) );
-        initVal.put( Catalog_Table.COL_INT, Integer.valueOf( creature[ 6 ] ) );
-        initVal.put( Catalog_Table.COL_WIS, Integer.valueOf( creature[ 7 ] ) );
-        initVal.put( Catalog_Table.COL_CHA, Integer.valueOf( creature[ 8 ] ) );
+        initVal.put( Catalog_Table.COL_STR, creature[ 3 ]);
+        initVal.put( Catalog_Table.COL_DEX, creature[ 4 ]);
+        initVal.put( Catalog_Table.COL_CON, creature[ 5 ]);
+        initVal.put( Catalog_Table.COL_INT, creature[ 6 ]);
+        initVal.put( Catalog_Table.COL_WIS, creature[ 7 ]);
+        initVal.put( Catalog_Table.COL_CHA, creature[ 8 ]);
         initVal.put( Catalog_Table.COL_CUSTOM, 0 ); // 0 means that this creature was loaded from file, not a user's custom creature.
         return db.insertWithOnConflict( Catalog_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
     }

@@ -133,20 +133,20 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
     private void setFields() {
         creatureName.setText( critter.getCreatureName() );
-        armorClass.setText( String.valueOf(critter.getArmorClass()) );
-        maxHP.setText( String.valueOf( critter.getMaxHitPoints() ) );
-        initBonus.setText( String.valueOf( critter.getInitMod() ) );
+        armorClass.setText(critter.getArmorClass());
+        maxHP.setText(critter.getMaxHitPoints());
+        initBonus.setText(critter.getInitMod());
 
-        strength.setText( String.valueOf( critter.getStrength() ) );
-        dexterity.setText( String.valueOf( critter.getDexterity() ) );
-        constitution.setText( String.valueOf( critter.getConstitution() ) );
-        intelligence.setText( String.valueOf( critter.getIntelligence() ) );
-        wisdom.setText( String.valueOf( critter.getWisdom() ) );
-        charisma.setText( String.valueOf( critter.getCharisma() ) );
+        strength.setText(critter.getStrength());
+        dexterity.setText(critter.getDexterity());
+        constitution.setText(critter.getConstitution());
+        intelligence.setText(critter.getIntelligence());
+        wisdom.setText(critter.getWisdom());
+        charisma.setText(critter.getCharisma());
 
-        fort.setText( String.valueOf( critter.getFortitude() ) );
-        ref.setText( String.valueOf( critter.getReflex() ) );
-        will.setText( String.valueOf( critter.getWill() ) );
+        fort.setText(critter.getFortitude());
+        ref.setText(critter.getReflex());
+        will.setText(critter.getWill());
     }
 
     // Gets the new stats for the creature when dialog is used for editing an existing creature.
@@ -154,23 +154,23 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         Creature thing = new Creature();
 
         thing.setCreatureName( creatureName.getText().toString().trim() );
-        thing.setArmorClass(Integer.parseInt(armorClass.getText().toString()));
-        thing.setMaxHitPoints( Integer.parseInt( maxHP.getText().toString() ) );
-        thing.setInitMod( Integer.parseInt( initBonus.getText().toString() ) );
+        thing.setArmorClass(armorClass.getText().toString());
+        thing.setMaxHitPoints(maxHP.getText().toString());
+        thing.setInitMod(initBonus.getText().toString());
 
         if ( showAbilityScores ) {
-            thing.setStrength( Integer.parseInt( strength.getText().toString() ) );
-            thing.setDexterity( Integer.parseInt( dexterity.getText().toString() ));
-            thing.setConstitution( Integer.parseInt( constitution.getText().toString() ) );
-            thing.setIntelligence( Integer.parseInt( intelligence.getText().toString() ) );
-            thing.setWisdom( Integer.parseInt( wisdom.getText().toString() ) );
-            thing.setCharisma( Integer.parseInt( charisma.getText().toString() ) );
+            thing.setStrength(strength.getText().toString());
+            thing.setDexterity(dexterity.getText().toString());
+            thing.setConstitution(constitution.getText().toString());
+            thing.setIntelligence(intelligence.getText().toString());
+            thing.setWisdom(wisdom.getText().toString());
+            thing.setCharisma(charisma.getText().toString());
         }
 
         if ( showSavingThrows ) {
-            thing.setFortitude( Integer.parseInt( fort.getText().toString() ) );
-            thing.setReflex( Integer.parseInt( ref.getText().toString() ) );
-            thing.setWill( Integer.parseInt( will.getText().toString() ) );
+            thing.setFortitude(fort.getText().toString());
+            thing.setReflex(ref.getText().toString());
+            thing.setWill(will.getText().toString());
         }
 
         return thing;

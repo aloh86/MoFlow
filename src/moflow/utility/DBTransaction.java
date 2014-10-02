@@ -78,18 +78,18 @@ public class DBTransaction {
         while ( cur.moveToNext() ) {
             Creature critter = new Creature();
             critter.setCreatureName( cur.getString( PC_NAME + ADJUST ) );
-            critter.setInitMod( cur.getInt( INIT_BONUS + ADJUST ) );
-            critter.setArmorClass( cur.getInt( ARMOR_CLASS + ADJUST ) );
-            critter.setMaxHitPoints( cur.getInt( MAX_HP + ADJUST ) );
-            critter.setStrength( cur.getInt( STR + ADJUST ) );
-            critter.setDexterity( cur.getInt( DEX + ADJUST ) );
-            critter.setConstitution( cur.getInt( CON + ADJUST ) );
-            critter.setIntelligence( cur.getInt( INT + ADJUST ) );
-            critter.setWisdom( cur.getInt( WIS + ADJUST ) );
-            critter.setCharisma( cur.getInt( CHA + ADJUST ) );
-            critter.setFortitude( cur.getInt( FORT + ADJUST ) );
-            critter.setReflex( cur.getInt( REF + ADJUST ) );
-            critter.setWill( cur.getInt( WILL + ADJUST ) );
+            critter.setInitMod( cur.getString( INIT_BONUS + ADJUST ) );
+            critter.setArmorClass( cur.getString( ARMOR_CLASS + ADJUST ) );
+            critter.setMaxHitPoints( cur.getString( MAX_HP + ADJUST ) );
+            critter.setStrength( cur.getString( STR + ADJUST ) );
+            critter.setDexterity( cur.getString( DEX + ADJUST ) );
+            critter.setConstitution( cur.getString( CON + ADJUST ) );
+            critter.setIntelligence( cur.getString( INT + ADJUST ) );
+            critter.setWisdom( cur.getString( WIS + ADJUST ) );
+            critter.setCharisma( cur.getString( CHA + ADJUST ) );
+            critter.setFortitude( cur.getString( FORT + ADJUST ) );
+            critter.setReflex( cur.getString( REF + ADJUST ) );
+            critter.setWill( cur.getString( WILL + ADJUST ) );
 
             creatureList.add( critter );
         }

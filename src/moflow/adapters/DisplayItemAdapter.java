@@ -53,56 +53,69 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
 
     private void fillData( Creature creature, ViewHolder holder ) {
         holder.creatureName.setText( creature.getCreatureName() );
-        holder.armorClass.setText( String.valueOf(creature.getArmorClass()) );
-        holder.maxHitPoints.setText( String.valueOf( creature.getMaxHitPoints() ) );
+        holder.armorClass.setText(creature.getArmorClass());
+        holder.maxHitPoints.setText(creature.getMaxHitPoints());
 
          // init is a special case. If it's the PC/Encounter items list show the init mod, else show the initiative.
         if ( !isInitiativeScreen )
-            holder.initScore.setText( String.valueOf( creature.getInitMod() ) );
+            holder.initScore.setText(creature.getInitMod());
         else
-            holder.initScore.setText( String.valueOf( creature.getInitiative() ) );
+            holder.initScore.setText(creature.getInitiative());
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( mContext );
         boolean showAbilityScores = sharedPref.getBoolean( CommonKey.ABILITY_SCORES_KEY, false  );
 
         if ( showAbilityScores ) {
-            holder.strScore.setText( String.valueOf( creature.getStrength() ) );
-            int mod = AbilityScoreMod.get345AbilityScoreMod( creature.getStrength() );
-            holder.strMod.setText( ( mod >= 0 ) ? "+" + String.valueOf( mod ) : String.valueOf( mod ) );
+            holder.strScore.setText(creature.getStrength());
+            String mod = AbilityScoreMod.get345AbilityScoreMod(creature.getStrength());
+            mod = modToString(mod);
+            holder.strMod.setText(mod);
 
-            holder.dexScore.setText( String.valueOf( creature.getDexterity() ) );
+            holder.dexScore.setText(creature.getDexterity());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getDexterity() );
-            holder.dexMod.setText( ( mod >= 0 ) ? "+" + String.valueOf( mod ) : String.valueOf( mod ) );
+            mod = modToString(mod);
+            holder.dexMod.setText(mod);
 
-            holder.conScore.setText( String.valueOf( creature.getConstitution() ) );
+            holder.conScore.setText(creature.getConstitution());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getConstitution() );
-            holder.conMod.setText( ( mod >= 0 ) ? "+" + String.valueOf( mod ) : String.valueOf( mod ) );
+            mod = modToString(mod);
+            holder.conMod.setText(mod);
 
-            holder.intScore.setText( String.valueOf( creature.getIntelligence() ) );
+            holder.intScore.setText(creature.getIntelligence());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getIntelligence() );
-            holder.intMod.setText( ( mod >= 0 ) ? "+" + String.valueOf( mod ) : String.valueOf( mod ) );
+            mod = modToString(mod);
+            holder.intMod.setText(mod);
 
-            holder.wisScore.setText( String.valueOf( creature.getWisdom() ) );
+            holder.wisScore.setText(creature.getWisdom());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getWisdom() );
-            holder.wisMod.setText( ( mod >= 0 ) ? "+" + String.valueOf( mod ) : String.valueOf( mod ) );
+            mod = modToString(mod);
+            holder.wisMod.setText(mod);
 
-            holder.chaScore.setText( String.valueOf( creature.getCharisma() ) );
+            holder.chaScore.setText(creature.getCharisma());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getCharisma() );
-            holder.chaMod.setText( ( mod >= 0 ) ? "+" + String.valueOf( mod ) : String.valueOf( mod ) );
+            mod = modToString(mod);
+            holder.chaMod.setText(mod);
         } else
-            holder.abilityScoresLayout.setVisibility( View.GONE );
+            holder.abilityScoresLayout.setVisibility(View.GONE);
 
-        boolean showSavingThrows = sharedPref.getBoolean( CommonKey.SAVING_THROW_KEY, false );
+        boolean showSavingThrows = sharedPref.getBoolean(CommonKey.SAVING_THROW_KEY, false);
 
         if ( showSavingThrows ) {
-            holder.fortScore.setText( String.valueOf( creature.getFortitude() ) );
-            holder.refScore.setText( String.valueOf( creature.getReflex() ) );
-            holder.willScore.setText( String.valueOf( creature.getWill() ) );
+            holder.fortScore.setText(creature.getFortitude());
+            holder.refScore.setText(creature.getReflex());
+            holder.willScore.setText(creature.getWill());
         } else
-            holder.savingThrowsLayout.setVisibility( View.GONE );
+            holder.savingThrowsLayout.setVisibility(View.GONE);
     }
 
-    private static class ViewHolder {
+    private String modToString(String modVal)
+    {
+        int mod = Integer.parseInt(modVal);
+        return (mod >= 0) ? "+" + modVal : modVal;
+    }
+
+    private static class ViewHolder
+    {
         public TextView creatureName;
         public TextView armorClass;
         public TextView maxHitPoints;
@@ -129,15 +142,16 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         public TextView refScore;
         public TextView willScore;
 
-        public ViewHolder( View convertView ) {
-            creatureName = ( TextView ) convertView.findViewById(R.id.display_creatureName);
-            creatureName.setTextColor( Color.GREEN );
-            armorClass = ( TextView ) convertView.findViewById( R.id.display_armorClassLabel );
-            maxHitPoints = ( TextView ) convertView.findViewById( R.id.display_maxHPLabel );
-            initScore = ( TextView ) convertView.findViewById( R.id.display_initBonusLabel );
+        public ViewHolder(View convertView)
+        {
+            creatureName = (TextView) convertView.findViewById(R.id.display_creatureName);
+            creatureName.setTextColor(Color.GREEN);
+            armorClass = (TextView) convertView.findViewById(R.id.display_armorClassLabel);
+            maxHitPoints = (TextView) convertView.findViewById(R.id.display_maxHPLabel);
+            initScore = (TextView) convertView.findViewById(R.id.display_initBonusLabel);
 
-            abilityScoresLayout = ( LinearLayout ) convertView.findViewById( R.id.display_abilityScoresLayout );
-            strScore = ( TextView ) convertView.findViewById( R.id.display_strScore );
+            abilityScoresLayout = (LinearLayout) convertView.findViewById(R.id.display_abilityScoresLayout);
+            strScore = (TextView) convertView.findViewById(R.id.display_strScore);
             strMod = ( TextView ) convertView.findViewById( R.id.display_strMod );
             dexScore = ( TextView ) convertView.findViewById( R.id.display_dexScore );
             dexMod = ( TextView ) convertView.findViewById( R.id.display_dexMod );

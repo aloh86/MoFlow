@@ -18,7 +18,7 @@ public class HitDie
         repetitions = -1;
         range = -1;
         modifier = 0;
-        evaluateExpression( die );
+        evaluateExpression(die);
     }
     
     public int rollHitDie()
@@ -27,9 +27,9 @@ public class HitDie
         int result = 0;
         int min = 1;
 
-        for ( int i = 0; i < repetitions; i++ )
+        for (int i = 0; i < repetitions; i++)
         {
-            result += r.nextInt( range ) + min;
+            result += r.nextInt(range) + min;
         }
 
         result += modifier;
@@ -41,13 +41,13 @@ public class HitDie
      * This method assumes that the string is a valid hit die expression.
      * @param expression
      */
-    private void evaluateExpression( String expression )
+    private void evaluateExpression(String expression)
     {
-        int dPosition = expression.indexOf( "d" );
-        String tempRepetitions = expression.substring( 0, dPosition );
+        int dPosition = expression.indexOf("d");
+        String tempRepetitions = expression.substring(0, dPosition);
 
-        if ( tempRepetitions.length() > 0 )
-            repetitions = Integer.valueOf( tempRepetitions );
+        if (tempRepetitions.length() > 0)
+            repetitions = Integer.valueOf(tempRepetitions);
         else
             repetitions = 1;
 
@@ -55,45 +55,45 @@ public class HitDie
         int modSignPosition = -1;
 
         boolean isNegative = false;
-        if ( expression.contains( "+" ) )
+        if (expression.contains("+"))
         {
-            modSignPosition = expression.indexOf( "+" );
+            modSignPosition = expression.indexOf("+");
         }
-        if ( expression.contains( "-" ) )
+        if (expression.contains("-"))
         {
-            modSignPosition = expression.indexOf( "-" );
+            modSignPosition = expression.indexOf("-");
             isNegative = true;
         }
 
-        if ( modSignPosition == -1 )
+        if (modSignPosition == -1)
         {
-            String tempRange = expression.substring( dPosition + 1, expression.length() );
+            String tempRange = expression.substring(dPosition + 1, expression.length());
             range = Integer.valueOf( tempRange );
             return;
         }
 
-        String tempRange = expression.substring( dPosition + 1, modSignPosition );
-        range = Integer.valueOf( tempRange );
+        String tempRange = expression.substring(dPosition + 1, modSignPosition);
+        range = Integer.valueOf(tempRange);
 
         String tempModifier;
-        if ( isNegative )
+        if (isNegative)
         {
-            tempModifier = expression.substring( modSignPosition, expression.length() );
+            tempModifier = expression.substring(modSignPosition, expression.length());
         }
         else
         {
-            tempModifier = expression.substring( modSignPosition + 1, expression.length()  );
+            tempModifier = expression.substring(modSignPosition + 1, expression.length());
         }
-        modifier = Integer.valueOf( tempModifier );
+        modifier = Integer.valueOf(tempModifier);
     }
 
-    public static boolean isHitDieExpression( String expression )
+    public static boolean isHitDieExpression(String expression)
     {
-        return expression.matches( "^(\\d+)?d\\d+((\\+|\\-)?\\d+)?$" );
+        return expression.matches("^(\\d+)?d\\d+((\\+|\\-)?\\d+)?$");
     }
 
-    public static boolean isDigit( String expression )
+    public static boolean isDigit(String expression)
     {
-        return expression.matches( "^\\d+$" );
+        return expression.matches("^\\d+$");
     }
 }
