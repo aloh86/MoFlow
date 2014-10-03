@@ -32,7 +32,8 @@ public class DBTransaction {
     private final int REF = 12;
     private final int WILL = 13;
 
-    public DBTransaction(Context ctx) {
+    public DBTransaction(Context ctx)
+    {
         db = new MoFlowDB( ctx );
 
         try {
@@ -42,13 +43,15 @@ public class DBTransaction {
         }
     }
 
-    public void closeDB() {
+    public void closeDB()
+    {
         db.close();
     }
 
     // Retrieval
 
-    public ArrayList< String > getGroupList( String groupType ) {
+    public ArrayList< String > getGroupList( String groupType )
+    {
         if ( groupType.equals( CommonKey.VAL_PARTY ) )
             cur = db.getAllParties();
         else
@@ -65,7 +68,8 @@ public class DBTransaction {
         return groupList;
     }
 
-    public ArrayList< Creature > getGroupItemList( String groupType, String groupName ) {
+    public ArrayList< Creature > getGroupItemList( String groupType, String groupName )
+    {
         if ( groupType.equals( CommonKey.VAL_PARTY ) )
             cur = db.getPCForGroup( groupName );
         else
@@ -102,31 +106,66 @@ public class DBTransaction {
         cur = db.getCatalog();
         ArrayList<String> list = new ArrayList<String>();
 
-        while ( cur.moveToNext() )
-        {
+        while ( cur.moveToNext() ) {
             list.add( cur.getString( 0 ) );
         }
 
         return list;
     }
 
+    public Creature getCreatureFromCatalog( String creatureName )
+    {
+        cur = db.getCreatureFromCatalog( creatureName );
+        Creature critter = new Creature();
+
+        final int ADJUST = -1;
+
+        while ( cur.moveToNext() ) {
+            critter.setCreatureName( cur.getString( PC_NAME + ADJUST ) );
+            critter.setInitMod( cur.getString( INIT_BONUS + ADJUST ) );
+            critter.setArmorClass( cur.getString( ARMOR_CLASS + ADJUST ) );
+            critter.setMaxHitPoints(cur.getString(MAX_HP + ADJUST));
+            critter.setStrength( cur.getString( STR + ADJUST ) );
+            critter.setDexterity( cur.getString( DEX + ADJUST ) );
+            critter.setConstitution( cur.getString( CON + ADJUST ) );
+            critter.setIntelligence( cur.getString( INT + ADJUST ) );
+            critter.setWisdom( cur.getString( WIS + ADJUST ) );
+            critter.setCharisma( cur.getString( CHA + ADJUST ) );
+            critter.setFortitude( cur.getString( FORT + ADJUST ) );
+            critter.setReflex( cur.getString( REF + ADJUST ) );
+            critter.setWill( cur.getString( WILL + ADJUST ) );
+        }
+        return critter;
+    }
+
     // Insertion
 
-    public void insertNewGroup( String groupName, String groupType ) {
+    // for new parties or encounters
+    public void insertNewGroup( String groupName, String groupType )
+    {
         if ( groupType.equals( CommonKey.VAL_PARTY ) )
             db.insertParty( groupName );
         else
             db.insertEncounter( groupName );
     }
 
-    public void insertNewCreature( String groupName, Creature critter, String groupType ) {
+    // for new player characters or monsters
+    public void insertNewCreature( String groupName, Creature critter, String groupType )
+    {
         if ( groupType.equals( CommonKey.VAL_PARTY ) )
             db.insertPlayer( groupName, critter );
         else
             db.insertCreature( groupName, critter );
     }
 
-    public void insertCreaturesFromFile( ArrayList<String []> creatures, int version ) {
+    public void insertNewCreatureIntoCatalog(Creature critter)
+    {
+        db.insertCreatureInCatalog(critter);
+    }
+
+    // catalog creatures from raw file
+    public void insertCreaturesFromFile( ArrayList<String []> creatures, int version )
+    {
         if ( version == 5 ) {
             for ( String [] s : creatures )
                 db.insertFileCreatureInCatalog5e( s );
@@ -135,7 +174,8 @@ public class DBTransaction {
 
     // Deletion
 
-    public void deleteGroup( final ArrayList< String > toDelete, String groupType ) {
+    public void deleteGroup( final ArrayList< String > toDelete, String groupType )
+    {
         for ( int i = 0; i < toDelete.size(); i++ ) {
             if ( groupType.equals( CommonKey.VAL_PARTY ) )
                 db.deletePartyRecord( toDelete.get( i ) );
@@ -144,7 +184,8 @@ public class DBTransaction {
         }
     }
 
-    public void deleteCreatureFromGroup( final ArrayList< Creature > toDelete, String groupName, String groupType ) {
+    public void deleteCreatureFromGroup( final ArrayList< Creature > toDelete, String groupName, String groupType )
+    {
         for ( int i = 0; i < toDelete.size(); i++ ) {
             if ( groupType.equals( CommonKey.VAL_PARTY ) )
                 db.deletePC( groupName, toDelete.get( i ).getCreatureName() );
@@ -153,23 +194,38 @@ public class DBTransaction {
         }
     }
 
-    public void deleteNonCustomCreatures() {
+    public void deleteCreatureFromCatalog(ArrayList<String> toDelete)
+    {
+        for (int i = 0; i < toDelete.size(); i++) {
+            db.deleteCreatureFromCatalog(toDelete.get(i));
+        }
+    }
+
+    public void deleteNonCustomCreatures()
+    {
         db.deleteNonCustomCreatures();
     }
 
     // Modification
 
-    public void renameGroup( String newName, String oldName, String groupType ) {
+    public void renameGroup( String newName, String oldName, String groupType )
+    {
         if ( groupType.equals( CommonKey.VAL_PARTY ) )
             db.updatePartyRecord( newName, oldName );
         else
             db.updateEncounterRecord( newName, oldName );
     }
 
-    public void updateExistingCreature( Creature critter, String groupName, String creatureNamePreChange, String groupType ) {
+    public void updateExistingCreature( Creature critter, String groupName, String creatureNamePreChange, String groupType )
+    {
         if ( groupType.equals( CommonKey.VAL_PARTY ) )
             db.updatePlayerRecord( critter, groupName, creatureNamePreChange );
         else
             db.updateCreatureRecord( critter, groupName, creatureNamePreChange );
+    }
+    
+    public void updateCatalogCreature( Creature updated, String oldName )
+    {
+        db.updateCreatureInCatalog(updated, oldName);
     }
 }

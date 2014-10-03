@@ -8,11 +8,13 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import moflow.activities.R;
 import moflow.utility.CommonKey;
+import moflow.utility.HitDie;
 import moflow.wolfpup.Creature;
 
 /**
@@ -41,6 +43,7 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
     private boolean showAbilityScores;
     private boolean showSavingThrows;
+    private boolean catalogCreature;
 
     private Creature critter;
 
@@ -49,11 +52,19 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     public CreatureEditDialog( String dialogTitle ) {
         title = dialogTitle;
         critter = null;
+        catalogCreature = false;
     }
 
     public CreatureEditDialog( String dialogTitle, Creature someCritter ) {
         title = dialogTitle;
         critter = someCritter;
+        catalogCreature = false;
+    }
+
+    public CreatureEditDialog( String dialogTitle, Creature someCritter, boolean isCatalogCreature ) {
+        title = dialogTitle;
+        critter = someCritter;
+        catalogCreature = isCatalogCreature;
     }
 
     @Override
@@ -98,7 +109,12 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
         creatureName = ( EditText ) view.findViewById( R.id.creatureNameEditText );
         armorClass = ( EditText ) view.findViewById( R.id.creatureArmorClassEditText );
+
         maxHP = ( EditText ) view.findViewById( R.id.creatureMaxHitPointsEditText );
+        if ( catalogCreature ) {
+            maxHP.setKeyListener(DigitsKeyListener.getInstance("0123456789d+-"));
+        }
+
         initBonus = ( EditText ) view.findViewById( R.id.creatureInitBonusEditText );
 
         strength = ( EditText ) view.findViewById( R.id.creatureStrEditText );
@@ -134,8 +150,8 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     private void setFields() {
         creatureName.setText( critter.getCreatureName() );
         armorClass.setText(critter.getArmorClass());
-        maxHP.setText(critter.getMaxHitPoints());
         initBonus.setText(critter.getInitMod());
+        maxHP.setText(critter.getMaxHitPoints());
 
         strength.setText(critter.getStrength());
         dexterity.setText(critter.getDexterity());
@@ -147,6 +163,20 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         fort.setText(critter.getFortitude());
         ref.setText(critter.getReflex());
         will.setText(critter.getWill());
+
+        armorClass.setText( String.valueOf(critter.getArmorClass()) );
+        initBonus.setText( String.valueOf( critter.getInitMod() ) );
+
+        strength.setText( String.valueOf( critter.getStrength() ) );
+        dexterity.setText( String.valueOf( critter.getDexterity() ) );
+        constitution.setText( String.valueOf( critter.getConstitution() ) );
+        intelligence.setText( String.valueOf( critter.getIntelligence() ) );
+        wisdom.setText( String.valueOf( critter.getWisdom() ) );
+        charisma.setText( String.valueOf( critter.getCharisma() ) );
+
+        fort.setText( String.valueOf( critter.getFortitude() ) );
+        ref.setText( String.valueOf( critter.getReflex() ) );
+        will.setText( String.valueOf( critter.getWill() ) );
     }
 
     // Gets the new stats for the creature when dialog is used for editing an existing creature.
@@ -155,8 +185,8 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
         thing.setCreatureName( creatureName.getText().toString().trim() );
         thing.setArmorClass(armorClass.getText().toString());
-        thing.setMaxHitPoints(maxHP.getText().toString());
         thing.setInitMod(initBonus.getText().toString());
+        thing.setMaxHitPoints(maxHP.getText().toString());
 
         if ( showAbilityScores ) {
             thing.setStrength(strength.getText().toString());

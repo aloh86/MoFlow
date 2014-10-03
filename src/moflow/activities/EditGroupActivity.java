@@ -33,7 +33,8 @@ public class EditGroupActivity extends ListActivity
     private Dialog newCreatureChoiceDialog;
 
     @Override
-    public void onCreate( Bundle savedInstanceState ) {
+    public void onCreate( Bundle savedInstanceState )
+    {
         super.onCreate( savedInstanceState );
 
         try {
@@ -75,7 +76,8 @@ public class EditGroupActivity extends ListActivity
      * Creates action bar menu.
      */
     @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
+    public boolean onCreateOptionsMenu( Menu menu )
+    {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate( R.menu.actionbar_add, menu );
@@ -86,7 +88,8 @@ public class EditGroupActivity extends ListActivity
      * Action bar item handling.
      */
     @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
+    public boolean onOptionsItemSelected( MenuItem item )
+    {
         // Handle presses on the action bar items
         switch ( item.getItemId() ) {
             case R.id.action_new:
@@ -102,7 +105,8 @@ public class EditGroupActivity extends ListActivity
     }
 
 
-    private void chooseNewCreatureOptions() {
+    private void chooseNewCreatureOptions()
+    {
         if ( groupType.equals( CommonKey.VAL_ENC ) )
             newCreatureChoiceDialog.show();
         else
@@ -110,7 +114,8 @@ public class EditGroupActivity extends ListActivity
     }
 
 
-    private void newCreatureFromScratch() {
+    private void newCreatureFromScratch()
+    {
         String type = ( groupType == CommonKey.VAL_PARTY ? "PC" : "Creature" );
         newCreatureDialog = new CreatureEditDialog( "New " + type );
         newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
@@ -118,11 +123,12 @@ public class EditGroupActivity extends ListActivity
 
     // Positive click handler for new or edit creature dialog
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogPositiveClick(DialogFragment dialog)
+    {
         if ( dialog == newCreatureDialog) {
             if ( !newCreatureDialog.isEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
-                critter.setCreatureName( NameModifier.makeNameUnique2(groupList, critter.getCreatureName()) );
+                critter.setCreatureName( NameModifier.makeNameUnique2( groupList, critter.getCreatureName() ) );
                 groupList.add( critter );
                 dbTransaction.insertNewCreature( groupName, critter, groupType );
                 listAdapter.sort( Creature.nameComparator() );
@@ -155,16 +161,19 @@ public class EditGroupActivity extends ListActivity
 
     // Negative click handler for new or edit creature dialog
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogNegativeClick(DialogFragment dialog)
+    {
     }
 
-    private void invalidFieldMessage() {
+    private void invalidFieldMessage()
+    {
         Toast.makeText( this, "All fields must be filled.", Toast.LENGTH_LONG ).show();
     }
 
     // Activity ListView item click handler
     @Override
-    public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
+    public void onItemClick( AdapterView<?> listView, View view, int position, long id )
+    {
         Creature c = listAdapter.getItem( position );
         editCreatureDialog = new CreatureEditDialog( "Edit", c );
         editCreatureDialog.show( getFragmentManager(), "editCreatureDialog" );
@@ -173,7 +182,8 @@ public class EditGroupActivity extends ListActivity
 
     // New or Catalog Creature dialog onClick handler for encounter manager
     @Override
-    public void onClick( DialogInterface dialogInterface, int which ) {
+    public void onClick( DialogInterface dialogInterface, int which )
+    {
         final int SCRATCH = 0;
 
         if ( dialogInterface == newCreatureChoiceDialog ) {
@@ -187,7 +197,8 @@ public class EditGroupActivity extends ListActivity
 
     // Contextual Action Mode
     @Override
-    public void onItemCheckedStateChanged( ActionMode actionMode, int position, long id, boolean checked ) {
+    public void onItemCheckedStateChanged( ActionMode actionMode, int position, long id, boolean checked )
+    {
         if ( checked )
             deleteList.add( listAdapter.getItem( position ) );
         else
@@ -196,7 +207,8 @@ public class EditGroupActivity extends ListActivity
 
     // Contextual Action Mode
     @Override
-    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
+    {
         listAdapter = null;
         listAdapter = new ArrayAdapter<Creature>(
                 this,
@@ -212,13 +224,15 @@ public class EditGroupActivity extends ListActivity
 
     // Contextual Action Mode
     @Override
-    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu)
+    {
         return false;
     }
 
     // Contextual Action Mode
     @Override
-    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
+    {
         switch ( menuItem.getItemId() ) {
             case R.id.action_discard:
                 deleteSelectedItems();
@@ -231,7 +245,8 @@ public class EditGroupActivity extends ListActivity
 
     // Contextual Action Mode
     @Override
-    public void onDestroyActionMode(ActionMode actionMode) {
+    public void onDestroyActionMode(ActionMode actionMode)
+    {
         deleteList.clear();
 
         listAdapter = null;

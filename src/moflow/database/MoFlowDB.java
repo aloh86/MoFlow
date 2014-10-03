@@ -111,6 +111,7 @@ public class MoFlowDB {
         initVal.put( Catalog_Table.COL_FORT, creature.getFortitude() );
         initVal.put( Catalog_Table.COL_REF, creature.getReflex() );
         initVal.put( Catalog_Table.COL_WILL, creature.getWill() );
+        initVal.put( Catalog_Table.COL_CUSTOM, 1 );
 		return db.insertWithOnConflict( Catalog_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
 	}
 
@@ -316,7 +317,16 @@ public class MoFlowDB {
 				Catalog_Table.COL_CreatureName,
 				Catalog_Table.COL_InitBonus,
 				Catalog_Table.COL_ArmorClass,
-				Catalog_Table.COL_MaxHP
+				Catalog_Table.COL_MaxHP,
+                Catalog_Table.COL_STR,
+                Catalog_Table.COL_DEX,
+                Catalog_Table.COL_CON,
+                Catalog_Table.COL_INT,
+                Catalog_Table.COL_WIS,
+                Catalog_Table.COL_CHA,
+                Catalog_Table.COL_FORT,
+                Catalog_Table.COL_REF,
+                Catalog_Table.COL_WILL
 				};
 		String whereClause = Catalog_Table.COL_CreatureName + " = ?";
 		String [] whereArgs = { name };
@@ -473,6 +483,15 @@ public class MoFlowDB {
 		initVal.put( Catalog_Table.COL_InitBonus, updated.getInitMod() );
 		initVal.put( Catalog_Table.COL_ArmorClass, updated.getArmorClass() );
 		initVal.put( Catalog_Table.COL_MaxHP, updated.getMaxHitPoints() );
+        initVal.put( Catalog_Table.COL_STR, updated.getStrength() );
+        initVal.put( Catalog_Table.COL_DEX, updated.getDexterity() );
+        initVal.put( Catalog_Table.COL_CON, updated.getConstitution() );
+        initVal.put( Catalog_Table.COL_INT, updated.getIntelligence() );
+        initVal.put( Catalog_Table.COL_WIS, updated.getWisdom() );
+        initVal.put( Catalog_Table.COL_CHA, updated.getCharisma() );
+        initVal.put( Catalog_Table.COL_FORT, updated.getFortitude() );
+        initVal.put( Catalog_Table.COL_REF, updated.getReflex() );
+        initVal.put( Catalog_Table.COL_WILL, updated.getWill() );
 		
 		return db.update( Catalog_Table.TABLE_NAME, initVal, whereClause, whereArgs );
 	}

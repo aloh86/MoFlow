@@ -38,20 +38,20 @@ public abstract class Creatures_Table implements BaseColumns {
 	
 	public static final String DB_CREATE = 
 			"CREATE TABLE " 	+ TABLE_NAME + " ( " +
-			COL_Encounter 		+ " VARCHAR(50) NOT NULL, " +
-			COL_CreatureName	+ " VARCHAR(50) NOT NULL, " +
-			COL_InitBonus		+ " INTEGER NOT NULL, " +
-			COL_ArmorClass		+ " INTEGER NOT NULL, " +
-			COL_MaxHP			+ " INTEGER NOT NULL, " +
-            COL_STR         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_DEX         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_CON         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_INT         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_WIS         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_CHA         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_FORT        + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_REF         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_WILL        + " INTEGER NOT NULL DEFAULT 0, " +
+			COL_Encounter 		+ " TEXT NOT NULL, " +
+			COL_CreatureName	+ " TEXT NOT NULL, " +
+			COL_InitBonus		+ " TEXT NOT NULL, " +
+			COL_ArmorClass		+ " TEXT NOT NULL, " +
+			COL_MaxHP			+ " TEXT NOT NULL, " +
+            COL_STR         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_DEX         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_CON         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_INT         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_WIS         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_CHA         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_FORT        + " TEXT NOT NULL DEFAULT '0', " +
+            COL_REF         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_WILL        + " TEXT NOT NULL DEFAULT '0', " +
             "PRIMARY KEY (" + COL_Encounter + "," + COL_CreatureName + "), " +
             "FOREIGN KEY (" + COL_Encounter + ") REFERENCES " + Encounters_Table.TABLE_NAME + "(" + Encounters_Table.COL_Encounter + ") " +
             "ON UPDATE CASCADE ON DELETE CASCADE" +
