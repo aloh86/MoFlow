@@ -2,13 +2,15 @@ package moflow.activities;
 
 import android.app.*;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import moflow.adapters.DisplayItemAdapter;
 import moflow.dialogs.CreatureEditDialog;
 import moflow.dialogs.SimpleDialogListener;
-import moflow.utility.CommonKey;
+import moflow.utility.HitDie;
+import moflow.utility.Key;
 import moflow.utility.DBTransaction;
 import moflow.utility.NameModifier;
 import moflow.wolfpup.Creature;
@@ -38,8 +40,8 @@ public class EditGroupActivity extends ListActivity
         super.onCreate( savedInstanceState );
 
         try {
-            groupType = getIntent().getExtras().getString( CommonKey.KEY_GROUP_TYPE );
-            groupName = getIntent().getExtras().getString( CommonKey.KEY_GROUP_NAME );
+            groupType = getIntent().getExtras().getString( Key.GROUP_TYPE);
+            groupName = getIntent().getExtras().getString( Key.GROUP_NAME);
         } catch ( NullPointerException npe ) {
             Toast.makeText(this, "onCreate: intent extras could not be extracted.", Toast.LENGTH_LONG).show();
         }
@@ -70,6 +72,39 @@ public class EditGroupActivity extends ListActivity
         builder.setTitle( "New Creature" )
                 .setItems( R.array.newCreatureDialogChoices, this );
         newCreatureChoiceDialog = builder.create(); // used in encounter manager to choose between new or catalog creature.
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Key.PICK_CREATURE) {
+            if (resultCode == RESULT_OK) {
+                Bundle bundle = data.getExtras().getBundle(Key.NUMPICK_CATALOG_CREATURE_BUNDLE);
+                int numPicked = bundle.getInt(Key.NUM__CREATURE_PICKED);
+                Creature pickedCreature = bundle.getParcelable(Key.CREATURE_OBJECT);
+                addPickedCreature( numPicked, pickedCreature );
+            }
+        }
+    }
+
+    private void addPickedCreature(int numPicked, Creature pickedCreature)
+    {
+        for (int i = 0; i < numPicked; i++) {
+            Creature copy = pickedCreature.clone();
+            copy.setCreatureName(NameModifier.makeNameUnique2(groupList, copy.getCreatureName()));
+
+            if (HitDie.isHitDieExpression(copy.getMaxHitPoints())) {
+                HitDie hitDie = new HitDie(copy.getMaxHitPoints());
+                int rollResult = hitDie.rollHitDie();
+                String strMaxHP = String.valueOf(rollResult);
+                copy.setMaxHitPoints(strMaxHP);
+            }
+
+            listAdapter.add(copy);
+            listAdapter.sort(Creature.nameComparator());
+            listAdapter.notifyDataSetChanged();
+            dbTransaction.insertNewCreature(groupName, copy, groupType);
+        }
     }
 
     /**
@@ -104,10 +139,9 @@ public class EditGroupActivity extends ListActivity
         return false;
     }
 
-
     private void chooseNewCreatureOptions()
     {
-        if ( groupType.equals( CommonKey.VAL_ENC ) )
+        if ( groupType.equals( Key.Val.ENCOUNTER) )
             newCreatureChoiceDialog.show();
         else
             newCreatureFromScratch();
@@ -116,7 +150,7 @@ public class EditGroupActivity extends ListActivity
 
     private void newCreatureFromScratch()
     {
-        String type = ( groupType == CommonKey.VAL_PARTY ? "PC" : "Creature" );
+        String type = ( groupType == Key.Val.PARTY ? "PC" : "Creature" );
         newCreatureDialog = new CreatureEditDialog( "New " + type );
         newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
     }
@@ -190,7 +224,9 @@ public class EditGroupActivity extends ListActivity
             if ( which == SCRATCH ) {
                 newCreatureFromScratch();
             } else {
-                // TODO: open the catalog
+                Intent intent = new Intent("moflow.activities.CatalogActivity");
+                intent.putExtra(Key.PARENT_ACTIVITY, Key.Val.FROM_GROUP_ITEM);
+                startActivityForResult(intent, Key.PICK_CREATURE);
             }
         }
     }

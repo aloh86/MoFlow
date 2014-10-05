@@ -5,27 +5,18 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import moflow.dialogs.CreatureEditDialog;
+import moflow.dialogs.NumPickDialog;
 import moflow.dialogs.SimpleDialogListener;
-import moflow.utility.CommonKey;
+import moflow.utility.Key;
 import moflow.utility.DBTransaction;
 import moflow.utility.NameModifier;
 import moflow.wolfpup.Creature;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -40,6 +31,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     private int indexOfItemToEdit;
     private CreatureEditDialog newCreatureDialog;
     private CreatureEditDialog editCreatureDialog;
+    private NumPickDialog numPickDialog;
     private String parentActivity;
 
     @Override
@@ -48,7 +40,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
         setTitle( "Catalog" );
 
         try {
-            parentActivity = getIntent().getExtras().getString( CommonKey.KEY_PARENT_ACTIVITY );
+            parentActivity = getIntent().getExtras().getString( Key.PARENT_ACTIVITY);
         } catch ( NullPointerException npe ) {
             Toast.makeText(this, "onCreate: intent extras could not be extracted.", Toast.LENGTH_LONG).show();
             finish();
@@ -73,6 +65,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
         indexOfItemToEdit = -1;
 
         newCreatureDialog = new CreatureEditDialog( "New Creature" );
+        numPickDialog = new NumPickDialog();
         //handleIntent( getIntent() );
     }
 
@@ -153,12 +146,26 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
             } else
                 invalidFieldMessage();
         }
+
+        if ( dialog == numPickDialog ) {
+            String name = listAdapter.getItem(indexOfItemToEdit);
+            Creature creature = dbTransaction.getCreatureFromCatalog(name);
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Key.CREATURE_OBJECT, creature);
+            bundle.putInt(Key.NUM__CREATURE_PICKED, numPickDialog.getPickValue());
+
+            Intent intent = getIntent();
+            intent.putExtra(Key.NUMPICK_CATALOG_CREATURE_BUNDLE, bundle);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
-        if (parentActivity.equals(CommonKey.VAL_FROM_MAIN)) {
+        if (parentActivity.equals(Key.Val.FROM_MAIN)) {
             String name = listAdapter.getItem(position);
             Creature creature = dbTransaction.getCreatureFromCatalog(name);
             editCreatureDialog = new CreatureEditDialog("Edit", creature, true);
@@ -166,7 +173,10 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
             indexOfItemToEdit = position;
         }
 
-
+        if (parentActivity.equals(Key.Val.FROM_GROUP_ITEM)) {
+            indexOfItemToEdit = position;
+            numPickDialog.show(getFragmentManager(), "numPickDialog");
+        }
     }
 
     @Override

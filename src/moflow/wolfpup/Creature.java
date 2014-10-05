@@ -87,6 +87,11 @@ public class Creature implements Parcelable, Cloneable, Comparable {
             twin.fort = fort;
             twin.reflex = reflex;
             twin.will = will;
+
+            twin.currentHitPoints = twin.maxHitPoints;
+            twin.initiative = "0";
+            twin.isMonster = true;
+            twin.hasInit = false;
 		} catch ( CloneNotSupportedException e ) {
 			throw new Error();
 		}

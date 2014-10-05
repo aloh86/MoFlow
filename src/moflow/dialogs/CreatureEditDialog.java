@@ -13,8 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import moflow.activities.R;
-import moflow.utility.CommonKey;
-import moflow.utility.HitDie;
+import moflow.utility.Key;
 import moflow.wolfpup.Creature;
 
 /**
@@ -132,8 +131,8 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         savingThrowsLayout = ( LinearLayout ) view.findViewById( R.id.edit_savingThrowsLayout );
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( getActivity().getApplicationContext() );
-        showAbilityScores = sharedPref.getBoolean( CommonKey.ABILITY_SCORES_KEY, false  );
-        showSavingThrows = sharedPref.getBoolean( CommonKey.SAVING_THROW_KEY, false );
+        showAbilityScores = sharedPref.getBoolean( Key.PREF_SCORE, false  );
+        showSavingThrows = sharedPref.getBoolean( Key.PREF_SAVETHROW, false );
 
         if ( !showAbilityScores )
             abilityScoresLayout.setVisibility( View.GONE );

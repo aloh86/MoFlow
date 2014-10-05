@@ -65,6 +65,9 @@
     <string name="pOpen">(</string>
     <string name="pClose">)</string>
 
+    <!-- Dialogs -->
+    <string name="pickCreatureNum">Select number of creatures to add:</string>
+
     <!-- Preferences -->
     <string name="prefHeader_optionalInfo">Optional Info</string>
     <string name="prefHeader_catalog">Creature Catalog</string>

@@ -52,7 +52,7 @@ public class DBTransaction {
 
     public ArrayList< String > getGroupList( String groupType )
     {
-        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+        if ( groupType.equals( Key.Val.PARTY) )
             cur = db.getAllParties();
         else
             cur = db.getAllEncounters();
@@ -70,7 +70,7 @@ public class DBTransaction {
 
     public ArrayList< Creature > getGroupItemList( String groupType, String groupName )
     {
-        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+        if ( groupType.equals( Key.Val.PARTY) )
             cur = db.getPCForGroup( groupName );
         else
             cur = db.getCreaturesForEncounter( groupName );
@@ -143,7 +143,7 @@ public class DBTransaction {
     // for new parties or encounters
     public void insertNewGroup( String groupName, String groupType )
     {
-        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+        if ( groupType.equals( Key.Val.PARTY) )
             db.insertParty( groupName );
         else
             db.insertEncounter( groupName );
@@ -152,7 +152,7 @@ public class DBTransaction {
     // for new player characters or monsters
     public void insertNewCreature( String groupName, Creature critter, String groupType )
     {
-        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+        if ( groupType.equals( Key.Val.PARTY) )
             db.insertPlayer( groupName, critter );
         else
             db.insertCreature( groupName, critter );
@@ -177,7 +177,7 @@ public class DBTransaction {
     public void deleteGroup( final ArrayList< String > toDelete, String groupType )
     {
         for ( int i = 0; i < toDelete.size(); i++ ) {
-            if ( groupType.equals( CommonKey.VAL_PARTY ) )
+            if ( groupType.equals( Key.Val.PARTY) )
                 db.deletePartyRecord( toDelete.get( i ) );
             else
                 db.deleteEncounterRecord( toDelete.get( i ) );
@@ -187,7 +187,7 @@ public class DBTransaction {
     public void deleteCreatureFromGroup( final ArrayList< Creature > toDelete, String groupName, String groupType )
     {
         for ( int i = 0; i < toDelete.size(); i++ ) {
-            if ( groupType.equals( CommonKey.VAL_PARTY ) )
+            if ( groupType.equals( Key.Val.PARTY) )
                 db.deletePC( groupName, toDelete.get( i ).getCreatureName() );
             else
                 db.deleteCreature( groupName, toDelete.get( i ).getCreatureName() );
@@ -210,7 +210,7 @@ public class DBTransaction {
 
     public void renameGroup( String newName, String oldName, String groupType )
     {
-        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+        if ( groupType.equals( Key.Val.PARTY) )
             db.updatePartyRecord( newName, oldName );
         else
             db.updateEncounterRecord( newName, oldName );
@@ -218,7 +218,7 @@ public class DBTransaction {
 
     public void updateExistingCreature( Creature critter, String groupName, String creatureNamePreChange, String groupType )
     {
-        if ( groupType.equals( CommonKey.VAL_PARTY ) )
+        if ( groupType.equals( Key.Val.PARTY) )
             db.updatePlayerRecord( critter, groupName, creatureNamePreChange );
         else
             db.updateCreatureRecord( critter, groupName, creatureNamePreChange );

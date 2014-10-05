@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import moflow.activities.R;
 import moflow.utility.AbilityScoreMod;
-import moflow.utility.CommonKey;
+import moflow.utility.Key;
 import moflow.wolfpup.Creature;
 
 import java.util.List;
@@ -63,7 +63,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
             holder.initScore.setText(creature.getInitiative());
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( mContext );
-        boolean showAbilityScores = sharedPref.getBoolean( CommonKey.ABILITY_SCORES_KEY, false  );
+        boolean showAbilityScores = sharedPref.getBoolean( Key.PREF_SCORE, false  );
 
         if ( showAbilityScores ) {
             holder.strScore.setText(creature.getStrength());
@@ -98,7 +98,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         } else
             holder.abilityScoresLayout.setVisibility(View.GONE);
 
-        boolean showSavingThrows = sharedPref.getBoolean(CommonKey.SAVING_THROW_KEY, false);
+        boolean showSavingThrows = sharedPref.getBoolean(Key.PREF_SAVETHROW, false);
 
         if ( showSavingThrows ) {
             holder.fortScore.setText(creature.getFortitude());

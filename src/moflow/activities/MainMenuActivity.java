@@ -13,7 +13,7 @@ import android.widget.Toast;
 import moflow.adapters.*;
 import moflow.dialogs.DonateDialogFragment;
 import moflow.dialogs.HelpDialogFragment;
-import moflow.utility.CommonKey;
+import moflow.utility.Key;
 /*
 ===============================================================================
 MainMenuActivity.java
@@ -89,17 +89,17 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id ) {
 		if ( position == Position.PC_MANAGER.ordinal() ) {
             Intent intent = new Intent( "moflow.activities.GroupListActivity" );
-            intent.putExtra( CommonKey.KEY_GROUP_TYPE, CommonKey.VAL_PARTY );
+            intent.putExtra( Key.GROUP_TYPE, Key.Val.PARTY);
 			startActivityForResult(intent, 1); // not using request code, can be any value
         }
 		else if ( position == Position.ENC_MANAGER.ordinal() ) {
             Intent intent = new Intent( "moflow.activities.GroupListActivity" );
-            intent.putExtra( CommonKey.KEY_GROUP_TYPE, CommonKey.VAL_ENC );
+            intent.putExtra( Key.GROUP_TYPE, Key.Val.ENCOUNTER);
             startActivityForResult(intent, 1); // not using request code, can be any value
         }
 		else if ( position == Position.CREATURE.ordinal() ) {
             Intent intent = new Intent( "moflow.activities.CatalogActivity" );
-            intent.putExtra( CommonKey.KEY_PARENT_ACTIVITY, CommonKey.VAL_FROM_MAIN );
+            intent.putExtra( Key.PARENT_ACTIVITY, Key.Val.FROM_MAIN);
             startActivityForResult(intent, 1); // not using request code, can be any value
         }
 		else if ( position == Position.INIT.ordinal() )

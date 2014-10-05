@@ -9,10 +9,9 @@ import android.os.Bundle;
 import android.widget.*;
 import moflow.dialogs.NameDialogFragment;
 import moflow.dialogs.SimpleDialogListener;
-import moflow.utility.CommonKey;
+import moflow.utility.Key;
 import moflow.utility.DBTransaction;
 import moflow.utility.NameModifier;
-import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,12 +42,12 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         super.onCreate( savedInstanceState );
 
         try {
-            groupType = getIntent().getExtras().getString( CommonKey.KEY_GROUP_TYPE );
+            groupType = getIntent().getExtras().getString( Key.GROUP_TYPE);
         } catch ( NullPointerException npe ) {
             Toast.makeText( this, "onCreate: groupType Extra could not be found.", Toast.LENGTH_LONG );
         }
 
-        this.setTitle( groupType.equals( CommonKey.VAL_PARTY ) ? "Parties" : "Encounters" );
+        this.setTitle( groupType.equals( Key.Val.PARTY) ? "Parties" : "Encounters" );
 
         dbTransaction = new DBTransaction( this );
 
@@ -116,8 +115,8 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
     @Override
     public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
             Intent intent = new Intent( "moflow.activities.EditGroupActivity" );
-            intent.putExtra( CommonKey.KEY_GROUP_TYPE, groupType );
-            intent.putExtra( CommonKey.KEY_GROUP_NAME, listAdapter.getItem( position ) );
+            intent.putExtra( Key.GROUP_TYPE, groupType );
+            intent.putExtra( Key.GROUP_NAME, listAdapter.getItem( position ) );
             startActivityForResult( intent, 1 );
     }
 
