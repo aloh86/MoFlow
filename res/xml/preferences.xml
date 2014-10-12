@@ -32,8 +32,7 @@
                 android:dialogTitle="Choose Edition"
                 android:summary="@string/summary_catalog"
                 android:entries="@array/prefArray_catalogEditionsEntries"
-                android:entryValues="@array/prefArray_catalogEditionsValues"
-                android:defaultValue="5">
+                android:entryValues="@array/prefArray_catalogEditionsValues">
         </moflow.wolfpup.CustomCatalogListPreference>
 
     </PreferenceCategory>

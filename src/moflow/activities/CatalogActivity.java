@@ -71,27 +71,30 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
 
 
     @Override
-    protected void onNewIntent( Intent intent ) {
+    protected void onNewIntent( Intent intent )
+    {
         handleIntent( intent );
     }
 
-    private void handleIntent( Intent intent ) {
+    private void handleIntent(Intent intent)
+    {
 
-        if ( Intent.ACTION_SEARCH.equals( intent.getAction() ) ) {
-            String query = intent.getStringExtra( SearchManager.QUERY );
+        if ( Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
             // use query
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_catalog, menu);
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager = ( SearchManager ) getSystemService( Context.SEARCH_SERVICE );
-        SearchView searchView = ( SearchView ) menu.findItem( R.id.search ).getActionView();
-        searchView.setSearchableInfo( searchManager.getSearchableInfo(getComponentName() ) );
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
     }
@@ -100,17 +103,18 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
      * Action bar item handling.
      */
     @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle presses on the action bar items
-        switch ( item.getItemId() ) {
+        switch (item.getItemId()) {
             case R.id.action_new:
-                newCreatureDialog.show( getFragmentManager(), "newCatalogCreature" );
+                newCreatureDialog.show(getFragmentManager(), "newCatalogCreature");
                 break;
             case R.id.action_help:
-                Toast.makeText( this, "Long-click to delete an item. Tap an item to edit or select.", Toast.LENGTH_LONG ).show();
+                Toast.makeText(this, "Long-click to delete an item. Tap an item to edit or select.", Toast.LENGTH_LONG).show();
                 break;
             default:
-                return super.onOptionsItemSelected( item );
+                return super.onOptionsItemSelected(item);
         }
         return false;
     }
