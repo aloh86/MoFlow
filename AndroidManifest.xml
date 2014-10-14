@@ -34,15 +34,15 @@
         </activity>
 
         <activity
-                android:name=".CatalogActivity" >
+                android:name=".CatalogActivity"
+                android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="moflow.activities.CatalogActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH"
-                        android:launchMode="singleTop"/>
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
 
             <meta-data android:name="android.app.searchable"

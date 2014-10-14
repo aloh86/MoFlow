@@ -4,6 +4,7 @@
 
     <!-- ContentDescriptions -->
     <string name="icon_img">Icon Image</string>
+    <string name="no_results">No results\nTry typing more letters.</string>
     
     <!-- Main Menu Strings -->
     <string name="actbar_help">Help</string>

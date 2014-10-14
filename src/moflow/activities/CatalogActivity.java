@@ -22,7 +22,7 @@ import java.util.Comparator;
 /**
  * Created by Alex on 9/22/14.
  */
-public class CatalogActivity extends ListActivity implements AdapterView.OnItemClickListener, AbsListView.MultiChoiceModeListener, SimpleDialogListener
+public class CatalogActivity extends ListActivity implements AdapterView.OnItemClickListener, AbsListView.MultiChoiceModeListener, SimpleDialogListener, MenuItem.OnActionExpandListener
 {
     private DBTransaction dbTransaction;
     private ArrayList< String > groupList;
@@ -54,7 +54,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
                 this,
                 android.R.layout.simple_list_item_checked,
                 groupList);
-        setListAdapter( listAdapter );
+        setListAdapter(listAdapter);
 
         getListView().setOnItemClickListener( this );
         getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE_MODAL );
@@ -69,11 +69,10 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
         //handleIntent( getIntent() );
     }
 
-
     @Override
-    protected void onNewIntent( Intent intent )
+    protected void onNewIntent(Intent intent)
     {
-        handleIntent( intent );
+        handleIntent(intent);
     }
 
     private void handleIntent(Intent intent)
@@ -81,8 +80,37 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
 
         if ( Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            // use query
+            filterResults(query.toLowerCase());
         }
+    }
+
+    private void filterResults(String query)
+    {
+        ArrayList<String> filterList = new ArrayList<String>();
+
+        for (int i = 0; i < groupList.size(); i++) {
+            if (query.length() > 3) {
+                if (groupList.get(i).toLowerCase().startsWith(query) || groupList.get(i).toLowerCase().contains(query)) {
+                    filterList.add(groupList.get(i));
+                }
+            }
+            else if (query.length() > 0 && query.length() <= 3) {
+                if (groupList.get(i).toLowerCase().startsWith(query)) {
+                    filterList.add(groupList.get(i));
+                }
+            }
+        }
+
+        if (filterList.isEmpty()) {
+            filterList.add(getString(R.string.no_results));
+        }
+
+        listAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_checked,
+                filterList);
+        setListAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -90,6 +118,8 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_catalog, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        item.setOnActionExpandListener(this);
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -169,6 +199,12 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
+        if (listAdapter.getCount() == 1) {
+            if (listAdapter.getItem(0).equals(getString(R.string.no_results))) {
+                return;
+            }
+        }
+
         if (parentActivity.equals(Key.Val.FROM_MAIN)) {
             String name = listAdapter.getItem(position);
             Creature creature = dbTransaction.getCreatureFromCatalog(name);
@@ -186,10 +222,10 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     @Override
     public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked)
     {
-        if ( checked )
-            deleteList.add( listAdapter.getItem( position ) );
+        if (checked)
+            deleteList.add(listAdapter.getItem(position));
         else
-            deleteList.remove( listAdapter.getItem( position ) );
+            deleteList.remove(listAdapter.getItem(position));
     }
 
     @Override
@@ -197,6 +233,16 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     {
         MenuInflater inflater = actionMode.getMenuInflater();
         inflater.inflate( R.menu.actionbar_del, menu );
+
+        if (listAdapter.getCount() == 1) {
+            if (listAdapter.getItem(0).equals(getString(R.string.no_results))) {
+                menu.findItem(R.id.action_discard).setEnabled(false).getIcon().setAlpha(128);
+            }
+        }
+        else {
+            menu.getItem(R.id.action_discard).setEnabled(false).getIcon().setAlpha(255);
+        }
+
         return true;
     }
 
@@ -251,5 +297,23 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     private void invalidFieldMessage()
     {
         Toast.makeText( this, "All fields must be filled.", Toast.LENGTH_LONG ).show();
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+        groupList.clear();
+        groupList = dbTransaction.getCatalogItemList();
+        listAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_checked,
+                groupList);
+        setListAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
+        return true;
     }
 }
