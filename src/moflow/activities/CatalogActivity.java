@@ -314,6 +314,8 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
                 groupList);
         setListAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
+
+        Toast.makeText(this, "Filters cleared", Toast.LENGTH_SHORT).show();
         return true;
     }
 }
