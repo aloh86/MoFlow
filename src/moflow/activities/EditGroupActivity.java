@@ -9,10 +9,7 @@ import android.widget.*;
 import moflow.adapters.DisplayItemAdapter;
 import moflow.dialogs.CreatureEditDialog;
 import moflow.dialogs.SimpleDialogListener;
-import moflow.utility.HitDie;
-import moflow.utility.Key;
-import moflow.utility.DBTransaction;
-import moflow.utility.NameModifier;
+import moflow.utility.*;
 import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
@@ -162,18 +159,29 @@ public class EditGroupActivity extends ListActivity
         if ( dialog == newCreatureDialog) {
             if ( !newCreatureDialog.isEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
+
+                if (critter == null) {
+                    CommonToast.invalidDieToast(this);
+                    return;
+                }
+
                 critter.setCreatureName( NameModifier.makeNameUnique2( groupList, critter.getCreatureName() ) );
                 groupList.add( critter );
                 dbTransaction.insertNewCreature( groupName, critter, groupType );
                 listAdapter.sort( Creature.nameComparator() );
                 listAdapter.notifyDataSetChanged();
             } else
-                invalidFieldMessage();
+                CommonToast.invalidFieldToast(this);
         }
 
         if ( dialog == editCreatureDialog ) {
             if ( !editCreatureDialog.isEmptyFields() ) {
                 Creature thing = editCreatureDialog.getCritter();
+
+                if (thing == null) {
+                    CommonToast.invalidDieToast(this);
+                    return;
+                }
 
                 if ( thing.equals( groupList.get( indexOfItemToEdit ) ) ) {
                     return;
@@ -189,25 +197,18 @@ public class EditGroupActivity extends ListActivity
                     listAdapter.notifyDataSetChanged();
                 }
             } else
-                invalidFieldMessage();
+                CommonToast.invalidFieldToast(this);
         }
     }
 
     // Negative click handler for new or edit creature dialog
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog)
-    {
-    }
-
-    private void invalidFieldMessage()
-    {
-        Toast.makeText( this, "All fields must be filled.", Toast.LENGTH_LONG ).show();
+    public void onDialogNegativeClick(DialogFragment dialog) {
     }
 
     // Activity ListView item click handler
     @Override
-    public void onItemClick( AdapterView<?> listView, View view, int position, long id )
-    {
+    public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
         Creature c = listAdapter.getItem( position );
         editCreatureDialog = new CreatureEditDialog( "Edit", c );
         editCreatureDialog.show( getFragmentManager(), "editCreatureDialog" );
@@ -216,8 +217,7 @@ public class EditGroupActivity extends ListActivity
 
     // New or Catalog Creature dialog onClick handler for encounter manager
     @Override
-    public void onClick( DialogInterface dialogInterface, int which )
-    {
+    public void onClick( DialogInterface dialogInterface, int which ) {
         final int SCRATCH = 0;
 
         if ( dialogInterface == newCreatureChoiceDialog ) {
@@ -233,8 +233,7 @@ public class EditGroupActivity extends ListActivity
 
     // Contextual Action Mode
     @Override
-    public void onItemCheckedStateChanged( ActionMode actionMode, int position, long id, boolean checked )
-    {
+    public void onItemCheckedStateChanged( ActionMode actionMode, int position, long id, boolean checked ) {
         if ( checked )
             deleteList.add( listAdapter.getItem( position ) );
         else
@@ -243,8 +242,7 @@ public class EditGroupActivity extends ListActivity
 
     // Contextual Action Mode
     @Override
-    public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
-    {
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
         listAdapter = null;
         listAdapter = new ArrayAdapter<Creature>(
                 this,
@@ -260,15 +258,13 @@ public class EditGroupActivity extends ListActivity
 
     // Contextual Action Mode
     @Override
-    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu)
-    {
+    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
         return false;
     }
 
     // Contextual Action Mode
     @Override
-    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
-    {
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
         switch ( menuItem.getItemId() ) {
             case R.id.action_discard:
                 deleteSelectedItems();
@@ -281,8 +277,7 @@ public class EditGroupActivity extends ListActivity
 
     // Contextual Action Mode
     @Override
-    public void onDestroyActionMode(ActionMode actionMode)
-    {
+    public void onDestroyActionMode(ActionMode actionMode) {
         deleteList.clear();
 
         listAdapter = null;

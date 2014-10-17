@@ -181,7 +181,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
             Collections.sort( groupList );
             listAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(this, "Party name required.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, groupType + " name required.", Toast.LENGTH_LONG).show();
         }
      }
 

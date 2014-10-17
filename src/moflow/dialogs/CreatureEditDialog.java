@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import moflow.activities.R;
+import moflow.utility.HitDie;
 import moflow.utility.Key;
 import moflow.wolfpup.Creature;
 
@@ -186,6 +187,12 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         thing.setArmorClass(armorClass.getText().toString());
         thing.setInitMod(initBonus.getText().toString());
         thing.setMaxHitPoints(maxHP.getText().toString());
+
+        String hitPointStr = thing.getMaxHitPoints();
+
+        if (!HitDie.isHitDieExpression(hitPointStr) && !HitDie.isDigit(hitPointStr)) {
+            return null;
+        }
 
         if ( showAbilityScores ) {
             thing.setStrength(strength.getText().toString());

@@ -11,6 +11,7 @@ import android.widget.*;
 import moflow.dialogs.CreatureEditDialog;
 import moflow.dialogs.NumPickDialog;
 import moflow.dialogs.SimpleDialogListener;
+import moflow.utility.CommonToast;
 import moflow.utility.Key;
 import moflow.utility.DBTransaction;
 import moflow.utility.NameModifier;
@@ -64,7 +65,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
 
         indexOfItemToEdit = -1;
 
-        newCreatureDialog = new CreatureEditDialog( "New Creature" );
+        newCreatureDialog = new CreatureEditDialog( "New Creature", null, true );
         numPickDialog = new NumPickDialog();
         //handleIntent( getIntent() );
     }
@@ -155,19 +156,31 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
         if ( dialog == newCreatureDialog ) {
             if ( !newCreatureDialog.isEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
+
+                if (critter == null) {
+                    CommonToast.invalidDieToast(this);
+                    return;
+                }
+
                 critter.setCreatureName( NameModifier.makeNameUnique( groupList, critter.getCreatureName() ) );
                 groupList.add(critter.getCreatureName());
                 dbTransaction.insertNewCreatureIntoCatalog(critter);
                 listAdapter.sort( nameComparator() );
                 listAdapter.notifyDataSetChanged();
             } else {
-                invalidFieldMessage();
+                CommonToast.invalidFieldToast(this);
             }
         }
 
         if ( dialog == editCreatureDialog ) {
             if ( !editCreatureDialog.isEmptyFields() ) {
                 Creature thing = editCreatureDialog.getCritter();
+
+                if (thing == null) {
+                    CommonToast.invalidDieToast(this);
+                    return;
+                }
+
                 String oldName = groupList.get( indexOfItemToEdit );
 
                 if ( !oldName.equals( thing.getCreatureName() ) )
@@ -178,7 +191,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
                 listAdapter.sort( nameComparator() );
                 listAdapter.notifyDataSetChanged();
             } else
-                invalidFieldMessage();
+                CommonToast.invalidFieldToast(this);
         }
 
         if ( dialog == numPickDialog ) {
@@ -240,7 +253,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
             }
         }
         else {
-            menu.getItem(R.id.action_discard).setEnabled(false).getIcon().setAlpha(255);
+            menu.findItem(R.id.action_discard).setEnabled(true).getIcon().setAlpha(255);
         }
 
         return true;
