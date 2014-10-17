@@ -148,7 +148,7 @@ public class EditGroupActivity extends ListActivity
     private void newCreatureFromScratch()
     {
         String type = ( groupType == Key.Val.PARTY ? "PC" : "Creature" );
-        newCreatureDialog = new CreatureEditDialog( "New " + type );
+        newCreatureDialog = CreatureEditDialog.newInstance( "New " + type, null, false );
         newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
     }
 
@@ -210,7 +210,7 @@ public class EditGroupActivity extends ListActivity
     @Override
     public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
         Creature c = listAdapter.getItem( position );
-        editCreatureDialog = new CreatureEditDialog( "Edit", c );
+        editCreatureDialog = CreatureEditDialog.newInstance( "Edit", c, false );
         editCreatureDialog.show( getFragmentManager(), "editCreatureDialog" );
         indexOfItemToEdit = position;
     }

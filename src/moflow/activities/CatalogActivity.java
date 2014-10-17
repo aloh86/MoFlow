@@ -65,9 +65,9 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
 
         indexOfItemToEdit = -1;
 
-        newCreatureDialog = new CreatureEditDialog( "New Creature", null, true );
+        newCreatureDialog = CreatureEditDialog.newInstance("New Creature", null, true);
+
         numPickDialog = new NumPickDialog();
-        //handleIntent( getIntent() );
     }
 
     @Override
@@ -221,7 +221,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
         if (parentActivity.equals(Key.Val.FROM_MAIN)) {
             String name = listAdapter.getItem(position);
             Creature creature = dbTransaction.getCreatureFromCatalog(name);
-            editCreatureDialog = new CreatureEditDialog("Edit", creature, true);
+            editCreatureDialog = CreatureEditDialog.newInstance("Edit", creature, true);
             editCreatureDialog.show( getFragmentManager(), "editCreatureDialog" );
             indexOfItemToEdit = position;
         }

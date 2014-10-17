@@ -49,22 +49,24 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
     private View view;
 
-    public CreatureEditDialog( String dialogTitle ) {
-        title = dialogTitle;
-        critter = null;
-        catalogCreature = false;
+    public static CreatureEditDialog newInstance(String dialogTitle, Creature critter, boolean isCatalog) {
+        CreatureEditDialog ced = new CreatureEditDialog();
+        Bundle args = new Bundle();
+        args.putString(Key.DIALOG_TITLE, dialogTitle);
+        args.putParcelable(Key.CREATURE_OBJECT, critter);
+        args.putBoolean(Key.TRUE_FALSE, isCatalog);
+        ced.setArguments(args);
+
+        return ced;
     }
 
-    public CreatureEditDialog( String dialogTitle, Creature someCritter ) {
-        title = dialogTitle;
-        critter = someCritter;
-        catalogCreature = false;
-    }
-
-    public CreatureEditDialog( String dialogTitle, Creature someCritter, boolean isCatalogCreature ) {
-        title = dialogTitle;
-        critter = someCritter;
-        catalogCreature = isCatalogCreature;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        title = bundle.getString(Key.DIALOG_TITLE);
+        critter = bundle.getParcelable(Key.CREATURE_OBJECT);
+        catalogCreature = bundle.getBoolean(Key.TRUE_FALSE);
     }
 
     @Override

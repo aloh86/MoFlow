@@ -17,6 +17,8 @@ public class Key {
     public static final String CREATURE_OBJECT = "creature_object";
     public static final String NUM__CREATURE_PICKED = "num_creature_picked";
     public static final String NUMPICK_CATALOG_CREATURE_BUNDLE = "creature_object_bundle";
+    public static final String DIALOG_TITLE = "dialogTitle";
+    public static final String TRUE_FALSE = "boolean";
 
     public static final int PICK_CREATURE = 1;
 
