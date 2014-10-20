@@ -42,21 +42,21 @@ public class Init_Table implements BaseColumns {
 	public static final String DB_CREATE =
 			"CREATE TABLE "  + TABLE_NAME + " ( " +
 			_ID				 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			COL_Init		 + " INTEGER NOT NULL, " +
-			COL_CreatureName + " VARCHAR(50) NOT NULL, " + 
-			COL_InitBonus 	 + " INTEGER NOT NULL, " +
-			COL_ArmorClass 	 + " INTEGER NOT NULL, " +
-			COL_CurrentHP	 + " INTEGER NOT NULL, " +
-			COL_MaxHP		 + " INTEGER NOT NULL, " +
+			COL_Init		 + " TEXT NOT NULL, " +
+			COL_CreatureName + " TEXT NOT NULL, " +
+			COL_InitBonus 	 + " TEXT NOT NULL, " +
+			COL_ArmorClass 	 + " TEXT NOT NULL, " +
+			COL_CurrentHP	 + " TEXT NOT NULL, " +
+			COL_MaxHP		 + " TEXT NOT NULL, " +
 			COL_Type		 + " INTEGER NOT NULL, " +
-            COL_STR         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_DEX         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_CON         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_INT         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_WIS         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_CHA         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_FORT        + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_REF         + " INTEGER NOT NULL DEFAULT 0, " +
-            COL_WILL        + " INTEGER NOT NULL DEFAULT 0 " +
+            COL_STR         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_DEX         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_CON         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_INT         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_WIS         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_CHA         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_FORT        + " TEXT NOT NULL DEFAULT '0', " +
+            COL_REF         + " TEXT NOT NULL DEFAULT '0', " +
+            COL_WILL        + " TEXT NOT NULL DEFAULT '0' " +
 			");";
 }

@@ -16,4 +16,17 @@
         <item>New</item>
         <item>Import from Catalog</item>
     </string-array>
+
+    <string-array name="newCatalogCreatureDialogChoices">
+        <item>New</item>
+        <item>Import from Parties</item>
+        <item>Import from Encounters</item>
+        <item>Import from Catalog</item>
+    </string-array>
+
+    <string-array name="deleteGroupDialogChoices">
+        <item>Remove PCs</item>
+        <item>Remove Monsters</item>
+        <item>Remove All</item>
+    </string-array>
 </resources>

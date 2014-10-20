@@ -37,8 +37,8 @@ public class EditGroupActivity extends ListActivity
         super.onCreate( savedInstanceState );
 
         try {
-            groupType = getIntent().getExtras().getString( Key.GROUP_TYPE);
-            groupName = getIntent().getExtras().getString( Key.GROUP_NAME);
+            groupType = getIntent().getExtras().getString(Key.GROUP_TYPE);
+            groupName = getIntent().getExtras().getString(Key.GROUP_NAME);
         } catch ( NullPointerException npe ) {
             Toast.makeText(this, "onCreate: intent extras could not be extracted.", Toast.LENGTH_LONG).show();
         }
@@ -108,8 +108,7 @@ public class EditGroupActivity extends ListActivity
      * Creates action bar menu.
      */
     @Override
-    public boolean onCreateOptionsMenu( Menu menu )
-    {
+    public boolean onCreateOptionsMenu( Menu menu ) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate( R.menu.actionbar_add, menu );
@@ -120,8 +119,7 @@ public class EditGroupActivity extends ListActivity
      * Action bar item handling.
      */
     @Override
-    public boolean onOptionsItemSelected( MenuItem item )
-    {
+    public boolean onOptionsItemSelected( MenuItem item ) {
         // Handle presses on the action bar items
         switch ( item.getItemId() ) {
             case R.id.action_new:
@@ -136,8 +134,7 @@ public class EditGroupActivity extends ListActivity
         return false;
     }
 
-    private void chooseNewCreatureOptions()
-    {
+    private void chooseNewCreatureOptions() {
         if ( groupType.equals( Key.Val.ENCOUNTER) )
             newCreatureChoiceDialog.show();
         else
@@ -145,8 +142,7 @@ public class EditGroupActivity extends ListActivity
     }
 
 
-    private void newCreatureFromScratch()
-    {
+    private void newCreatureFromScratch() {
         String type = ( groupType == Key.Val.PARTY ? "PC" : "Creature" );
         newCreatureDialog = CreatureEditDialog.newInstance( "New " + type, null, false );
         newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
@@ -154,8 +150,7 @@ public class EditGroupActivity extends ListActivity
 
     // Positive click handler for new or edit creature dialog
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog)
-    {
+    public void onDialogPositiveClick(DialogFragment dialog) {
         if ( dialog == newCreatureDialog) {
             if ( !newCreatureDialog.isEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
@@ -208,7 +203,7 @@ public class EditGroupActivity extends ListActivity
 
     // Activity ListView item click handler
     @Override
-    public void onItemClick( AdapterView<?> listView, View view, int position, long id ) {
+    public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
         Creature c = listAdapter.getItem( position );
         editCreatureDialog = CreatureEditDialog.newInstance( "Edit", c, false );
         editCreatureDialog.show( getFragmentManager(), "editCreatureDialog" );

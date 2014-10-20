@@ -4,19 +4,6 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-    <LinearLayout
-      android:orientation="vertical"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent">
-
-        <EditText
-                android:id="@+id/creatureNameEditText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/nameHint"
-                android:maxLength="50"
-                android:singleLine="true"
-                android:nextFocusDown="@+id/creatureArmorClassEditText"/>
 
         <LinearLayout
                 android:layout_width="fill_parent"
@@ -37,11 +24,11 @@
                         android:layout_height="wrap_content">
                     <TextView
                             style="@style/editCreatureDialogTextView"
-                            android:text="@string/display_maxHPLabel"/>
+                            android:text="@string/hitPointsLabel"/>
                     <EditText
                             android:id="@+id/creatureMaxHitPointsEditText"
                             style="@style/statEntry"
-                            android:hint="@string/maxHPHint"
+                            android:hint="@string/hpEditHint"
                             android:nextFocusDown="@+id/creatureInitBonusEditText"/>
                 </LinearLayout>
 
@@ -223,5 +210,4 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 </ScrollView>

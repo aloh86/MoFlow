@@ -102,10 +102,12 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
             intent.putExtra( Key.PARENT_ACTIVITY, Key.Val.FROM_MAIN);
             startActivityForResult(intent, 1); // not using request code, can be any value
         }
-		else if ( position == Position.INIT.ordinal() )
-			;
-        else if ( position == Position.OPTIONS.ordinal() )
-            startActivity( new Intent( "moflow.activities.SettingsActivity" ) );
+		else if ( position == Position.INIT.ordinal() ) {
+            startActivity(new Intent("moflow.activities.InitiativeActivity"));
+        }
+        else if ( position == Position.OPTIONS.ordinal() ) {
+            startActivity(new Intent("moflow.activities.SettingsActivity"));
+        }
 	}
 
     private void startEmailIntent() {

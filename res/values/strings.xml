@@ -25,11 +25,19 @@
     <string name="actbar_cancel">Cancel</string>
     <string name="search_title">Search Catalog</string>
     <string name="search_hint">i.e. Skeleton</string>
+    <string name="actbar_grpdelete">Remove by Group</string>
+    <string name="actbar_sortAscending">Sort Ascending</string>
+    <string name="actbar_sortDescending">Sort Descending</string>
+    <string name="actbar_prevItem">Previous</string>
+    <string name="actbar_nextItem">Next</string>
+    <string name="actbar_waitList">Hold Action</string>
 
-    <!-- Party and Encounter Item Edit Strings -->
+    <!-- Party, Encounter, and Initiative Item Edit Strings -->
     <string name="nameHint">Name</string>
-    <string name="healthInitLabel">Basics</string>
+    <string name="basicsLabel">Basics</string>
+    <string name="hitPointsLabel">Hit Points</string>
     <string name="maxHPHint">HP</string>
+    <string name="hpEditHint">e.g. 5/+5/-5</string>
     <string name="initBonusHint">Init</string>
     <string name="abilityScoresLabel">Ability Scores</string>
     <string name="strHint">STR</string>

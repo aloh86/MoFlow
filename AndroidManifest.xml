@@ -47,7 +47,14 @@
 
             <meta-data android:name="android.app.searchable"
                        android:resource="@xml/searchable" />
+        </activity>
 
+        <activity
+                android:name=".InitiativeActivity" >
+            <intent-filter>
+                <action android:name="moflow.activities.InitiativeActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <activity

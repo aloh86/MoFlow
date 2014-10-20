@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_new"
+          android:icon="@drawable/ic_action_new"
+          android:title="@string/actbar_add"
+          android:showAsAction="always"/>
+
+    <item android:id="@+id/action_nextItem"
+          android:icon="@drawable/ic_action_expand"
+          android:title="@string/actbar_nextItem"
+          android:showAsAction="always"/>
+
+    <item android:id="@+id/action_prevItem"
+          android:icon="@drawable/ic_action_collapse"
+          android:title="@string/actbar_prevItem"
+          android:showAsAction="always"/>
+
+    <item android:id="@+id/action_sortDescending"
+          android:icon="@drawable/ic_action_sort_by_size"
+          android:title="@string/actbar_sortDescending"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/action_sortAscending"
+          android:icon="@drawable/ic_action_sort_by_size"
+          android:title="@string/actbar_sortAscending"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/action_waitList"
+          android:icon="@drawable/ic_action_storage"
+          android:title="@string/actbar_waitList"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/action_group_delete"
+          android:icon="@drawable/ic_action_discard"
+          android:title="@string/actbar_grpdelete"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/action_help"
+          android:icon="@drawable/ic_action_help"
+          android:title="Help"
+          android:showAsAction="never"/>
+</menu>
