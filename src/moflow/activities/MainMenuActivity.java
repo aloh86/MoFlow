@@ -99,7 +99,7 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
         }
 		else if ( position == Position.CREATURE.ordinal() ) {
             Intent intent = new Intent( "moflow.activities.CatalogActivity" );
-            intent.putExtra( Key.PARENT_ACTIVITY, Key.Val.FROM_MAIN);
+            intent.putExtra( Key.PARENT_ACTIVITY, Key.Val.MAIN_ACTIVITY);
             startActivityForResult(intent, 1); // not using request code, can be any value
         }
 		else if ( position == Position.INIT.ordinal() ) {

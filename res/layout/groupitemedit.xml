@@ -18,6 +18,35 @@
                 android:singleLine="true"
                 android:nextFocusDown="@+id/creatureArmorClassEditText"/>
 
+        <TextView
+                android:id="@+id/creatureNameLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nameHint"
+                android:gravity="center"
+                android:singleLine="true"
+                android:nextFocusDown="@+id/creatureMaxHitPointsEditText"/>
+
+    <LinearLayout
+            android:id="@+id/creatureTypeLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="@string/creatureTypeLabel"
+                android:textColor="#31B6E7"/>
+        <Switch
+                android:id="@+id/creatureTypeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textOff="@string/typeSwitchOff"
+                android:textOn="@string/typeSwitchOn"/>
+    </LinearLayout>
+
         <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -29,10 +58,35 @@
                     android:text="@string/basicsLabel"
                     android:textColor="#31B6E7"/>
             <LinearLayout
+                    android:id="@+id/hpDamageLayout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                 <LinearLayout
+                        android:id="@+id/hitPointModLayout"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+                    <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center">
+                        <Switch
+                                android:id="@+id/hitPointModTypeSwitch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textOff="@string/hitPointSwitchOff"
+                                android:textOn="@string/hitPointSwitchOn"/>
+                    </LinearLayout>
+                    <EditText
+                            android:id="@+id/creatureHitPointModEditText"
+                            style="@style/statEntry"
+                            android:hint="@string/hpGainLossHint"
+                            android:nextFocusDown="@+id/creatureInitiativeEditText"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:id="@+id/maxHitPointsLayout"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
                     <TextView
@@ -42,7 +96,7 @@
                             android:id="@+id/creatureMaxHitPointsEditText"
                             style="@style/statEntry"
                             android:hint="@string/maxHPHint"
-                            android:nextFocusDown="@+id/creatureInitBonusEditText"/>
+                            android:nextFocusDown="@+id/creatureInitiativeEditText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -62,10 +116,11 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
                     <TextView
+                            android:id="@+id/initiativeLabel"
                             style="@style/editCreatureDialogTextView"
                             android:text="@string/display_initBonusLabel"/>
                     <EditText
-                            android:id="@+id/creatureInitBonusEditText"
+                            android:id="@+id/creatureInitiativeEditText"
                             style="@style/statEntry"
                             android:hint="@string/initBonusHint"
                             android:nextFocusDown="@+id/creatureStrEditText"/>

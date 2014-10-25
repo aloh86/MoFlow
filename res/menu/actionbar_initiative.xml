@@ -16,14 +16,14 @@
           android:title="@string/actbar_prevItem"
           android:showAsAction="always"/>
 
-    <item android:id="@+id/action_sortDescending"
-          android:icon="@drawable/ic_action_sort_by_size"
-          android:title="@string/actbar_sortDescending"
+    <item android:id="@+id/action_rollInit"
+          android:icon="@drawable/ic_action_collapse"
+          android:title="@string/actbar_rollInit"
           android:showAsAction="never"/>
 
-    <item android:id="@+id/action_sortAscending"
+    <item android:id="@+id/action_sortInitList"
           android:icon="@drawable/ic_action_sort_by_size"
-          android:title="@string/actbar_sortAscending"
+          android:title="@string/actbar_sortInitList"
           android:showAsAction="never"/>
 
     <item android:id="@+id/action_waitList"

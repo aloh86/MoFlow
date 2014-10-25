@@ -25,19 +25,19 @@
     <string name="actbar_cancel">Cancel</string>
     <string name="search_title">Search Catalog</string>
     <string name="search_hint">i.e. Skeleton</string>
-    <string name="actbar_grpdelete">Remove by Group</string>
-    <string name="actbar_sortAscending">Sort Ascending</string>
-    <string name="actbar_sortDescending">Sort Descending</string>
+    <string name="actbar_grpdelete">Remove</string>
+    <string name="actbar_sortInitList">Sort</string>
     <string name="actbar_prevItem">Previous</string>
     <string name="actbar_nextItem">Next</string>
-    <string name="actbar_waitList">Hold Action</string>
+    <string name="actbar_waitList">Wait List</string>
+    <string name="actbar_rollInit">Roll Initiative</string>
 
     <!-- Party, Encounter, and Initiative Item Edit Strings -->
     <string name="nameHint">Name</string>
     <string name="basicsLabel">Basics</string>
     <string name="hitPointsLabel">Hit Points</string>
     <string name="maxHPHint">HP</string>
-    <string name="hpEditHint">e.g. 5/+5/-5</string>
+    <string name="hpGainLossHint">Life gain/loss</string>
     <string name="initBonusHint">Init</string>
     <string name="abilityScoresLabel">Ability Scores</string>
     <string name="strHint">STR</string>
@@ -57,6 +57,14 @@
     <string name="refHint">REF</string>
     <string name="willHint">WILL</string>
     <string name="armorClassHint">AC</string>
+    <string name="creatureTypeLabel">Type</string>
+    <string name="creatureTypePC">Player</string>
+    <string name="creatureTypeMonster">Monster</string>
+    <string name="initiativeLabel">Initiative</string>
+    <string name="hitPointSwitchOff">Damage</string>
+    <string name="hitPointSwitchOn">Heal</string>
+    <string name="typeSwitchOff">Monster</string>
+    <string name="typeSwitchOn">Player</string>
 
     <!-- Creature Stat Display Strings -->
     <string name="display_armorClassLabel">Armor Class</string>
@@ -89,7 +97,7 @@
     <string name="summary_catalog">Choose a version to load monsters into Creature Catalog.</string>
 
     <string name="openSourceHelp">This c</string>
-    <string name="openSourceHelpCatalog">This catalog is not available! MoFlow is a free and open source project. Help implement this catalog at github.</string>
+    <string name="openSourceHelpCatalog">This catalog is not available yet! MoFlow is a free and open source project. Help implement this catalog at github.</string>
 
     <!--Context Menu-->
     <string name="menu_moveUp">Move Up</string>
@@ -100,6 +108,11 @@
     <!--Context Menu-->
     <string name="scratchCreature">New Creature</string>
     <string name="importCatalogCreature">Import from Catalog</string>
+
+    <!--Toast Messages-->
+    <string name="initHelpMsg">Long-click to delete single/multiple item(s). Tap an item to edit.</string>
+    <string name="invalidFieldMsg">All fields must be filled.</string>
+    <string name="invalidDieExpMsg">Please enter valid hit point value or hit die expression.</string>
 
     <!-- Sample Text -->
     <string name="sample">temp</string>

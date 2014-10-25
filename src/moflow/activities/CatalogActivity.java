@@ -65,7 +65,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
 
         indexOfItemToEdit = -1;
 
-        newCreatureDialog = CreatureEditDialog.newInstance("New Creature", null, true);
+        newCreatureDialog = CreatureEditDialog.newInstance("New Creature", null, Key.Val.CATALOG_ACTIVITY);
 
         numPickDialog = new NumPickDialog();
     }
@@ -154,7 +154,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     public void onDialogPositiveClick(DialogFragment dialog)
     {
         if ( dialog == newCreatureDialog ) {
-            if ( !newCreatureDialog.isEmptyFields() ) {
+            if ( !newCreatureDialog.hasEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
 
                 if (critter == null) {
@@ -173,7 +173,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
         }
 
         if ( dialog == editCreatureDialog ) {
-            if ( !editCreatureDialog.isEmptyFields() ) {
+            if ( !editCreatureDialog.hasEmptyFields() ) {
                 Creature thing = editCreatureDialog.getCritter();
 
                 if (thing == null) {
@@ -218,15 +218,15 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
             }
         }
 
-        if (parentActivity.equals(Key.Val.FROM_MAIN)) {
+        if (parentActivity.equals(Key.Val.MAIN_ACTIVITY)) {
             String name = listAdapter.getItem(position);
             Creature creature = dbTransaction.getCreatureFromCatalog(name);
-            editCreatureDialog = CreatureEditDialog.newInstance("Edit", creature, true);
+            editCreatureDialog = CreatureEditDialog.newInstance("Edit", creature, Key.Val.CATALOG_ACTIVITY);
             editCreatureDialog.show( getFragmentManager(), "editCreatureDialog" );
             indexOfItemToEdit = position;
         }
 
-        if (parentActivity.equals(Key.Val.FROM_GROUP_ITEM)) {
+        if (parentActivity.equals(Key.Val.EDITGROUP_ACTIVITY)) {
             indexOfItemToEdit = position;
             numPickDialog.show(getFragmentManager(), "numPickDialog");
         }

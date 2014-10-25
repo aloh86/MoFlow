@@ -196,6 +196,10 @@ public class DBTransaction {
         }
     }
 
+    public void insertNewCreatureIntoInitiative(Creature critter) {
+        db.insertCreatureIntoInitiative(critter);
+    }
+
     // Deletion
 
     public void deleteGroup( final ArrayList< String > toDelete, String groupType ) {

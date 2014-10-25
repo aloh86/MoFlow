@@ -19,9 +19,9 @@
 
     <string-array name="newCatalogCreatureDialogChoices">
         <item>New</item>
-        <item>Import from Parties</item>
-        <item>Import from Encounters</item>
-        <item>Import from Catalog</item>
+        <item>Party</item>
+        <item>Encounter</item>
+        <item>Catalog</item>
     </string-array>
 
     <string-array name="deleteGroupDialogChoices">

@@ -18,15 +18,17 @@ public class Key {
     public static final String NUM__CREATURE_PICKED = "num_creature_picked";
     public static final String NUMPICK_CATALOG_CREATURE_BUNDLE = "creature_object_bundle";
     public static final String DIALOG_TITLE = "dialogTitle";
-    public static final String TRUE_FALSE = "boolean";
+    public static final String EDIT_CREATURE_DIALOG_USAGE = "dialogUsage";
 
     public static final int PICK_CREATURE = 1;
 
     public static class Val {
         public static final String PARTY = "party";
         public static final String ENCOUNTER = "encounter";
-        public static final String FROM_MAIN = "mainMenuActivity";
-        public static final String FROM_INIT = "initiativeActivity";
-        public static final String FROM_GROUP_ITEM = "encounterActivity";
+        public static final String MAIN_ACTIVITY = "mainMenuActivity";
+        public static final String EDITGROUP_ACTIVITY = "groupActivity";
+        public static final String CATALOG_ACTIVITY = "catalogActivity";
+        public static final String USAGE_INIT_NEW_CREATURE = "initNewCreature";
+        public static final String USAGE_INIT_EDIT_CREATURE = "initEditCreature";
     }
 }

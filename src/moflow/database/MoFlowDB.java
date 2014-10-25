@@ -161,7 +161,6 @@ public class MoFlowDB {
 		initVal.put( Creatures_Table.COL_InitBonus, critter.getInitMod() );
 		initVal.put( Creatures_Table.COL_ArmorClass, critter.getArmorClass() );
 		initVal.put( Creatures_Table.COL_MaxHP, critter.getMaxHitPoints() );
-        initVal.put( Creatures_Table.COL_MaxHP, critter.getMaxHitPoints() );
         initVal.put( Creatures_Table.COL_STR, critter.getStrength() );
         initVal.put( Creatures_Table.COL_DEX, critter.getDexterity() );
         initVal.put( Creatures_Table.COL_CON, critter.getConstitution() );
@@ -180,7 +179,7 @@ public class MoFlowDB {
 	 * @param creature the creature to insert
 	 * @return tuple position of this entry
 	 */
-	public long insertItemFromInitiative( Creature creature ) {
+	public long insertCreatureIntoInitiative( Creature creature ) {
 		ContentValues initVal = new ContentValues();
 		initVal.put( Init_Table.COL_Init, creature.getInitiative() );
 		initVal.put( Init_Table.COL_CreatureName, creature.getCreatureName() );
@@ -189,6 +188,15 @@ public class MoFlowDB {
 		initVal.put( Init_Table.COL_CurrentHP, creature.getCurrentHitPoints() );
 		initVal.put( Init_Table.COL_MaxHP, creature.getMaxHitPoints() );
 		initVal.put( Init_Table.COL_Type, ( creature.isMonster() == false ? 0 : 1 ) ); // 0 = PC, 1 = Creature
+        initVal.put( Init_Table.COL_STR, creature.getStrength() );
+        initVal.put( Init_Table.COL_DEX, creature.getDexterity() );
+        initVal.put( Init_Table.COL_CON, creature.getConstitution() );
+        initVal.put( Init_Table.COL_INT, creature.getIntelligence() );
+        initVal.put( Init_Table.COL_WIS, creature.getWisdom() );
+        initVal.put( Init_Table.COL_CHA, creature.getCharisma() );
+        initVal.put( Init_Table.COL_FORT, creature.getFortitude() );
+        initVal.put( Init_Table.COL_REF, creature.getReflex() );
+        initVal.put( Init_Table.COL_WILL, creature.getWill() );
 		
 		return db.insert( Init_Table.TABLE_NAME, null, initVal );
 	}

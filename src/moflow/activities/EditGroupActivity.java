@@ -90,13 +90,6 @@ public class EditGroupActivity extends ListActivity
             Creature copy = pickedCreature.clone();
             copy.setCreatureName(NameModifier.makeNameUnique2(groupList, copy.getCreatureName()));
 
-            if (HitDie.isHitDieExpression(copy.getMaxHitPoints())) {
-                HitDie hitDie = new HitDie(copy.getMaxHitPoints());
-                int rollResult = hitDie.rollHitDie();
-                String strMaxHP = String.valueOf(rollResult);
-                copy.setMaxHitPoints(strMaxHP);
-            }
-
             listAdapter.add(copy);
             listAdapter.sort(Creature.nameComparator());
             listAdapter.notifyDataSetChanged();
@@ -144,7 +137,7 @@ public class EditGroupActivity extends ListActivity
 
     private void newCreatureFromScratch() {
         String type = ( groupType == Key.Val.PARTY ? "PC" : "Creature" );
-        newCreatureDialog = CreatureEditDialog.newInstance( "New " + type, null, false );
+        newCreatureDialog = CreatureEditDialog.newInstance("New " + type, null, Key.Val.EDITGROUP_ACTIVITY);
         newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
     }
 
@@ -152,7 +145,7 @@ public class EditGroupActivity extends ListActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         if ( dialog == newCreatureDialog) {
-            if ( !newCreatureDialog.isEmptyFields() ) {
+            if ( !newCreatureDialog.hasEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
 
                 if (critter == null) {
@@ -170,7 +163,7 @@ public class EditGroupActivity extends ListActivity
         }
 
         if ( dialog == editCreatureDialog ) {
-            if ( !editCreatureDialog.isEmptyFields() ) {
+            if ( !editCreatureDialog.hasEmptyFields() ) {
                 Creature thing = editCreatureDialog.getCritter();
 
                 if (thing == null) {
@@ -205,7 +198,7 @@ public class EditGroupActivity extends ListActivity
     @Override
     public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
         Creature c = listAdapter.getItem( position );
-        editCreatureDialog = CreatureEditDialog.newInstance( "Edit", c, false );
+        editCreatureDialog = CreatureEditDialog.newInstance("Edit", c, Key.Val.EDITGROUP_ACTIVITY);
         editCreatureDialog.show( getFragmentManager(), "editCreatureDialog" );
         indexOfItemToEdit = position;
     }
@@ -220,7 +213,7 @@ public class EditGroupActivity extends ListActivity
                 newCreatureFromScratch();
             } else {
                 Intent intent = new Intent("moflow.activities.CatalogActivity");
-                intent.putExtra(Key.PARENT_ACTIVITY, Key.Val.FROM_GROUP_ITEM);
+                intent.putExtra(Key.PARENT_ACTIVITY, Key.Val.EDITGROUP_ACTIVITY);
                 startActivityForResult(intent, Key.PICK_CREATURE);
             }
         }
