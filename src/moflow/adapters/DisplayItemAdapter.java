@@ -66,35 +66,29 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         boolean showAbilityScores = sharedPref.getBoolean( Key.PREF_SCORE, false  );
 
         if ( showAbilityScores ) {
-            holder.strScore.setText(creature.getStrength());
             String mod = AbilityScoreMod.get345AbilityScoreMod(creature.getStrength());
             mod = modToString(mod);
-            holder.strMod.setText(mod);
+            holder.strScore.setText(creature.getStrength() + " (" + mod + ")");
 
-            holder.dexScore.setText(creature.getDexterity());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getDexterity() );
             mod = modToString(mod);
-            holder.dexMod.setText(mod);
+            holder.dexScore.setText(creature.getDexterity() + " (" + mod + ")");
 
-            holder.conScore.setText(creature.getConstitution());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getConstitution() );
             mod = modToString(mod);
-            holder.conMod.setText(mod);
+            holder.conScore.setText(creature.getConstitution() + " (" + mod + ")");
 
-            holder.intScore.setText(creature.getIntelligence());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getIntelligence() );
             mod = modToString(mod);
-            holder.intMod.setText(mod);
+            holder.intScore.setText(creature.getIntelligence() + " (" + mod + ")");
 
-            holder.wisScore.setText(creature.getWisdom());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getWisdom() );
             mod = modToString(mod);
-            holder.wisMod.setText(mod);
+            holder.wisScore.setText(creature.getWill() + " (" + mod + ")");
 
-            holder.chaScore.setText(creature.getCharisma());
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getCharisma() );
             mod = modToString(mod);
-            holder.chaMod.setText(mod);
+            holder.chaScore.setText(creature.getCharisma() + " (" + mod + ")");
         } else
             holder.abilityScoresLayout.setVisibility(View.GONE);
 
@@ -124,17 +118,11 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         // optional ability scores
         public LinearLayout abilityScoresLayout;
         public TextView strScore;
-        public TextView strMod;
         public TextView dexScore;
-        public TextView dexMod;
         public TextView conScore;
-        public TextView conMod;
         public TextView intScore;
-        public TextView intMod;
         public TextView wisScore;
-        public TextView wisMod;
         public TextView chaScore;
-        public TextView chaMod;
 
         // optional saving throws
         public LinearLayout savingThrowsLayout;
@@ -152,17 +140,11 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
 
             abilityScoresLayout = (LinearLayout) convertView.findViewById(R.id.display_abilityScoresLayout);
             strScore = (TextView) convertView.findViewById(R.id.display_strScore);
-            strMod = ( TextView ) convertView.findViewById( R.id.display_strMod );
             dexScore = ( TextView ) convertView.findViewById( R.id.display_dexScore );
-            dexMod = ( TextView ) convertView.findViewById( R.id.display_dexMod );
             conScore = ( TextView ) convertView.findViewById( R.id.display_conScore );
-            conMod = ( TextView ) convertView.findViewById( R.id.display_conMod );
             intScore = ( TextView ) convertView.findViewById( R.id.display_intScore );
-            intMod = ( TextView ) convertView.findViewById( R.id.display_intMod );
             wisScore = ( TextView ) convertView.findViewById( R.id.display_wisScore );
-            wisMod = ( TextView ) convertView.findViewById( R.id.display_wisMod );
             chaScore = ( TextView ) convertView.findViewById( R.id.display_chaScore );
-            chaMod = ( TextView ) convertView.findViewById( R.id.display_chaMod );
 
             savingThrowsLayout = ( LinearLayout ) convertView.findViewById( R.id.display_savingThrowLayout );
             fortScore = ( TextView ) convertView.findViewById( R.id.display_fortScore );

@@ -4,131 +4,116 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="3dp">
 
-    <TextView
-            android:id="@+id/display_creatureName"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/sample"
-            android:textSize="18dp"/>
-
-    <TableLayout
+    <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-        <TableRow
+        <TextView
+                android:id="@+id/display_creatureName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/sample"
+                android:textSize="18dp"/>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+            <TextView
+                    android:id="@+id/display_static_initBonusLabel"
+                    style="@style/displayTableCell"
+                    android:text="@string/display_initBonusLabel"
+                    android:drawableLeft="@drawable/init"/>
+            <TextView
+                    android:id="@+id/display_initBonusLabel"
+                    style="@style/displayTableCell"
+                    android:text="@string/sampleNum"
+                    android:layout_marginRight="5dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+        <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             <TextView
                     android:id="@+id/display_static_armorClassLabel"
-                    style="@style/displayTableCell"
-                    android:text="@string/display_armorClassLabel"/>
-            <TextView
-                    android:id="@+id/display_static_maxHPLabel"
-                    style="@style/displayTableCell"
-                    android:text="@string/display_maxHPLabel"/>
-            <TextView
-                    android:id="@+id/display_static_initBonusLabel"
-                    style="@style/displayTableCell"
-                    android:text="@string/display_initBonusLabel"/>
-        </TableRow>
-        <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    style="@style/statLabel"
+                    android:text="@string/display_armorClassLabel"
+                    android:drawableLeft="@drawable/armorclass"/>
             <TextView
                     android:id="@+id/display_armorClassLabel"
-                    style="@style/displayTableCell"
-                    android:text="@string/sample"/>
+                    style="@style/wrapContent"
+                    android:text="@string/sampleNum"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp">
+            <TextView
+                    android:id="@+id/display_static_maxHPLabel"
+                    style="@style/statLabel"
+                    android:text="@string/display_maxHPLabel"
+                    android:drawableLeft="@drawable/hitpoints"/>
             <TextView
                     android:id="@+id/display_maxHPLabel"
-                    style="@style/displayTableCell"
-                    android:text="@string/sample"/>
-            <TextView
-                    android:id="@+id/display_initBonusLabel"
-                    style="@style/displayTableCell"
-                    android:text="@string/sample"/>
-        </TableRow>
-    </TableLayout>
+                    style="@style/wrapContent"
+                    android:text="6d10+234"/>
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
             android:id="@+id/display_abilityScoresLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             android:layout_margin="5dp">
         <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:orientation="vertical"
                 android:layout_weight="1">
             <LinearLayout
-                    style="@style/wrapContent"
-                    android:orientation="horizontal">
-                <TextView
-                        style="@style/statLabel"
-                        android:text="@string/strLabel"/>
-                <TextView
-                        style="@style/statLabel"
-                        android:id="@+id/display_strScore"
-                        android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pOpen"/>
-                <TextView
-                    style="@style/wrapContent"
-                    android:id="@+id/display_strMod"
-                    android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pClose"/>
+                    style="@style/statHolder">
+                    <TextView
+                            style="@style/statLabel"
+                            android:text="@string/strLabel"
+                            android:drawableLeft="@drawable/strength"/>
+                    <TextView
+                            android:id="@+id/display_strScore"
+                            style="@style/wrapContent"
+                            android:text="@string/sampleStats"/>
             </LinearLayout>
             <LinearLayout
-                    style="@style/wrapContent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-            <TextView
-                    style="@style/statLabel"
-                    android:text="@string/dexLabel"/>
-            <TextView
-                    style="@style/statLabel"
-                    android:id="@+id/display_dexScore"
-                    android:text="@string/sample"/>
-            <TextView
-                    style="@style/wrapContent"
-                    android:text="@string/pOpen"/>
-            <TextView
-                    style="@style/wrapContent"
-                    android:id="@+id/display_dexMod"
-                    android:text="@string/sample"/>
-            <TextView
-                    style="@style/wrapContent"
-                    android:text="@string/pClose"/>
-            </LinearLayout>
-            <LinearLayout
-                    style="@style/wrapContent"
-                    android:orientation="horizontal">
+                    style="@style/statHolder">
                 <TextView
                         style="@style/statLabel"
-                        android:text="@string/conLabel"/>
+                        android:text="@string/dexLabel"
+                        android:drawableLeft="@drawable/dexterity"/>
+                <TextView
+                        style="@style/statLabel"
+                        android:id="@+id/display_dexScore"
+                        android:text="@string/sampleStats"/>
+            </LinearLayout>
+            <LinearLayout
+                    style="@style/statHolder">
+                <TextView
+                        style="@style/statLabel"
+                        android:text="@string/conLabel"
+                        android:drawableLeft="@drawable/constitution"/>
                 <TextView
                         style="@style/statLabel"
                         android:id="@+id/display_conScore"
-                        android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pOpen"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:id="@+id/display_conMod"
-                        android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pClose"/>
+                        android:text="@string/sampleStats"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -139,67 +124,37 @@
                 android:orientation="vertical"
                 android:layout_weight="1">
             <LinearLayout
-                    style="@style/wrapContent"
-                    android:orientation="horizontal">
+                    style="@style/statHolder">
                 <TextView
                         style="@style/statLabel"
-                        android:text="@string/intLabel"/>
+                        android:text="@string/intLabel"
+                        android:drawableLeft="@drawable/intelligence"/>
                 <TextView
                         style="@style/statLabel"
                         android:id="@+id/display_intScore"
-                        android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pOpen"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:id="@+id/display_intMod"
-                        android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pClose"/>
+                        android:text="@string/sampleStats"/>
             </LinearLayout>
             <LinearLayout
-                    style="@style/wrapContent"
-                    android:orientation="horizontal">
+                    style="@style/statHolder">
                 <TextView
                         style="@style/statLabel"
-                        android:text="@string/wisLabel"/>
+                        android:text="@string/wisLabel"
+                        android:drawableLeft="@drawable/wisdom"/>
                 <TextView
                         style="@style/statLabel"
                         android:id="@+id/display_wisScore"
-                        android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pOpen"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:id="@+id/display_wisMod"
-                        android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pClose"/>
+                        android:text="@string/sampleStats"/>
             </LinearLayout>
             <LinearLayout
-                    style="@style/wrapContent"
-                    android:orientation="horizontal">
+                    style="@style/statHolder">
                 <TextView
                         style="@style/statLabel"
-                        android:text="@string/chaLabel"/>
+                        android:text="@string/chaLabel"
+                        android:drawableLeft="@drawable/charisma"/>
                 <TextView
                         style="@style/statLabel"
                         android:id="@+id/display_chaScore"
                         android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pOpen"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:id="@+id/display_chaMod"
-                        android:text="@string/sample"/>
-                <TextView
-                        style="@style/wrapContent"
-                        android:text="@string/pClose"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

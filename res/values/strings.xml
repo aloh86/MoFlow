@@ -67,9 +67,9 @@
     <string name="typeSwitchOn">Player</string>
 
     <!-- Creature Stat Display Strings -->
-    <string name="display_armorClassLabel">Armor Class</string>
-    <string name="display_maxHPLabel">Max Hit Points</string>
-    <string name="display_initBonusLabel">Initiative Bonus</string>
+    <string name="display_armorClassLabel">"AC: "</string>
+    <string name="display_maxHPLabel">"Hit Points: "</string>
+    <string name="display_initBonusLabel">"Init Bonus: "</string>
     <string name="strLabel">STR:</string>
     <string name="dexLabel">DEX:</string>
     <string name="conLabel">CON:</string>
@@ -79,8 +79,12 @@
     <string name="fortLabel">FORT:</string>
     <string name="refLabel">REF:</string>
     <string name="willLabel">WILL:</string>
-    <string name="pOpen">(</string>
-    <string name="pClose">)</string>
+
+    <!--Initiative Header/Footer-->
+    <string name="initRoundHeaderLabel">"Round: "</string>
+    <string name="armorClassHeaderLabel">"AC: "</string>
+    <string name="hitPointHeaderLabel">"HP: "</string>
+    <string name="initHeaderLabel">"Init: "</string>
 
     <!-- Dialogs -->
     <string name="pickCreatureNum">Select number of creatures to add:</string>
@@ -116,4 +120,11 @@
 
     <!-- Sample Text -->
     <string name="sample">temp</string>
+    <string name="sampleNum">7</string>
+    <string name="sampleStats">stats</string>
+
+    <!-- Single -->
+    <string name="pOpen">(</string>
+    <string name="pClose">)</string>
+    <string name="fSlash">/</string>
 </resources>
