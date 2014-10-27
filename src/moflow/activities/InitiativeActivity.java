@@ -49,7 +49,6 @@ public class InitiativeActivity extends ListActivity
                 groupList,
                 false );
         setListAdapter(listAdapter);
-        listAdapter.sort(Creature.nameComparator());
 
         getListView().setOnItemClickListener(this);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);

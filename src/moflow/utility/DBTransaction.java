@@ -16,22 +16,6 @@ public class DBTransaction {
     private MoFlowDB db;
     private Cursor cur;
 
-    // column order of players table
-    private final int PARTY_NAME = 0;
-    private final int PC_NAME = 1;
-    private final int INIT_BONUS = 2;
-    private final int ARMOR_CLASS = 3;
-    private final int MAX_HP = 4;
-    private final int STR = 5;
-    private final int DEX = 6;
-    private final int CON = 7;
-    private final int INT = 8;
-    private final int WIS = 9;
-    private final int CHA = 10;
-    private final int FORT = 11;
-    private final int REF = 12;
-    private final int WILL = 13;
-
     public DBTransaction(Context ctx) {
         db = new MoFlowDB( ctx );
 
@@ -59,7 +43,7 @@ public class DBTransaction {
 
         while ( cur.moveToNext() ) {
             // there is only 1 column in the parties table, hence 0 for getString
-            groupList.add( cur.getString( PARTY_NAME ) );
+            groupList.add(cur.getString(0));
         }
         cur.close();
 
@@ -76,21 +60,24 @@ public class DBTransaction {
 
         final int ADJUST = -1;
 
+        // COLUMN ORDER, pc
+        // PCName = 0, init = 1, etc...
+
         while ( cur.moveToNext() ) {
             Creature critter = new Creature();
-            critter.setCreatureName( cur.getString( PC_NAME + ADJUST ) );
-            critter.setInitMod( cur.getString( INIT_BONUS + ADJUST ) );
-            critter.setArmorClass( cur.getString( ARMOR_CLASS + ADJUST ) );
-            critter.setMaxHitPoints( cur.getString( MAX_HP + ADJUST ) );
-            critter.setStrength( cur.getString( STR + ADJUST ) );
-            critter.setDexterity( cur.getString( DEX + ADJUST ) );
-            critter.setConstitution( cur.getString( CON + ADJUST ) );
-            critter.setIntelligence( cur.getString( INT + ADJUST ) );
-            critter.setWisdom( cur.getString( WIS + ADJUST ) );
-            critter.setCharisma( cur.getString( CHA + ADJUST ) );
-            critter.setFortitude( cur.getString( FORT + ADJUST ) );
-            critter.setReflex( cur.getString( REF + ADJUST ) );
-            critter.setWill( cur.getString( WILL + ADJUST ) );
+            critter.setCreatureName(cur.getString(0));
+            critter.setInitMod(cur.getString(1));
+            critter.setArmorClass(cur.getString(2));
+            critter.setMaxHitPoints(cur.getString(3));
+            critter.setStrength(cur.getString(4));
+            critter.setDexterity(cur.getString(5));
+            critter.setConstitution(cur.getString(6));
+            critter.setIntelligence(cur.getString(7));
+            critter.setWisdom(cur.getString(8));
+            critter.setCharisma(cur.getString(9));
+            critter.setFortitude(cur.getString(10));
+            critter.setReflex(cur.getString(11));
+            critter.setWill(cur.getString(12));
 
             creatureList.add( critter );
         }
@@ -116,19 +103,19 @@ public class DBTransaction {
         final int ADJUST = -1;
 
         while ( cur.moveToNext() ) {
-            critter.setCreatureName( cur.getString( PC_NAME + ADJUST ) );
-            critter.setInitMod( cur.getString( INIT_BONUS + ADJUST ) );
-            critter.setArmorClass( cur.getString( ARMOR_CLASS + ADJUST ) );
-            critter.setMaxHitPoints(cur.getString(MAX_HP + ADJUST));
-            critter.setStrength( cur.getString( STR + ADJUST ) );
-            critter.setDexterity( cur.getString( DEX + ADJUST ) );
-            critter.setConstitution( cur.getString( CON + ADJUST ) );
-            critter.setIntelligence( cur.getString( INT + ADJUST ) );
-            critter.setWisdom( cur.getString( WIS + ADJUST ) );
-            critter.setCharisma( cur.getString( CHA + ADJUST ) );
-            critter.setFortitude( cur.getString( FORT + ADJUST ) );
-            critter.setReflex( cur.getString( REF + ADJUST ) );
-            critter.setWill( cur.getString( WILL + ADJUST ) );
+            critter.setCreatureName(cur.getString(0));
+            critter.setInitMod(cur.getString(1));
+            critter.setArmorClass(cur.getString(2));
+            critter.setMaxHitPoints(cur.getString(3));
+            critter.setStrength(cur.getString(4));
+            critter.setDexterity(cur.getString(5));
+            critter.setConstitution(cur.getString(6));
+            critter.setIntelligence(cur.getString(7));
+            critter.setWisdom(cur.getString(8));
+            critter.setCharisma(cur.getString(9));
+            critter.setFortitude(cur.getString(10));
+            critter.setReflex(cur.getString(11));
+            critter.setWill(cur.getString(12));
         }
         return critter;
     }
@@ -142,22 +129,22 @@ public class DBTransaction {
 
         while ( cur.moveToNext() ) {
             Creature critter = new Creature();
-            critter.setInitiative(cur.getString(0));
-            critter.setCreatureName( cur.getString( PC_NAME + ADJUST ) );
-            critter.setInitMod( cur.getString( INIT_BONUS + ADJUST ) );
-            critter.setArmorClass( cur.getString( ARMOR_CLASS + ADJUST ) );
-            critter.setCurrentHitPoints(cur.getString(4));
-            critter.setMaxHitPoints( cur.getString( MAX_HP + ADJUST ) );
-            critter.setAsMonster(Boolean.getBoolean(String.valueOf(cur.getInt(6))));
-            critter.setStrength( cur.getString( STR + ADJUST ) );
-            critter.setDexterity( cur.getString( DEX + ADJUST ) );
-            critter.setConstitution( cur.getString( CON + ADJUST ) );
-            critter.setIntelligence( cur.getString( INT + ADJUST ) );
-            critter.setWisdom( cur.getString( WIS + ADJUST ) );
-            critter.setCharisma( cur.getString( CHA + ADJUST ) );
-            critter.setFortitude( cur.getString( FORT + ADJUST ) );
-            critter.setReflex( cur.getString( REF + ADJUST ) );
-            critter.setWill( cur.getString( WILL + ADJUST ) );
+            critter.setInitiative(cur.getString(1));
+            critter.setCreatureName(cur.getString(2));
+            critter.setInitMod(cur.getString(3));
+            critter.setArmorClass(cur.getString(4));
+            critter.setCurrentHitPoints(cur.getString(5));
+            critter.setMaxHitPoints(cur.getString(6));
+            critter.setAsMonster(Boolean.getBoolean(String.valueOf(cur.getInt(7))));
+            critter.setStrength(cur.getString(8));
+            critter.setDexterity(cur.getString(9));
+            critter.setConstitution(cur.getString(10));
+            critter.setIntelligence(cur.getString(11));
+            critter.setWisdom(cur.getString(12));
+            critter.setCharisma(cur.getString(13));
+            critter.setFortitude(cur.getString(14));
+            critter.setReflex(cur.getString(15));
+            critter.setWill(cur.getString(16));
 
             creatureList.add( critter );
         }
