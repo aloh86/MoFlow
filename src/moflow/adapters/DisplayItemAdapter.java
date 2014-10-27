@@ -54,13 +54,16 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
     private void fillData( Creature creature, ViewHolder holder ) {
         holder.creatureName.setText( creature.getCreatureName() );
         holder.armorClass.setText(creature.getArmorClass());
-        holder.maxHitPoints.setText(creature.getMaxHitPoints());
 
          // init is a special case. If it's the PC/Encounter items list show the init mod, else show the initiative.
-        if ( !isInitiativeScreen )
+        if ( !isInitiativeScreen ) {
             holder.initScore.setText(creature.getInitMod());
-        else
+            holder.initLabel.setText("Init Mod: ");
+            holder.maxHitPoints.setText(creature.getMaxHitPoints());
+        } else {
             holder.initScore.setText(creature.getInitiative());
+            holder.maxHitPoints.setText(creature.getCurrentHitPoints() + "/" + creature.getMaxHitPoints());
+        }
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( mContext );
         boolean showAbilityScores = sharedPref.getBoolean( Key.PREF_SCORE, false  );
@@ -130,6 +133,9 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         public TextView refScore;
         public TextView willScore;
 
+        // static labels
+        public TextView initLabel;
+
         public ViewHolder(View convertView)
         {
             creatureName = (TextView) convertView.findViewById(R.id.display_creatureName);
@@ -150,6 +156,8 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
             fortScore = ( TextView ) convertView.findViewById( R.id.display_fortScore );
             refScore = ( TextView ) convertView.findViewById( R.id.display_refScore );
             willScore = ( TextView ) convertView.findViewById( R.id.display_willScore );
+
+            initLabel = (TextView) convertView.findViewById(R.id.display_static_initBonusLabel);
         }
     }
 }
