@@ -26,7 +26,7 @@ import moflow.wolfpup.Creature;
  * this dialog is being used to create or edit a new creature dialog in the
  * group item edit activity, catalog activity, or initiative activity.
  */
-public class CreatureEditDialog extends DialogFragment implements DialogInterface.OnClickListener, Switch.OnCheckedChangeListener {
+public class CreatureEditDialog extends DialogFragment implements DialogInterface.OnClickListener {
     private SimpleDialogListener simpleDialogListener;
 
     private String title;
@@ -151,9 +151,7 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         initiative = ( EditText ) view.findViewById( R.id.creatureInitiativeEditText);
 
         creatureTypeSwitch = (Switch) view.findViewById(R.id.creatureTypeSwitch);
-        creatureTypeSwitch.setOnCheckedChangeListener(this);
         hitPointModTypeSwitch = (Switch) view.findViewById(R.id.hitPointModTypeSwitch);
-        hitPointModTypeSwitch.setOnCheckedChangeListener(this);
 
         strength = ( EditText ) view.findViewById( R.id.creatureStrEditText );
         dexterity = ( EditText ) view.findViewById( R.id.creatureDexEditText );
@@ -218,7 +216,11 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             creatureNameTextView.setText(critter.getCreatureName());
         }
 
-        maxHP.setText(critter.getMaxHitPoints());
+        boolean hasHitDie = HitDie.isHitDieExpression(critter.getHitDie());
+        if (hasHitDie) {
+            maxHP.setText(critter.getHitDie());
+        } else
+            maxHP.setText(critter.getMaxHitPoints());
 
         strength.setText(critter.getStrength());
         dexterity.setText(critter.getDexterity());
@@ -239,22 +241,22 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         thing.setCreatureName(creatureName.getText().toString().trim());
         thing.setArmorClass(armorClass.getText().toString());
 
-        String hitPointStr = thing.getMaxHitPoints();
+        // TODO make checks against both maxhp and hitdie
+        String hp = maxHP.getText().toString();
         if (usedForGroupEditActivity || usedForCatalogActivity || usedForInitNewCreature) {
-            thing.setInitMod(initiative.getText().toString());
-
-            if (!HitDie.isHitDieExpression(hitPointStr) && !HitDie.isDigit(hitPointStr)) {
+            if (!HitDie.isHitDieExpression(hp) && !HitDie.isDigit(hp)) {
                 return null;
             }
+            thing.setInitMod(initiative.getText().toString());
         } else if (usedForInitEditCreature) {
+            if (!HitDie.isDigit(hp)) {
+                return null;
+            }
+
             thing.setInitiative(initiative.getText().toString());
 
-            if (!HitDie.isDigit(hitPointStr)) {
-                return null;
-            }
-
             // Change the current hit point value if a life gain/loss value was supplied
-            String curHP = thing.getCurrentHitPoints();
+            String curHP = this.critter.getCurrentHitPoints();
             if (!curHP.isEmpty()) {
                 int currentHP = Integer.valueOf(curHP);
                 int hpModValue = Integer.valueOf(hitPointMod.getText().toString());
@@ -278,7 +280,11 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             }
         }
 
-        thing.setMaxHitPoints(maxHP.getText().toString());
+        boolean hasHitDie = HitDie.isHitDieExpression(hp);
+        if (hasHitDie) {
+            thing.setHitDie(hp);
+        } else
+            thing.setMaxHitPoints(hp);
 
         if (showAbilityScores) {
             thing.setStrength(strength.getText().toString());
@@ -332,10 +338,5 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
                 valid = true;
         }
         return valid;
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
     }
 }

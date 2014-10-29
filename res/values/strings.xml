@@ -68,8 +68,8 @@
 
     <!-- Creature Stat Display Strings -->
     <string name="display_armorClassLabel">"AC: "</string>
-    <string name="display_maxHPLabel">"Hit Points: "</string>
-    <string name="display_initBonusLabel">"Init Bonus: "</string>
+    <string name="display_maxHPLabel">"HP: "</string>
+    <string name="display_initBonusLabel">"Init: "</string>
     <string name="strLabel">STR:</string>
     <string name="dexLabel">DEX:</string>
     <string name="conLabel">CON:</string>

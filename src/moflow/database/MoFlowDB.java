@@ -77,6 +77,7 @@ public class MoFlowDB {
 		initVal.put( Players_Table.COL_InitBonus, critter.getInitMod() );
 		initVal.put( Players_Table.COL_ArmorClass, critter.getArmorClass() );
 		initVal.put( Players_Table.COL_MaxHP, critter.getMaxHitPoints() );
+        initVal.put(Players_Table.COL_HitDie, critter.getHitDie());
         initVal.put( Players_Table.COL_STR, critter.getStrength() );
         initVal.put( Players_Table.COL_DEX, critter.getDexterity() );
         initVal.put( Players_Table.COL_CON, critter.getConstitution() );
@@ -102,6 +103,7 @@ public class MoFlowDB {
 		initVal.put( Catalog_Table.COL_InitBonus, creature.getInitMod() );
 		initVal.put( Catalog_Table.COL_ArmorClass, creature.getArmorClass() );
 		initVal.put( Catalog_Table.COL_MaxHP, creature.getMaxHitPoints() );
+        initVal.put(Catalog_Table.COL_HitDie, creature.getHitDie());
         initVal.put( Catalog_Table.COL_STR, creature.getStrength() );
         initVal.put( Catalog_Table.COL_DEX, creature.getDexterity() );
         initVal.put( Catalog_Table.COL_CON, creature.getConstitution() );
@@ -126,7 +128,8 @@ public class MoFlowDB {
         initVal.put( Catalog_Table.COL_CreatureName, creature[ 0 ] );
         initVal.put(Catalog_Table.COL_InitBonus, AbilityScoreMod.get345AbilityScoreMod( creature[4] ) ); // getting the ability score mod since no init bonus in the catalog file
         initVal.put( Catalog_Table.COL_ArmorClass, creature[ 1 ]);
-        initVal.put( Catalog_Table.COL_MaxHP, creature[ 2 ] );
+        initVal.put(Catalog_Table.COL_MaxHP, "XdX");
+        initVal.put( Catalog_Table.COL_HitDie, creature[ 2 ] );
         initVal.put( Catalog_Table.COL_STR, creature[ 3 ]);
         initVal.put( Catalog_Table.COL_DEX, creature[ 4 ]);
         initVal.put( Catalog_Table.COL_CON, creature[ 5 ]);
@@ -134,7 +137,8 @@ public class MoFlowDB {
         initVal.put( Catalog_Table.COL_WIS, creature[ 7 ]);
         initVal.put( Catalog_Table.COL_CHA, creature[ 8 ]);
         initVal.put( Catalog_Table.COL_CUSTOM, 0 ); // 0 means that this creature was loaded from file, not a user's custom creature.
-        return db.insertWithOnConflict( Catalog_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
+        long error = db.insertWithOnConflict( Catalog_Table.TABLE_NAME, null, initVal, SQLiteDatabase.CONFLICT_IGNORE );
+        return error;
     }
 	
 	/**
@@ -161,6 +165,7 @@ public class MoFlowDB {
 		initVal.put( Creatures_Table.COL_InitBonus, critter.getInitMod() );
 		initVal.put( Creatures_Table.COL_ArmorClass, critter.getArmorClass() );
 		initVal.put( Creatures_Table.COL_MaxHP, critter.getMaxHitPoints() );
+        initVal.put(Creatures_Table.COL_HitDie, critter.getHitDie());
         initVal.put( Creatures_Table.COL_STR, critter.getStrength() );
         initVal.put( Creatures_Table.COL_DEX, critter.getDexterity() );
         initVal.put( Creatures_Table.COL_CON, critter.getConstitution() );
@@ -187,6 +192,7 @@ public class MoFlowDB {
 		initVal.put( Init_Table.COL_ArmorClass, creature.getArmorClass() );
 		initVal.put( Init_Table.COL_CurrentHP, creature.getCurrentHitPoints() );
 		initVal.put( Init_Table.COL_MaxHP, creature.getMaxHitPoints() );
+        initVal.put(Init_Table.COL_HitDie, creature.getHitDie());
 		initVal.put( Init_Table.COL_Type, ( creature.isMonster() == false ? 0 : 1 ) ); // 0 = PC, 1 = Creature
         initVal.put( Init_Table.COL_STR, creature.getStrength() );
         initVal.put( Init_Table.COL_DEX, creature.getDexterity() );
@@ -276,6 +282,7 @@ public class MoFlowDB {
 				Players_Table.COL_InitBonus,
 				Players_Table.COL_ArmorClass,
 				Players_Table.COL_MaxHP,
+                Players_Table.COL_HitDie,
                 Players_Table.COL_STR,
                 Players_Table.COL_DEX,
                 Players_Table.COL_CON,
@@ -326,6 +333,7 @@ public class MoFlowDB {
 				Catalog_Table.COL_InitBonus,
 				Catalog_Table.COL_ArmorClass,
 				Catalog_Table.COL_MaxHP,
+                Catalog_Table.COL_HitDie,
                 Catalog_Table.COL_STR,
                 Catalog_Table.COL_DEX,
                 Catalog_Table.COL_CON,
@@ -353,6 +361,7 @@ public class MoFlowDB {
 				Creatures_Table.COL_InitBonus,
 				Creatures_Table.COL_ArmorClass,
 				Creatures_Table.COL_MaxHP,
+                Creatures_Table.COL_HitDie,
                 Creatures_Table.COL_STR,
                 Creatures_Table.COL_DEX,
                 Creatures_Table.COL_CON,
@@ -431,6 +440,7 @@ public class MoFlowDB {
 		initVal.put( Players_Table.COL_InitBonus, updated.getInitMod() );
 		initVal.put( Players_Table.COL_ArmorClass, updated.getArmorClass() );
 		initVal.put( Players_Table.COL_MaxHP, updated.getMaxHitPoints() );
+        initVal.put(Players_Table.COL_HitDie, updated.getHitDie());
         initVal.put( Players_Table.COL_STR, updated.getStrength() );
         initVal.put( Players_Table.COL_DEX, updated.getDexterity() );
         initVal.put( Players_Table.COL_CON, updated.getConstitution() );
@@ -491,6 +501,7 @@ public class MoFlowDB {
 		initVal.put( Catalog_Table.COL_InitBonus, updated.getInitMod() );
 		initVal.put( Catalog_Table.COL_ArmorClass, updated.getArmorClass() );
 		initVal.put( Catalog_Table.COL_MaxHP, updated.getMaxHitPoints() );
+        initVal.put(Catalog_Table.COL_HitDie, updated.getHitDie());
         initVal.put( Catalog_Table.COL_STR, updated.getStrength() );
         initVal.put( Catalog_Table.COL_DEX, updated.getDexterity() );
         initVal.put( Catalog_Table.COL_CON, updated.getConstitution() );
@@ -554,6 +565,7 @@ public class MoFlowDB {
 		initVal.put( Creatures_Table.COL_InitBonus, updated.getInitMod() );
 		initVal.put( Creatures_Table.COL_ArmorClass, updated.getArmorClass() );
 		initVal.put( Creatures_Table.COL_MaxHP, updated.getMaxHitPoints() );
+        initVal.put(Creatures_Table.COL_HitDie, updated.getHitDie());
         initVal.put( Creatures_Table.COL_STR, updated.getStrength() );
         initVal.put( Creatures_Table.COL_DEX, updated.getDexterity() );
         initVal.put( Creatures_Table.COL_CON, updated.getConstitution() );
