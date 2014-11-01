@@ -283,8 +283,13 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         boolean hasHitDie = HitDie.isHitDieExpression(hp);
         if (hasHitDie) {
             thing.setHitDie(hp);
-        } else
+        } else {
             thing.setMaxHitPoints(hp);
+
+            if (usedForInitNewCreature) {
+                thing.setCurrentHitPoints(hp);
+            }
+        }
 
         if (showAbilityScores) {
             thing.setStrength(strength.getText().toString());

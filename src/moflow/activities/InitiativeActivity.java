@@ -47,7 +47,7 @@ public class InitiativeActivity extends ListActivity
                 this,
                 R.layout.groupitemdisplay,
                 groupList,
-                false );
+                true );
         setListAdapter(listAdapter);
 
         getListView().setOnItemClickListener(this);

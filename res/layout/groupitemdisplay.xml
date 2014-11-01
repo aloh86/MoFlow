@@ -19,6 +19,22 @@
             android:textSize="18dp"/>
 
     <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+        <TextView
+                android:id="@+id/display_static_initBonusLabel"
+                style="@style/displayTableCell"
+                android:text="@string/display_initBonusLabel"
+                android:drawableLeft="@drawable/init"/>
+        <TextView
+                android:id="@+id/display_initBonusLabel"
+                style="@style/displayTableCell"
+                android:text="@string/sampleNum"
+                android:layout_marginRight="5dp"/>
+    </LinearLayout>
+
+    <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
         <LinearLayout
@@ -50,22 +66,6 @@
                     android:id="@+id/display_maxHPLabel"
                     style="@style/wrapContent"
                     android:text="6d10+234"/>
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true">
-            <TextView
-                    android:id="@+id/display_static_initBonusLabel"
-                    style="@style/displayTableCell"
-                    android:text="@string/display_initBonusLabel"
-                    android:drawableLeft="@drawable/init"/>
-            <TextView
-                    android:id="@+id/display_initBonusLabel"
-                    style="@style/displayTableCell"
-                    android:text="@string/sampleNum"
-                    android:layout_marginRight="5dp"/>
         </LinearLayout>
     </LinearLayout>
 
