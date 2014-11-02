@@ -69,15 +69,16 @@ public class DBTransaction {
             critter.setInitMod(cur.getString(1));
             critter.setArmorClass(cur.getString(2));
             critter.setMaxHitPoints(cur.getString(3));
-            critter.setStrength(cur.getString(4));
-            critter.setDexterity(cur.getString(5));
-            critter.setConstitution(cur.getString(6));
-            critter.setIntelligence(cur.getString(7));
-            critter.setWisdom(cur.getString(8));
-            critter.setCharisma(cur.getString(9));
-            critter.setFortitude(cur.getString(10));
-            critter.setReflex(cur.getString(11));
-            critter.setWill(cur.getString(12));
+            critter.setHitDie(cur.getString((4)));
+            critter.setStrength(cur.getString(5));
+            critter.setDexterity(cur.getString(6));
+            critter.setConstitution(cur.getString(7));
+            critter.setIntelligence(cur.getString(8));
+            critter.setWisdom(cur.getString(9));
+            critter.setCharisma(cur.getString(10));
+            critter.setFortitude(cur.getString(11));
+            critter.setReflex(cur.getString(12));
+            critter.setWill(cur.getString(13));
 
             creatureList.add( critter );
         }
@@ -107,15 +108,16 @@ public class DBTransaction {
             critter.setInitMod(cur.getString(1));
             critter.setArmorClass(cur.getString(2));
             critter.setMaxHitPoints(cur.getString(3));
-            critter.setStrength(cur.getString(4));
-            critter.setDexterity(cur.getString(5));
-            critter.setConstitution(cur.getString(6));
-            critter.setIntelligence(cur.getString(7));
-            critter.setWisdom(cur.getString(8));
-            critter.setCharisma(cur.getString(9));
-            critter.setFortitude(cur.getString(10));
-            critter.setReflex(cur.getString(11));
-            critter.setWill(cur.getString(12));
+            critter.setHitDie(cur.getString((4)));
+            critter.setStrength(cur.getString(5));
+            critter.setDexterity(cur.getString(6));
+            critter.setConstitution(cur.getString(7));
+            critter.setIntelligence(cur.getString(8));
+            critter.setWisdom(cur.getString(9));
+            critter.setCharisma(cur.getString(10));
+            critter.setFortitude(cur.getString(11));
+            critter.setReflex(cur.getString(12));
+            critter.setWill(cur.getString(13));
         }
         return critter;
     }
@@ -135,16 +137,17 @@ public class DBTransaction {
             critter.setArmorClass(cur.getString(4));
             critter.setCurrentHitPoints(cur.getString(5));
             critter.setMaxHitPoints(cur.getString(6));
-            critter.setAsMonster(Boolean.getBoolean(String.valueOf(cur.getInt(7))));
-            critter.setStrength(cur.getString(8));
-            critter.setDexterity(cur.getString(9));
-            critter.setConstitution(cur.getString(10));
-            critter.setIntelligence(cur.getString(11));
-            critter.setWisdom(cur.getString(12));
-            critter.setCharisma(cur.getString(13));
-            critter.setFortitude(cur.getString(14));
-            critter.setReflex(cur.getString(15));
-            critter.setWill(cur.getString(16));
+            critter.setHitDie(cur.getString(7));
+            critter.setAsMonster(Boolean.getBoolean(String.valueOf(cur.getInt(8))));
+            critter.setStrength(cur.getString(9));
+            critter.setDexterity(cur.getString(10));
+            critter.setConstitution(cur.getString(11));
+            critter.setIntelligence(cur.getString(12));
+            critter.setWisdom(cur.getString(13));
+            critter.setCharisma(cur.getString(14));
+            critter.setFortitude(cur.getString(15));
+            critter.setReflex(cur.getString(16));
+            critter.setWill(cur.getString(17));
 
             creatureList.add( critter );
         }

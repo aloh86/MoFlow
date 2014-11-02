@@ -19,8 +19,12 @@ public class Key {
     public static final String NUMPICK_CATALOG_CREATURE_BUNDLE = "creature_object_bundle";
     public static final String DIALOG_TITLE = "dialogTitle";
     public static final String EDIT_CREATURE_DIALOG_USAGE = "dialogUsage";
+    public static final String GROUP_PICKED = "party_picked";
+    public static final String GROUP_PICK_BUNDLE = "party_pick_bundle";
 
     public static final int PICK_CREATURE = 1;
+    public static final int PICK_PARTY = 2;
+    public static final int PICK_ENCOUNTER = 3;
 
     public static class Val {
         public static final String PARTY = "party";
@@ -28,6 +32,7 @@ public class Key {
         public static final String MAIN_ACTIVITY = "mainMenuActivity";
         public static final String EDITGROUP_ACTIVITY = "groupActivity";
         public static final String CATALOG_ACTIVITY = "catalogActivity";
+        public static final String INITIATIVE_ACTIVITY = "initiativeActivity";
         public static final String USAGE_INIT_NEW_CREATURE = "initNewCreature";
         public static final String USAGE_INIT_EDIT_CREATURE = "initEditCreature";
     }

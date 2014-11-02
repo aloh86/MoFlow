@@ -18,6 +18,7 @@ public abstract class Players_Table implements BaseColumns {
 	public static final String COL_InitBonus  = "InitBonus";
 	public static final String COL_ArmorClass = "ArmorClass";
 	public static final String COL_MaxHP	  = "MaxHP";
+    public static final String COL_HitDie     = "HitDie";
     public static final String COL_STR        = "str";
     public static final String COL_DEX        = "dex";
     public static final String COL_CON        = "con";
@@ -35,6 +36,7 @@ public abstract class Players_Table implements BaseColumns {
 			COL_InitBonus   + " TEXT NOT NULL, " +
 			COL_ArmorClass  + " TEXT NOT NULL, " +
 			COL_MaxHP		+ " TEXT NOT NULL, " +
+            COL_HitDie      + " TEXT NOT NULL, " +
             COL_STR         + " TEXT NOT NULL DEFAULT '0', " +
             COL_DEX         + " TEXT NOT NULL DEFAULT '0', " +
             COL_CON         + " TEXT NOT NULL DEFAULT '0', " +

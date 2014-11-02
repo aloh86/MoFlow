@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -24,14 +25,18 @@ public class InitiativeActivity extends ListActivity
                     DialogInterface.OnClickListener, SimpleDialogListener {
 
     private DBTransaction dbTransaction;
-    private ArrayList< Creature > groupList;
-    private ArrayAdapter< Creature > listAdapter;
+    private ArrayList< Creature > initList;
     private ArrayList< Creature > deleteList;
+    private ArrayList<String> partyList;
+    private ArrayList<String> encounterList;
+    private ArrayAdapter< Creature > listAdapter;
     private int indexOfItemToEdit;
     private CreatureEditDialog newCreatureDialog;
     private CreatureEditDialog editCreatureDialog;
     private Dialog newCreatureChoiceDialog;
     private Dialog deleteCreatureChoiceDialog;
+    private Dialog partyChoiceList;
+    private Dialog encounterChoiceList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +45,13 @@ public class InitiativeActivity extends ListActivity
         this.setTitle("Initiative");
 
         dbTransaction = new DBTransaction( this );
-        groupList = dbTransaction.getInitiativeItems();
+        initList = dbTransaction.getInitiativeItems();
 
         // fill the list with parties from database
         listAdapter = new DisplayItemAdapter(
                 this,
                 R.layout.groupitemdisplay,
-                groupList,
+                initList,
                 true );
         setListAdapter(listAdapter);
 
@@ -62,6 +67,13 @@ public class InitiativeActivity extends ListActivity
         builder.setTitle("New Creature")
                 .setItems(R.array.newCatalogCreatureDialogChoices, this);
         newCreatureChoiceDialog = builder.create();
+
+        partyList = dbTransaction.getGroupList(Key.Val.PARTY);
+        String [] pList = partyList.toArray(new String[partyList.size()]);
+        builder = new AlertDialog.Builder(this)
+                .setTitle("Parties")
+                .setItems(pList, this);
+        partyChoiceList = builder.create();
     }
 
     // Inflates the action bar.
@@ -154,8 +166,30 @@ public class InitiativeActivity extends ListActivity
             if (choiceIndex == NEW_CREATURE) {
                 newCreatureDialog = CreatureEditDialog.newInstance("New Creature", null, Key.Val.USAGE_INIT_NEW_CREATURE);
                 newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
+            } else if (choiceIndex == IMPORT_PARTY) {
+                partyChoiceList.show();
             }
         }
+
+        if (dialogInterface == partyChoiceList) {
+            ArrayList<Creature> tmpList =  dbTransaction.getGroupItemList(Key.Val.PARTY, partyList.get(choiceIndex));
+            for(Creature c : tmpList) {
+                prepForInitList(c, false);
+                listAdapter.add(c);
+                dbTransaction.insertNewCreatureIntoInitiative(c);
+            }
+        }
+    }
+
+    private void prepForInitList(Creature c, boolean isMonster) {
+        c.setAsMonster(isMonster);
+        String hitDie = c.getHitDie();
+        if (HitDie.isHitDieExpression(hitDie)) {
+            HitDie hpDie = new HitDie(hitDie);
+            String maxHPStr = String.valueOf(hpDie.getMaxVal());
+            c.setMaxHitPoints(maxHPStr);
+        }
+        c.setCurrentHitPoints(c.getMaxHitPoints());
     }
 
     // Handle positive click for dialog fragments.
@@ -178,8 +212,8 @@ public class InitiativeActivity extends ListActivity
                     critter.setCurrentHitPoints(roll);
                 }
 
-                critter.setCreatureName(NameModifier.makeNameUnique2(groupList, critter.getCreatureName()));
-                groupList.add( critter );
+                critter.setCreatureName(NameModifier.makeNameUnique2(initList, critter.getCreatureName()));
+                initList.add(critter);
                 dbTransaction.insertNewCreatureIntoInitiative(critter);
                 listAdapter.sort(Creature.nameComparator());
                 listAdapter.notifyDataSetChanged();
@@ -192,5 +226,40 @@ public class InitiativeActivity extends ListActivity
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Key.PICK_PARTY) {
+            if (resultCode == RESULT_OK) {
+                Bundle bundle = data.getExtras().getBundle(Key.GROUP_PICK_BUNDLE);
+                String partyPicked = bundle.getString(Key.GROUP_PICKED);
+                addPickedGroup(partyPicked, Key.PICK_PARTY);
+            }
+        } else if (requestCode == Key.PICK_ENCOUNTER) {
+            Bundle bundle = data.getExtras().getBundle(Key.GROUP_PICK_BUNDLE);
+            String partyPicked = bundle.getString(Key.GROUP_PICKED);
+            addPickedGroup(partyPicked, Key.PICK_ENCOUNTER);
+        }
+    }
+
+    public void addPickedGroup(String groupPicked, int pickType) {
+        ArrayList<Creature> groupItems = new ArrayList<Creature>();
+        if (pickType == Key.PICK_PARTY) {
+            groupItems = dbTransaction.getGroupItemList(Key.Val.PARTY, groupPicked);
+        } else {
+            groupItems = dbTransaction.getGroupItemList(Key.Val.ENCOUNTER, groupPicked);
+        }
+
+        for (Creature list : groupItems) {
+            if (pickType == Key.PICK_PARTY) {
+                list.setAsMonster(false);
+            } else {
+                list.setAsMonster(true);
+            }
+            listAdapter.add(list);
+            listAdapter.notifyDataSetChanged();
+        }
     }
 }

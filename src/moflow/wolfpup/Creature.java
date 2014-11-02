@@ -19,6 +19,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
     private String armorClass;
     private String initMod;
     private String maxHitPoints;
+    private String hitDie;
 
     // ability scores
     private String strength;
@@ -59,7 +60,9 @@ public class Creature implements Parcelable, Cloneable, Comparable {
         reflex = "0";
         will = "0";
 
+        maxHitPoints = "X";
         currentHitPoints = maxHitPoints;
+        hitDie = "XdX";
 		initiative = "0";
 		isMonster = true;
 		hasInit = false;
@@ -76,6 +79,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
             twin.armorClass = armorClass;
 			twin.initMod = initMod;
 			twin.maxHitPoints = maxHitPoints;
+            twin.hitDie = hitDie;
 
             twin.strength = strength;
             twin.dexterity = dexterity;
@@ -108,6 +112,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
     public String    getArmorClass() { return armorClass; }
     public String    getInitMod() { return initMod; }
     public String    getMaxHitPoints() { return maxHitPoints; }
+    public String    getHitDie() { return hitDie; }
 
     public String    getStrength() { return strength; }
     public String    getDexterity() { return dexterity; }
@@ -142,6 +147,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
     public void setArmorClass( String AC ) { armorClass = AC; }
     public void setInitMod( String mod ) { initMod = mod; }
     public void setMaxHitPoints( String points ) { maxHitPoints = points; }
+    public void setHitDie(String dieExpression) { hitDie = dieExpression; }
 
     public void setStrength( String score ) { strength = validateScore( score ); }
     public void setDexterity( String score ) { dexterity = validateScore( score ); }
@@ -199,6 +205,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 		armorClass = in.readString();
 		initMod = in.readString();
 		maxHitPoints = in.readString();
+        hitDie = in.readString();
 
         strength = in.readString();
         dexterity = in.readString();
@@ -237,6 +244,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 		dest.writeString(armorClass);
 		dest.writeString(initMod);
 		dest.writeString(maxHitPoints);
+        dest.writeString(hitDie);
 
         dest.writeString(strength);
         dest.writeString(dexterity);
@@ -271,6 +279,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
         if ( this.creatureName == c.creatureName &&
                 this.armorClass == c.armorClass &&
                 this.maxHitPoints == c.maxHitPoints &&
+                this.hitDie == c.hitDie &&
                 this.initMod == c.initMod &&
                 this.strength == c.strength &&
                 this.dexterity == c.dexterity &&

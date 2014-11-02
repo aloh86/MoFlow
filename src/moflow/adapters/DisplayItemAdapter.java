@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import moflow.activities.R;
 import moflow.utility.AbilityScoreMod;
+import moflow.utility.HitDie;
 import moflow.utility.Key;
 import moflow.wolfpup.Creature;
 
@@ -56,17 +57,24 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         holder.armorClass.setText(creature.getArmorClass());
 
          // init is a special case. If it's the PC/Encounter items list show the init mod, else show the initiative.
+        String dieExp = creature.getHitDie();
+        String maxHP = creature.getMaxHitPoints();
         if ( !isInitiativeScreen ) {
             holder.initScore.setText(creature.getInitMod());
-            holder.initLabel.setText("Init Mod: ");
-            holder.maxHitPoints.setText(creature.getMaxHitPoints());
+            holder.initLabel.setText("Init Bonus: ");
+
+            if (HitDie.isDigit(maxHP)) {
+                holder.maxHitPoints.setText(creature.getMaxHitPoints());
+            } else if (HitDie.isHitDieExpression(dieExp)) {
+                holder.maxHitPoints.setText(creature.getHitDie());
+            }
         } else {
             holder.initScore.setText(creature.getInitiative());
-            holder.maxHitPoints.setText(creature.getCurrentHitPoints() + "/" + creature.getMaxHitPoints());
+            holder.maxHitPoints.setText(creature.getCurrentHitPoints() + "/" + maxHP);
         }
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( mContext );
-        boolean showAbilityScores = sharedPref.getBoolean( Key.PREF_SCORE, false  );
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean showAbilityScores = sharedPref.getBoolean(Key.PREF_SCORE, false);
 
         if ( showAbilityScores ) {
             String mod = AbilityScoreMod.get345AbilityScoreMod(creature.getStrength());
