@@ -37,6 +37,17 @@ public class HitDie
         return result;
     }
 
+    public int getMaxVal() {
+        int result = 0;
+
+        for (int i = 0; i < repetitions; i++) {
+            result += range;
+        }
+        result += modifier;
+
+        return result;
+    }
+
     /**
      * This method assumes that the string is a valid hit die expression.
      * @param expression
