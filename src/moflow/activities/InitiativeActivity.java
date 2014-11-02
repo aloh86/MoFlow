@@ -74,6 +74,13 @@ public class InitiativeActivity extends ListActivity
                 .setTitle("Parties")
                 .setItems(pList, this);
         partyChoiceList = builder.create();
+
+        encounterList = dbTransaction.getGroupList(Key.Val.ENCOUNTER);
+        String [] eList = encounterList.toArray(new String[encounterList.size()]);
+        builder = new AlertDialog.Builder(this)
+                .setTitle("Encounters")
+                .setItems(eList, this);
+        encounterChoiceList = builder.create();
     }
 
     // Inflates the action bar.
@@ -168,25 +175,41 @@ public class InitiativeActivity extends ListActivity
                 newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
             } else if (choiceIndex == IMPORT_PARTY) {
                 partyChoiceList.show();
+            } else if (choiceIndex == IMPORT_ENCOUNTER) {
+                encounterChoiceList.show();
             }
         }
 
         if (dialogInterface == partyChoiceList) {
             ArrayList<Creature> tmpList =  dbTransaction.getGroupItemList(Key.Val.PARTY, partyList.get(choiceIndex));
             for(Creature c : tmpList) {
-                prepForInitList(c, false);
+                prepForInitList(c, false, false);
+                listAdapter.add(c);
+                dbTransaction.insertNewCreatureIntoInitiative(c);
+            }
+        }
+
+        if (dialogInterface == encounterChoiceList) {
+            ArrayList<Creature> tmpList =  dbTransaction.getGroupItemList(Key.Val.ENCOUNTER, encounterList.get(choiceIndex));
+            for(Creature c : tmpList) {
+                prepForInitList(c, false, true);
                 listAdapter.add(c);
                 dbTransaction.insertNewCreatureIntoInitiative(c);
             }
         }
     }
 
-    private void prepForInitList(Creature c, boolean isMonster) {
+    private void prepForInitList(Creature c, boolean isMonster, boolean randomHitDie) {
         c.setAsMonster(isMonster);
         String hitDie = c.getHitDie();
         if (HitDie.isHitDieExpression(hitDie)) {
             HitDie hpDie = new HitDie(hitDie);
-            String maxHPStr = String.valueOf(hpDie.getMaxVal());
+            String maxHPStr;
+            if (randomHitDie) {
+                maxHPStr = String.valueOf(hpDie.rollHitDie());
+            } else {
+                maxHPStr = String.valueOf(hpDie.getMaxVal());
+            }
             c.setMaxHitPoints(maxHPStr);
         }
         c.setCurrentHitPoints(c.getMaxHitPoints());
