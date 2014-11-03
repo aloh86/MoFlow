@@ -177,6 +177,10 @@ public class InitiativeActivity extends ListActivity
                 partyChoiceList.show();
             } else if (choiceIndex == IMPORT_ENCOUNTER) {
                 encounterChoiceList.show();
+            } else { // else if IMPORT_CATALOG
+                Intent intent = new Intent("moflow.activities.CatalogActivity");
+                intent.putExtra(Key.PARENT_ACTIVITY, Key.Val.INITIATIVE_ACTIVITY);
+                startActivityForResult(intent, Key.PICK_CREATURE);
             }
         }
 
@@ -227,12 +231,11 @@ public class InitiativeActivity extends ListActivity
                     return;
                 }
 
-                String hitDieExp = critter.getMaxHitPoints();
-                if (HitDie.isHitDieExpression(hitDieExp)) {
-                    HitDie die = new HitDie(hitDieExp);
-                    String roll = String.valueOf(die.rollHitDie());
-                    critter.setMaxHitPoints(roll);
-                    critter.setCurrentHitPoints(roll);
+                String hitDieExp = critter.getHitDie();
+                String result = hitDieExpToInt(hitDieExp);
+                if (result != null) {
+                    critter.setMaxHitPoints(result);
+                    critter.setCurrentHitPoints(result);
                 }
 
                 critter.setCreatureName(NameModifier.makeNameUnique2(initList, critter.getCreatureName()));
@@ -254,35 +257,41 @@ public class InitiativeActivity extends ListActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Key.PICK_PARTY) {
+        if (requestCode == Key.PICK_CREATURE) {
             if (resultCode == RESULT_OK) {
-                Bundle bundle = data.getExtras().getBundle(Key.GROUP_PICK_BUNDLE);
-                String partyPicked = bundle.getString(Key.GROUP_PICKED);
-                addPickedGroup(partyPicked, Key.PICK_PARTY);
+                Bundle bundle = data.getExtras().getBundle(Key.NUMPICK_CATALOG_CREATURE_BUNDLE);
+                int numPicked = bundle.getInt(Key.NUM__CREATURE_PICKED);
+                Creature pickedCreature = bundle.getParcelable(Key.CREATURE_OBJECT);
+                addPickedCreature(numPicked, pickedCreature);
             }
-        } else if (requestCode == Key.PICK_ENCOUNTER) {
-            Bundle bundle = data.getExtras().getBundle(Key.GROUP_PICK_BUNDLE);
-            String partyPicked = bundle.getString(Key.GROUP_PICKED);
-            addPickedGroup(partyPicked, Key.PICK_ENCOUNTER);
         }
     }
 
-    public void addPickedGroup(String groupPicked, int pickType) {
-        ArrayList<Creature> groupItems = new ArrayList<Creature>();
-        if (pickType == Key.PICK_PARTY) {
-            groupItems = dbTransaction.getGroupItemList(Key.Val.PARTY, groupPicked);
-        } else {
-            groupItems = dbTransaction.getGroupItemList(Key.Val.ENCOUNTER, groupPicked);
+    private void addPickedCreature(int numPicked, Creature pickedCreature)
+    {
+        for (int i = 0; i < numPicked; i++) {
+            Creature copy = pickedCreature.clone();
+            copy.setAsMonster(true);
+            copy.setCreatureName(NameModifier.makeNameUnique2(initList, copy.getCreatureName()));
+
+            listAdapter.add(copy);
+            listAdapter.notifyDataSetChanged();
+            dbTransaction.insertNewCreatureIntoInitiative(copy);
+        }
+    }
+
+    /**
+     * Get a integer value as a string from a hit die expression
+     * @param hitDieExpression hit die expression (ex. 3d4).
+     * @return A string representing an integer value. If an integer was already
+     */
+    private String hitDieExpToInt(String hitDieExpression) {
+        if (HitDie.isHitDieExpression(hitDieExpression)) {
+            HitDie die = new HitDie(hitDieExpression);
+            String roll = String.valueOf(die.rollHitDie());
+            return roll;
         }
 
-        for (Creature list : groupItems) {
-            if (pickType == Key.PICK_PARTY) {
-                list.setAsMonster(false);
-            } else {
-                list.setAsMonster(true);
-            }
-            listAdapter.add(list);
-            listAdapter.notifyDataSetChanged();
-        }
+        return null;
     }
 }

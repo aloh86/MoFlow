@@ -226,7 +226,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
             indexOfItemToEdit = position;
         }
 
-        if (parentActivity.equals(Key.Val.EDITGROUP_ACTIVITY)) {
+        if (parentActivity.equals(Key.Val.EDITGROUP_ACTIVITY) || parentActivity.equals(Key.Val.INITIATIVE_ACTIVITY)) {
             indexOfItemToEdit = position;
             numPickDialog.show(getFragmentManager(), "numPickDialog");
         }
