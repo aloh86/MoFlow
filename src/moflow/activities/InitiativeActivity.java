@@ -288,6 +288,13 @@ public class InitiativeActivity extends ListActivity
             copy.setAsMonster(true);
             copy.setCreatureName(NameModifier.makeNameUnique2(initList, copy.getCreatureName()));
 
+            String hitDieExp = copy.getHitDie();
+            String result = hitDieExpToInt(hitDieExp);
+            if (result != null) {
+                copy.setMaxHitPoints(result);
+                copy.setCurrentHitPoints(result);
+            } 
+
             listAdapter.add(copy);
             listAdapter.notifyDataSetChanged();
             dbTransaction.insertNewCreatureIntoInitiative(copy);
