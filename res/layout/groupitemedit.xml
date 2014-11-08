@@ -94,8 +94,15 @@
                             android:text="@string/display_maxHPLabel"/>
                     <EditText
                             android:id="@+id/creatureMaxHitPointsEditText"
-                            style="@style/statEntry"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:maxLength="11"
+                            android:singleLine="true"
+                            android:selectAllOnFocus="true"
+                            android:gravity="center"
                             android:hint="@string/maxHPHint"
+                            android:inputType="textNoSuggestions|textVisiblePassword"
                             android:nextFocusDown="@+id/creatureInitiativeEditText"/>
                 </LinearLayout>
 

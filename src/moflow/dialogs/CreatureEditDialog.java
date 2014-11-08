@@ -8,11 +8,14 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.*;
 import moflow.activities.R;
 import moflow.utility.HitDie;
+import moflow.utility.HitDieInputFilter;
 import moflow.utility.Key;
 import moflow.wolfpup.Creature;
 
@@ -189,17 +192,19 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             creatureNameTextView.setVisibility(View.GONE);
             creatureTypeLayout.setVisibility(View.GONE);
             hitPointModLayout.setVisibility(View.GONE);
-            maxHP.setKeyListener(DigitsKeyListener.getInstance("0123456789d+-"));
         } else if (usedForInitNewCreature) {
             creatureNameTextView.setVisibility(View.GONE);
             hitPointModLayout.setVisibility(View.GONE);
-            maxHP.setKeyListener(DigitsKeyListener.getInstance("0123456789d+-"));
         } else if (usedForInitEditCreature) {
             creatureName.setVisibility(View.GONE);
             creatureTypeLayout.setVisibility(View.GONE);
             initiativeLabel.setText(getString(R.string.initiativeLabel));
             //maxHitPointLayout.setVisibility(View.GONE);
         }
+
+        //maxHP.setKeyListener(DigitsKeyListener.getInstance("0123456789d+-"));
+        HitDieInputFilter hdFilter = new HitDieInputFilter();
+        maxHP.setFilters(new InputFilter[]{hdFilter});
 
         return view;
     }
