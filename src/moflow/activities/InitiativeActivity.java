@@ -81,6 +81,11 @@ public class InitiativeActivity extends ListActivity
                 .setTitle("Encounters")
                 .setItems(eList, this);
         encounterChoiceList = builder.create();
+
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Remove")
+                .setItems(R.array.deleteGroupDialogChoices, this);
+        deleteCreatureChoiceDialog = builder.create();
     }
 
     // Inflates the action bar.
@@ -111,6 +116,7 @@ public class InitiativeActivity extends ListActivity
             case R.id.action_waitList:
                 break;
             case R.id.action_group_delete:
+                deleteCreatureChoiceDialog.show();
                 break;
             case R.id.action_help:
                 Toast.makeText(this, getString(R.string.initHelpMsg), Toast.LENGTH_LONG).show();
@@ -199,6 +205,14 @@ public class InitiativeActivity extends ListActivity
                 prepForInitList(c, false, true);
                 listAdapter.add(c);
                 dbTransaction.insertNewCreatureIntoInitiative(c);
+            }
+        }
+
+        if (dialogInterface == deleteCreatureChoiceDialog) {
+            if (choiceIndex == DELETE_ALL) {
+                dbTransaction.deleteAllFromInitiative();
+                initList.clear();
+                listAdapter.notifyDataSetChanged();
             }
         }
     }

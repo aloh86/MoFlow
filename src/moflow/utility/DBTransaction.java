@@ -221,6 +221,8 @@ public class DBTransaction {
         db.deleteNonCustomCreatures();
     }
 
+    public void deleteAllFromInitiative() { db.deleteInitListAll(); }
+
     // Modification
 
     public void renameGroup( String newName, String oldName, String groupType ) {
