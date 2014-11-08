@@ -95,7 +95,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
 
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getWisdom() );
             mod = modToString(mod);
-            holder.wisScore.setText(creature.getWill() + " (" + mod + ")");
+            holder.wisScore.setText(creature.getWisdom() + " (" + mod + ")");
 
             mod = AbilityScoreMod.get345AbilityScoreMod( creature.getCharisma() );
             mod = modToString(mod);
