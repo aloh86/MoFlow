@@ -223,6 +223,10 @@ public class DBTransaction {
 
     public void deleteAllFromInitiative() { db.deleteInitListAll(); }
 
+    public void deletePCsFromInitiative() { db.deleteInitListPCs(); }
+
+    public void deleteMonstersFromInitiative() { db.deleteInitListMonsters(); }
+
     // Modification
 
     public void renameGroup( String newName, String oldName, String groupType ) {

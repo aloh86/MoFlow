@@ -16,6 +16,7 @@ import moflow.utility.*;
 import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by alex on 10/19/14.
@@ -202,19 +203,39 @@ public class InitiativeActivity extends ListActivity
         if (dialogInterface == encounterChoiceList) {
             ArrayList<Creature> tmpList =  dbTransaction.getGroupItemList(Key.Val.ENCOUNTER, encounterList.get(choiceIndex));
             for(Creature c : tmpList) {
-                prepForInitList(c, false, true);
+                prepForInitList(c, true, true);
                 listAdapter.add(c);
                 dbTransaction.insertNewCreatureIntoInitiative(c);
             }
         }
 
         if (dialogInterface == deleteCreatureChoiceDialog) {
+            if (choiceIndex == DELETE_PCs) {
+                dbTransaction.deletePCsFromInitiative();
+                for (Iterator<Creature> iterator = initList.iterator(); iterator.hasNext();) {
+                    Creature c = iterator.next();
+                    if (!c.isMonster()) {
+                        iterator.remove();
+                    }
+                }
+            }
+
+            if (choiceIndex == DELETE_MONSTERS) {
+                dbTransaction.deleteMonstersFromInitiative();
+                for (Iterator<Creature> iterator = initList.iterator(); iterator.hasNext();) {
+                    Creature c = iterator.next();
+                    if (c.isMonster()) {
+                        iterator.remove();
+                    }
+                }
+            }
+
             if (choiceIndex == DELETE_ALL) {
                 dbTransaction.deleteAllFromInitiative();
                 initList.clear();
-                listAdapter.notifyDataSetChanged();
             }
         }
+        listAdapter.notifyDataSetChanged();
     }
 
     private void prepForInitList(Creature c, boolean isMonster, boolean randomHitDie) {
