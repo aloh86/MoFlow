@@ -277,8 +277,7 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         }
 
         if (usedForInitNewCreature) {
-            String selectedType = creatureTypeSwitch.getText().toString();
-            if (selectedType.equals(getString(R.string.typeSwitchOff))) {
+            if (!creatureTypeSwitch.isChecked()) {
                 thing.setAsMonster(true);
             } else {
                 thing.setAsMonster(false);

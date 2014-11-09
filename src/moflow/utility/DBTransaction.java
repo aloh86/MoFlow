@@ -138,7 +138,7 @@ public class DBTransaction {
             critter.setCurrentHitPoints(cur.getString(5));
             critter.setMaxHitPoints(cur.getString(6));
             critter.setHitDie(cur.getString(7));
-            critter.setAsMonster(Boolean.getBoolean(String.valueOf(cur.getInt(8))));
+            critter.setAsMonster((cur.getInt(8) == 0 ? false : true));
             critter.setStrength(cur.getString(9));
             critter.setDexterity(cur.getString(10));
             critter.setConstitution(cur.getString(11));

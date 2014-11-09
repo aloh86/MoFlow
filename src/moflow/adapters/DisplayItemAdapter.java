@@ -54,6 +54,10 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
 
     private void fillData( Creature creature, ViewHolder holder ) {
         holder.creatureName.setText( creature.getCreatureName() );
+        if (creature.isMonster()) {
+            holder.creatureName.setTextColor(Color.RED);
+        }
+
         holder.armorClass.setText(creature.getArmorClass());
 
          // init is a special case. If it's the PC/Encounter items list show the init mod, else show the initiative.
