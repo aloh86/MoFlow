@@ -16,6 +16,7 @@ import moflow.utility.*;
 import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -37,12 +38,15 @@ public class InitiativeActivity extends ListActivity
     private CreatureEditDialog editCreatureDialog;
     private Dialog newCreatureChoiceDialog;
     private Dialog deleteCreatureChoiceDialog;
-    private Dialog partyChoiceList;
-    private Dialog encounterChoiceList;
-    private Dialog rollChoiceList;
+    private Dialog partyChoiceDialog;
+    private Dialog encounterChoiceDialog;
+    private Dialog rollChoiceDialog;
+    private Dialog sortChoiceDialog;
     final int PCs = 0;
     final int MONSTERS = 1;
     final int ALL = 2;
+    final int DESCENDING = 0;
+    final int ASCENDING = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,14 +83,14 @@ public class InitiativeActivity extends ListActivity
         builder = new AlertDialog.Builder(this)
                 .setTitle("Parties")
                 .setItems(pList, this);
-        partyChoiceList = builder.create();
+        partyChoiceDialog = builder.create();
 
         encounterList = dbTransaction.getGroupList(Key.Val.ENCOUNTER);
         String [] eList = encounterList.toArray(new String[encounterList.size()]);
         builder = new AlertDialog.Builder(this)
                 .setTitle("Encounters")
                 .setItems(eList, this);
-        encounterChoiceList = builder.create();
+        encounterChoiceDialog = builder.create();
 
         builder = new AlertDialog.Builder(this);
         builder.setTitle("Remove")
@@ -96,7 +100,12 @@ public class InitiativeActivity extends ListActivity
         builder = new AlertDialog.Builder(this);
         builder.setTitle("Roll Init")
                 .setItems(R.array.pc_monster_all, this);
-        rollChoiceList = builder.create();
+        rollChoiceDialog = builder.create();
+
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Sort")
+                .setItems(R.array.sortChoiceArray, this);
+        sortChoiceDialog = builder.create();
     }
 
     // Inflates the action bar.
@@ -121,9 +130,10 @@ public class InitiativeActivity extends ListActivity
             case R.id.action_prevItem:
                 break;
             case R.id.action_rollInit:
-                rollChoiceList.show();
+                rollChoiceDialog.show();
                 break;
             case R.id.action_sortInitList:
+                sortChoiceDialog.show();
                 break;
             case R.id.action_waitList:
                 break;
@@ -188,9 +198,9 @@ public class InitiativeActivity extends ListActivity
                 newCreatureDialog = CreatureEditDialog.newInstance("New Creature", null, Key.Val.USAGE_INIT_NEW_CREATURE);
                 newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
             } else if (choiceIndex == IMPORT_PARTY) {
-                partyChoiceList.show();
+                partyChoiceDialog.show();
             } else if (choiceIndex == IMPORT_ENCOUNTER) {
-                encounterChoiceList.show();
+                encounterChoiceDialog.show();
             } else { // else if IMPORT_CATALOG
                 Intent intent = new Intent("moflow.activities.CatalogActivity");
                 intent.putExtra(Key.PARENT_ACTIVITY, Key.Val.INITIATIVE_ACTIVITY);
@@ -198,7 +208,7 @@ public class InitiativeActivity extends ListActivity
             }
         }
 
-        if (dialogInterface == partyChoiceList) {
+        if (dialogInterface == partyChoiceDialog) {
             ArrayList<Creature> tmpList =  dbTransaction.getGroupItemList(Key.Val.PARTY, partyList.get(choiceIndex));
             for(Creature c : tmpList) {
                 prepForInitList(c, false, false);
@@ -207,7 +217,7 @@ public class InitiativeActivity extends ListActivity
             }
         }
 
-        if (dialogInterface == encounterChoiceList) {
+        if (dialogInterface == encounterChoiceDialog) {
             ArrayList<Creature> tmpList =  dbTransaction.getGroupItemList(Key.Val.ENCOUNTER, encounterList.get(choiceIndex));
             for(Creature c : tmpList) {
                 prepForInitList(c, true, true);
@@ -239,13 +249,21 @@ public class InitiativeActivity extends ListActivity
             }
         }
 
-        if (dialogInterface == rollChoiceList) {
+        if (dialogInterface == rollChoiceDialog) {
             if (choiceIndex == PCs) {
                 rollInit(PCs);
             } else if (choiceIndex == MONSTERS) {
                 rollInit(MONSTERS);
             } else if (choiceIndex == ALL) {
                 rollInit(ALL);
+            }
+        }
+
+        if (dialogInterface == sortChoiceDialog) {
+            if (choiceIndex == DESCENDING) {
+                sortInitiative(DESCENDING);
+            } else if (choiceIndex == ASCENDING) {
+                sortInitiative(ASCENDING);
             }
         }
         listAdapter.notifyDataSetChanged();
@@ -369,12 +387,20 @@ public class InitiativeActivity extends ListActivity
         }
     }
 
-    public int rollInitiative() {
+    private int rollInitiative() {
         Random r = new Random();
         int result = 0;
         int min = 1;
         int range = 20;
 
         return result = r.nextInt(range) + min;
+    }
+
+    private void sortInitiative(int sortType) {
+        Collections.sort(initList, Collections.reverseOrder());
+
+        if (sortType == ASCENDING) {
+            Collections.sort(initList);
+        }
     }
 }

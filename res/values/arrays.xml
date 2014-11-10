@@ -29,4 +29,9 @@
         <item>Monsters</item>
         <item>All</item>
     </string-array>
+
+    <string-array name="sortChoiceArray">
+        <item>Descending</item>
+        <item>Ascending</item>
+    </string-array>
 </resources>
