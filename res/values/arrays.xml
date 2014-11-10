@@ -24,7 +24,7 @@
         <item>Catalog</item>
     </string-array>
 
-    <string-array name="deleteGroupDialogChoices">
+    <string-array name="pc_monster_all">
         <item>PCs</item>
         <item>Monsters</item>
         <item>All</item>

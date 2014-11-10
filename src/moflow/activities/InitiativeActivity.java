@@ -17,6 +17,7 @@ import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by alex on 10/19/14.
@@ -38,6 +39,10 @@ public class InitiativeActivity extends ListActivity
     private Dialog deleteCreatureChoiceDialog;
     private Dialog partyChoiceList;
     private Dialog encounterChoiceList;
+    private Dialog rollChoiceList;
+    final int PCs = 0;
+    final int MONSTERS = 1;
+    final int ALL = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,8 +90,13 @@ public class InitiativeActivity extends ListActivity
 
         builder = new AlertDialog.Builder(this);
         builder.setTitle("Remove")
-                .setItems(R.array.deleteGroupDialogChoices, this);
+                .setItems(R.array.pc_monster_all, this);
         deleteCreatureChoiceDialog = builder.create();
+
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Roll Init")
+                .setItems(R.array.pc_monster_all, this);
+        rollChoiceList = builder.create();
     }
 
     // Inflates the action bar.
@@ -111,6 +121,7 @@ public class InitiativeActivity extends ListActivity
             case R.id.action_prevItem:
                 break;
             case R.id.action_rollInit:
+                rollChoiceList.show();
                 break;
             case R.id.action_sortInitList:
                 break;
@@ -172,10 +183,6 @@ public class InitiativeActivity extends ListActivity
         final int IMPORT_ENCOUNTER = 2;
         final int IMPORT_CATALOG = 3;
 
-        final int DELETE_PCs = 0;
-        final int DELETE_MONSTERS = 1;
-        final int DELETE_ALL = 2;
-
         if (dialogInterface == newCreatureChoiceDialog) {
             if (choiceIndex == NEW_CREATURE) {
                 newCreatureDialog = CreatureEditDialog.newInstance("New Creature", null, Key.Val.USAGE_INIT_NEW_CREATURE);
@@ -210,7 +217,7 @@ public class InitiativeActivity extends ListActivity
         }
 
         if (dialogInterface == deleteCreatureChoiceDialog) {
-            if (choiceIndex == DELETE_PCs) {
+            if (choiceIndex == PCs) {
                 dbTransaction.deletePCsFromInitiative();
                 for (Iterator<Creature> iterator = initList.iterator(); iterator.hasNext();) {
                     Creature c = iterator.next();
@@ -218,9 +225,7 @@ public class InitiativeActivity extends ListActivity
                         iterator.remove();
                     }
                 }
-            }
-
-            if (choiceIndex == DELETE_MONSTERS) {
+            } else if (choiceIndex == MONSTERS) {
                 dbTransaction.deleteMonstersFromInitiative();
                 for (Iterator<Creature> iterator = initList.iterator(); iterator.hasNext();) {
                     Creature c = iterator.next();
@@ -228,11 +233,19 @@ public class InitiativeActivity extends ListActivity
                         iterator.remove();
                     }
                 }
-            }
-
-            if (choiceIndex == DELETE_ALL) {
+            } else if (choiceIndex == ALL) {
                 dbTransaction.deleteAllFromInitiative();
                 initList.clear();
+            }
+        }
+
+        if (dialogInterface == rollChoiceList) {
+            if (choiceIndex == PCs) {
+                rollInit(PCs);
+            } else if (choiceIndex == MONSTERS) {
+                rollInit(MONSTERS);
+            } else if (choiceIndex == ALL) {
+                rollInit(ALL);
             }
         }
         listAdapter.notifyDataSetChanged();
@@ -335,5 +348,33 @@ public class InitiativeActivity extends ListActivity
         }
 
         return null;
+    }
+
+
+    private void rollInit(int choice) {
+        for (int i = 0; i < initList.size(); i++) {
+            Creature c = initList.get(i);
+            int mod = Integer.valueOf(c.getInitMod());
+            int roll = rollInitiative();
+            int result = roll + mod;
+            String resultStr = String.valueOf(result);
+
+            if (choice == ALL) {
+                c.setInitiative(resultStr);
+            } else if (choice == PCs && !c.isMonster()) {
+                c.setInitiative(resultStr);
+            } else if (choice == MONSTERS && c.isMonster()) {
+                c.setInitiative(resultStr);
+            }
+        }
+    }
+
+    public int rollInitiative() {
+        Random r = new Random();
+        int result = 0;
+        int min = 1;
+        int range = 20;
+
+        return result = r.nextInt(range) + min;
     }
 }
