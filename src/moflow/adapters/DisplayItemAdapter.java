@@ -56,7 +56,8 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         holder.creatureName.setText( creature.getCreatureName() );
         if (creature.isMonster()) {
             holder.creatureName.setTextColor(Color.RED);
-        }
+        } else
+            holder.creatureName.setTextColor(Color.GREEN);
 
         holder.armorClass.setText(creature.getArmorClass());
 
@@ -151,7 +152,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         public ViewHolder(View convertView)
         {
             creatureName = (TextView) convertView.findViewById(R.id.display_creatureName);
-            creatureName.setTextColor(Color.GREEN);
+            //creatureName.setTextColor(Color.GREEN);
             armorClass = (TextView) convertView.findViewById(R.id.display_armorClassLabel);
             maxHitPoints = (TextView) convertView.findViewById(R.id.display_maxHPLabel);
             initScore = (TextView) convertView.findViewById(R.id.display_initBonusLabel);

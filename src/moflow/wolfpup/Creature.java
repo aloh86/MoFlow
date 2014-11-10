@@ -64,7 +64,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
         currentHitPoints = maxHitPoints;
         hitDie = "XdX";
 		initiative = "0";
-		isMonster = true;
+		isMonster = false;
 		hasInit = false;
 	}
 	
