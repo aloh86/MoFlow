@@ -75,6 +75,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
             }
         } else {
             holder.initScore.setText(creature.getInitiative());
+            holder.initLabel.setText("Initiative: ");
             holder.maxHitPoints.setText(creature.getCurrentHitPoints() + "/" + maxHP);
         }
 

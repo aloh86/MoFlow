@@ -265,7 +265,11 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
                 return null;
             }
 
-            thing.setInitiative(initiative.getText().toString());
+            String init = initiative.getText().toString();
+            String initMod = critter.getInitMod();
+            int initSum = Integer.valueOf(init) + Integer.valueOf(initMod);
+            String initString = String.valueOf(initSum);
+            thing.setInitiative(initString);
 
             // Change the current hit point value if a life gain/loss value was supplied
             String curHP = this.critter.getCurrentHitPoints();
