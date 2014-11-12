@@ -72,7 +72,7 @@
                     <EditText
                             android:id="@+id/creatureHitPointModEditText"
                             style="@style/statEntry"
-
+                            android:numeric="integer"
                             android:hint="@string/hpGainLossHint"
                             android:nextFocusDown="@+id/creatureInitiativeEditText"/>
                 </LinearLayout>
