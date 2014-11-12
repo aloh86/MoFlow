@@ -37,7 +37,7 @@
     <string name="basicsLabel">Basics</string>
     <string name="hitPointsLabel">Hit Points</string>
     <string name="maxHPHint">HP</string>
-    <string name="hpGainLossHint">Life gain/loss</string>
+    <string name="hpGainLossHint">HP loss/gain</string>
     <string name="initBonusHint">Init</string>
     <string name="abilityScoresLabel">Ability Scores</string>
     <string name="strHint">STR</string>
@@ -61,14 +61,14 @@
     <string name="creatureTypePC">Player</string>
     <string name="creatureTypeMonster">Monster</string>
     <string name="initiativeLabel">Initiative</string>
-    <string name="hitPointSwitchOff">Damage</string>
+    <string name="hitPointSwitchOff">Dmg</string>
     <string name="hitPointSwitchOn">Heal</string>
     <string name="typeSwitchOff">Monster</string>
     <string name="typeSwitchOn">Player</string>
 
     <!-- Creature Stat Display Strings -->
     <string name="display_armorClassLabel">"AC: "</string>
-    <string name="display_maxHPLabel">"HP: "</string>
+    <string name="display_maxHPLabel">"Max HP: "</string>
     <string name="display_initBonusLabel">"Init: "</string>
     <string name="strLabel">STR:</string>
     <string name="dexLabel">DEX:</string>

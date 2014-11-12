@@ -60,7 +60,7 @@
             <TextView
                     android:id="@+id/display_static_maxHPLabel"
                     style="@style/statLabel"
-                    android:text="@string/display_maxHPLabel"
+                    android:text="@string/hitPointsLabel"
                     android:drawableLeft="@drawable/hitpoints"/>
             <TextView
                     android:id="@+id/display_maxHPLabel"

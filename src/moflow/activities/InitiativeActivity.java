@@ -152,7 +152,10 @@ public class InitiativeActivity extends ListActivity
     // Handle listview item clicks.
     @Override
     public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-
+        String nameAsTitle = initList.get(position).getCreatureName();
+        editCreatureDialog = CreatureEditDialog.newInstance(nameAsTitle, initList.get(position), Key.Val.USAGE_INIT_EDIT_CREATURE);
+        editCreatureDialog.show(getFragmentManager(), "editCreatureDialog");
+        indexOfItemToEdit = position;
     }
 
     // Contextual action mode: checked state changed.
@@ -283,6 +286,9 @@ public class InitiativeActivity extends ListActivity
             c.setMaxHitPoints(maxHPStr);
         }
         c.setCurrentHitPoints(c.getMaxHitPoints());
+
+        String name = NameModifier.makeNameUnique2(initList, c.getCreatureName());
+        c.setCreatureName(name);
     }
 
     // Handle positive click for dialog fragments.
@@ -309,6 +315,31 @@ public class InitiativeActivity extends ListActivity
                 dbTransaction.insertNewCreatureIntoInitiative(critter);
                 listAdapter.sort(Creature.nameComparator());
                 listAdapter.notifyDataSetChanged();
+            } else
+                CommonToast.invalidFieldToast(this);
+        }
+
+        if ( dialog == editCreatureDialog ) {
+            if ( !editCreatureDialog.hasEmptyFields() ) {
+                Creature thing = editCreatureDialog.getCritter();
+
+                if (thing == null) {
+                    CommonToast.invalidDieToast(this);
+                    return;
+                }
+
+                if ( thing.equals(initList.get(indexOfItemToEdit))) {
+                    return;
+                } else {
+                    String oldName = initList.get(indexOfItemToEdit).getCreatureName();
+
+                    if ( !oldName.equals( thing.getCreatureName() ) )
+                        thing.setCreatureName( NameModifier.makeNameUnique2( initList, thing.getCreatureName() ) );
+
+                    initList.set( indexOfItemToEdit, thing );
+                    dbTransaction.updateCreatureInInit(thing, oldName);
+                    listAdapter.notifyDataSetChanged();
+                }
             } else
                 CommonToast.invalidFieldToast(this);
         }

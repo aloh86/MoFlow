@@ -246,4 +246,8 @@ public class DBTransaction {
     public void updateCatalogCreature( Creature updated, String oldName ) {
         db.updateCreatureInCatalog(updated, oldName);
     }
+
+    public void updateCreatureInInit(Creature updated, String oldCreatureName) {
+        db.updateCreatureInInitiative(updated, oldCreatureName);
+    }
 }

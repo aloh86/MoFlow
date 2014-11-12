@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
@@ -50,7 +51,6 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     private EditText will;
     private EditText hitPointMod;
 
-    private TextView creatureNameTextView;
     private TextView initiativeLabel;
 
     private Switch creatureTypeSwitch;
@@ -60,7 +60,6 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     private LinearLayout savingThrowsLayout;
     private LinearLayout creatureTypeLayout;
     private LinearLayout hitPointModLayout;
-    private LinearLayout maxHitPointLayout;
 
     private boolean showAbilityScores;
     private boolean showSavingThrows;
@@ -144,7 +143,6 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         view = getActivity().getLayoutInflater().inflate(R.layout.groupitemedit, null);
 
         creatureName = (EditText) view.findViewById(R.id.creatureNameEditText);
-        creatureNameTextView = (TextView) view.findViewById(R.id.creatureNameLabel);
         armorClass = (EditText) view.findViewById(R.id.creatureArmorClassEditText);
 
         hitPointMod = (EditText) view.findViewById(R.id.creatureHitPointModEditText);
@@ -171,7 +169,6 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         savingThrowsLayout = ( LinearLayout ) view.findViewById( R.id.edit_savingThrowsLayout );
         creatureTypeLayout = (LinearLayout) view.findViewById(R.id.creatureTypeLayout);
         hitPointModLayout = (LinearLayout) view.findViewById(R.id.hitPointModLayout);
-        maxHitPointLayout = (LinearLayout) view.findViewById(R.id.maxHitPointsLayout);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( getActivity().getApplicationContext() );
         showAbilityScores = sharedPref.getBoolean( Key.PREF_SCORE, false  );
@@ -189,11 +186,9 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         // Change or Hide some of the views depending on the usage
         // (e.g. from catalog, party/encounter manager, initiative)
         if (usedForGroupEditActivity || usedForCatalogActivity) {
-            creatureNameTextView.setVisibility(View.GONE);
             creatureTypeLayout.setVisibility(View.GONE);
             hitPointModLayout.setVisibility(View.GONE);
         } else if (usedForInitNewCreature) {
-            creatureNameTextView.setVisibility(View.GONE);
             hitPointModLayout.setVisibility(View.GONE);
         } else if (usedForInitEditCreature) {
             creatureName.setVisibility(View.GONE);
@@ -202,9 +197,14 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             //maxHitPointLayout.setVisibility(View.GONE);
         }
 
-        //maxHP.setKeyListener(DigitsKeyListener.getInstance("0123456789d+-"));
-        HitDieInputFilter hdFilter = new HitDieInputFilter();
-        maxHP.setFilters(new InputFilter[]{hdFilter});
+        if (usedForInitEditCreature) {
+            maxHP.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        } else {
+            //maxHP.setKeyListener(DigitsKeyListener.getInstance("0123456789d+-"));
+            HitDieInputFilter hdFilter = new HitDieInputFilter();
+            maxHP.setFilters(new InputFilter[]{hdFilter});
+            maxHP.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        }
 
         return view;
     }
@@ -218,14 +218,17 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             creatureName.setText(critter.getCreatureName());
         } else if (usedForInitEditCreature) {
             initiative.setText(critter.getInitiative());
-            creatureNameTextView.setText(critter.getCreatureName());
         }
 
-        boolean hasHitDie = HitDie.isHitDieExpression(critter.getHitDie());
-        if (hasHitDie) {
-            maxHP.setText(critter.getHitDie());
-        } else
+        if (!usedForInitEditCreature) {
+            boolean hasHitDie = HitDie.isHitDieExpression(critter.getHitDie());
+            if (hasHitDie) {
+                maxHP.setText(critter.getHitDie());
+            } else
+                maxHP.setText(critter.getMaxHitPoints());
+        } else {
             maxHP.setText(critter.getMaxHitPoints());
+        }
 
         strength.setText(critter.getStrength());
         dexterity.setText(critter.getDexterity());
@@ -243,10 +246,14 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     public Creature getCritter() {
         Creature thing = new Creature();
 
-        thing.setCreatureName(creatureName.getText().toString().trim());
+        if (usedForInitEditCreature) {
+            thing.setCreatureName(critter.getCreatureName());
+        } else {
+            thing.setCreatureName(creatureName.getText().toString().trim());
+        }
+
         thing.setArmorClass(armorClass.getText().toString());
 
-        // TODO make checks against both maxhp and hitdie
         String hp = maxHP.getText().toString();
         if (usedForGroupEditActivity || usedForCatalogActivity || usedForInitNewCreature) {
             if (!HitDie.isHitDieExpression(hp) && !HitDie.isDigit(hp)) {
@@ -264,12 +271,14 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             String curHP = this.critter.getCurrentHitPoints();
             if (!curHP.isEmpty()) {
                 int currentHP = Integer.valueOf(curHP);
-                int hpModValue = Integer.valueOf(hitPointMod.getText().toString());
+                String hpMod = hitPointMod.getText().toString();
+                hpMod = (hpMod.isEmpty() ? "0" : hpMod);
+                int hpModValue = (hpMod == null ? 0 : Integer.valueOf(hpMod));
 
-                if (hitPointModTypeSwitch.getText().equals(getString(R.string.hitPointSwitchOff))) {
-                    currentHP -= hpModValue;
-                } else {
+                if (hitPointModTypeSwitch.isChecked()) {
                     currentHP += hpModValue;
+                } else {
+                    currentHP -= hpModValue;
                 }
                 curHP = String.valueOf(currentHP);
                 thing.setCurrentHitPoints(curHP);

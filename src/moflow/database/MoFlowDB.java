@@ -578,6 +578,30 @@ public class MoFlowDB {
 		
 		return db.updateWithOnConflict( Creatures_Table.TABLE_NAME, initVal, whereClause, whereArgs, SQLiteDatabase.CONFLICT_IGNORE );
 	}
+
+    public int updateCreatureInInitiative(Creature updated, String nameOfOldCreature) {
+        String whereClause = Init_Table.COL_CreatureName + " = ?";
+        String [] whereArgs = {nameOfOldCreature};
+
+        ContentValues initVal = new ContentValues();
+        initVal.put( Init_Table.COL_CreatureName, updated.getCreatureName() );
+        initVal.put( Init_Table.COL_InitBonus, updated.getInitMod() );
+        initVal.put( Init_Table.COL_ArmorClass, updated.getArmorClass() );
+        initVal.put( Init_Table.COL_MaxHP, updated.getMaxHitPoints() );
+        initVal.put(Init_Table.COL_HitDie, updated.getHitDie());
+        initVal.put( Init_Table.COL_STR, updated.getStrength() );
+        initVal.put( Init_Table.COL_DEX, updated.getDexterity() );
+        initVal.put( Init_Table.COL_CON, updated.getConstitution() );
+        initVal.put( Init_Table.COL_INT, updated.getIntelligence() );
+        initVal.put( Init_Table.COL_WIS, updated.getWisdom() );
+        initVal.put( Init_Table.COL_CHA, updated.getCharisma() );
+        initVal.put( Init_Table.COL_FORT, updated.getFortitude() );
+        initVal.put( Init_Table.COL_REF, updated.getReflex() );
+        initVal.put( Init_Table.COL_WILL, updated.getWill() );
+        initVal.put(Init_Table.COL_Type, updated.isMonster() == false ? 0 : 1);
+
+        return db.updateWithOnConflict(Init_Table.TABLE_NAME, initVal, whereClause, whereArgs, SQLiteDatabase.CONFLICT_ROLLBACK);
+    }
 	
 	/*************************************************************************
 	 *  DELETIONS
