@@ -59,6 +59,10 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         } else
             holder.creatureName.setTextColor(Color.GREEN);
 
+        if (!isInitiativeScreen) {
+            holder.creatureName.setTextColor(Color.YELLOW);
+        }
+
         holder.armorClass.setText(creature.getArmorClass());
 
          // init is a special case. If it's the PC/Encounter items list show the init mod, else show the initiative.
@@ -153,7 +157,6 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         public ViewHolder(View convertView)
         {
             creatureName = (TextView) convertView.findViewById(R.id.display_creatureName);
-            //creatureName.setTextColor(Color.GREEN);
             armorClass = (TextView) convertView.findViewById(R.id.display_armorClassLabel);
             maxHitPoints = (TextView) convertView.findViewById(R.id.display_maxHPLabel);
             initScore = (TextView) convertView.findViewById(R.id.display_initBonusLabel);
