@@ -214,7 +214,7 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
                 groupList);
         setListAdapter( listAdapter );
         MenuInflater inflater = actionMode.getMenuInflater();
-        inflater.inflate( R.menu.actionbar_del, menu );
+        inflater.inflate( R.menu.context_actionbar_delete, menu );
         menu.findItem( R.id.action_edit ).setVisible( true );
 
         return true;

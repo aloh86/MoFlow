@@ -587,6 +587,7 @@ public class MoFlowDB {
         initVal.put( Init_Table.COL_CreatureName, updated.getCreatureName() );
         initVal.put( Init_Table.COL_InitBonus, updated.getInitMod() );
         initVal.put( Init_Table.COL_ArmorClass, updated.getArmorClass() );
+        initVal.put(Init_Table.COL_CurrentHP, updated.getCurrentHitPoints());
         initVal.put( Init_Table.COL_MaxHP, updated.getMaxHitPoints() );
         initVal.put(Init_Table.COL_HitDie, updated.getHitDie());
         initVal.put( Init_Table.COL_STR, updated.getStrength() );
@@ -600,7 +601,7 @@ public class MoFlowDB {
         initVal.put( Init_Table.COL_WILL, updated.getWill() );
         initVal.put(Init_Table.COL_Type, updated.isMonster() == false ? 0 : 1);
 
-        return db.updateWithOnConflict(Init_Table.TABLE_NAME, initVal, whereClause, whereArgs, SQLiteDatabase.CONFLICT_ROLLBACK);
+        return db.updateWithOnConflict(Init_Table.TABLE_NAME, initVal, whereClause, whereArgs, SQLiteDatabase.CONFLICT_REPLACE);
     }
 	
 	/*************************************************************************
@@ -720,5 +721,11 @@ public class MoFlowDB {
 
     public void deleteNonCustomCreatures() {
         db.execSQL( "DELETE FROM " + Catalog_Table.TABLE_NAME + " WHERE CUSTOM = 0;" );
+    }
+
+    public int deleteCreatureFromInit(String creatureName) {
+        String whereClause = Init_Table.COL_CreatureName + " = ?";
+        String [] whereArgs = {creatureName};
+        return db.delete(Init_Table.TABLE_NAME, whereClause, whereArgs);
     }
 }

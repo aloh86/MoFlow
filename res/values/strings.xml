@@ -31,6 +31,7 @@
     <string name="actbar_nextItem">Next</string>
     <string name="actbar_waitList">Wait List</string>
     <string name="actbar_rollInit">Roll Initiative</string>
+    <string name="actbar_hold">Hold</string>
 
     <!-- Party, Encounter, and Initiative Item Edit Strings -->
     <string name="nameHint">Name</string>
@@ -108,6 +109,7 @@
     <string name="menu_itemWait">Hold action</string>
     <string name="menu_itemRemove">Delete</string>
     <string name="menu_moveDown">Move Down</string>
+
 
     <!--Context Menu-->
     <string name="scratchCreature">New Creature</string>

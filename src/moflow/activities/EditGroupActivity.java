@@ -238,7 +238,7 @@ public class EditGroupActivity extends ListActivity
                 groupList);
         setListAdapter( listAdapter );
         MenuInflater inflater = actionMode.getMenuInflater();
-        inflater.inflate( R.menu.actionbar_del, menu );
+        inflater.inflate( R.menu.context_actionbar_delete, menu );
 
         return true;
     }

@@ -245,7 +245,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
     {
         MenuInflater inflater = actionMode.getMenuInflater();
-        inflater.inflate( R.menu.actionbar_del, menu );
+        inflater.inflate( R.menu.context_actionbar_delete, menu );
 
         if (listAdapter.getCount() == 1) {
             if (listAdapter.getItem(0).equals(getString(R.string.no_results))) {

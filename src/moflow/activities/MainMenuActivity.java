@@ -56,7 +56,7 @@ public class MainMenuActivity extends Activity implements OnItemClickListener {
     public boolean onCreateOptionsMenu( Menu menu ) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate( R.menu.abm_main, menu );
+        inflater.inflate( R.menu.actionbar_main, menu );
         return super.onCreateOptionsMenu( menu );
     }
 

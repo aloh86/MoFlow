@@ -52,7 +52,7 @@ public class InitiativeActivity extends ListActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.setTitle("Initiative");
+        this.setTitle("Round: ");
 
         dbTransaction = new DBTransaction( this );
         initList = dbTransaction.getInitiativeItems();
@@ -160,32 +160,68 @@ public class InitiativeActivity extends ListActivity
 
     // Contextual action mode: checked state changed.
     @Override
-    public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-
+    public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked) {
+        if ( checked )
+            deleteList.add(listAdapter.getItem(position));
+        else
+            deleteList.remove(listAdapter.getItem(position));
     }
 
     // Contextual action mode: setup the list adapter and inflate the view.
     @Override
     public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-        return false;
+        listAdapter = null;
+        listAdapter = new ArrayAdapter<Creature>(
+                this,
+                android.R.layout.simple_list_item_checked,
+                initList);
+        setListAdapter( listAdapter );
+        MenuInflater inflater = actionMode.getMenuInflater();
+        inflater.inflate( R.menu.context_actionbar_initiative, menu );
+
+        return true;
     }
 
     // Contextual action mode: do nothing.
     @Override
     public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+
         return false;
     }
 
     // Contextual action mode: handle menu items.
     @Override
     public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+        switch ( menuItem.getItemId() ) {
+            case R.id.action_discard:
+                deleteSelectedItems();
+                listAdapter.notifyDataSetChanged();
+                actionMode.finish();
+                return true;
+        }
         return false;
     }
 
     // Contextual action mode: restore list.
     @Override
     public void onDestroyActionMode(ActionMode actionMode) {
+        deleteList.clear();
 
+        listAdapter = null;
+        listAdapter = new DisplayItemAdapter(
+                this,
+                R.layout.groupitemdisplay,
+                initList,
+                true );
+        setListAdapter(listAdapter);
+    }
+
+    private void deleteSelectedItems() {
+        dbTransaction.deleteCreatureFromInitiative(deleteList);
+
+        for ( Creature c : deleteList ) {
+            listAdapter.remove( c );
+        }
     }
 
     // Handle contextual menu selection.

@@ -210,6 +210,12 @@ public class DBTransaction {
         }
     }
 
+    public void deleteCreatureFromInitiative(final ArrayList<Creature> toDelete) {
+        for (int i = 0; i < toDelete.size(); i++) {
+            db.deleteCreatureFromInit(toDelete.get(i).getCreatureName());
+        }
+    }
+
     public void deleteCreatureFromCatalog(ArrayList<String> toDelete) {
         for (int i = 0; i < toDelete.size(); i++) {
             db.deleteCreatureFromCatalog(toDelete.get(i));

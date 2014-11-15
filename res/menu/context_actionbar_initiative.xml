@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_hold"
+          android:title="@string/actbar_hold"
+          android:showAsAction="always"/>
+    <item android:id="@+id/action_discard"
+          android:icon="@drawable/ic_action_discard"
+          android:title="@string/actbar_discard"
+          android:showAsAction="always"/>
+</menu>
