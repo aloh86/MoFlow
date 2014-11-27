@@ -227,6 +227,8 @@ public class DBTransaction {
         db.deleteNonCustomCreatures();
     }
 
+    public void deleteAllCatalogCreatures() { db.deleteAllCatalogCreatures(); }
+
     public void deleteAllFromInitiative() { db.deleteInitListAll(); }
 
     public void deletePCsFromInitiative() { db.deleteInitListPCs(); }

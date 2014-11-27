@@ -724,6 +724,10 @@ public class MoFlowDB {
         db.execSQL( "DELETE FROM " + Catalog_Table.TABLE_NAME + " WHERE CUSTOM = 0;" );
     }
 
+    public void deleteAllCatalogCreatures() {
+        db.execSQL("DELETE FROM " + Catalog_Table.TABLE_NAME + ";");
+    }
+
     public int deleteCreatureFromInit(String creatureName) {
         String whereClause = Init_Table.COL_CreatureName + " = ?";
         String [] whereArgs = {creatureName};

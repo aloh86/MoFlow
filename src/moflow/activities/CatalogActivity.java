@@ -1,11 +1,12 @@
 package moflow.activities;
 
-import android.app.DialogFragment;
-import android.app.ListActivity;
-import android.app.SearchManager;
+import android.app.*;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.*;
 import android.widget.*;
 import moflow.dialogs.CreatureEditDialog;
@@ -23,10 +24,12 @@ import java.util.Comparator;
 /**
  * Created by Alex on 9/22/14.
  */
-public class CatalogActivity extends ListActivity implements AdapterView.OnItemClickListener, AbsListView.MultiChoiceModeListener, SimpleDialogListener, MenuItem.OnActionExpandListener
+public class CatalogActivity extends ListActivity
+        implements AdapterView.OnItemClickListener, AbsListView.MultiChoiceModeListener, SimpleDialogListener,
+        MenuItem.OnActionExpandListener, DialogInterface.OnClickListener
 {
     private DBTransaction dbTransaction;
-    private ArrayList< String > groupList;
+    private ArrayList< String > catalogList;
     private ArrayAdapter< String > listAdapter;
     private ArrayList< String > deleteList;
     private int indexOfItemToEdit;
@@ -34,6 +37,7 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     private CreatureEditDialog editCreatureDialog;
     private NumPickDialog numPickDialog;
     private String parentActivity;
+    private Dialog deleteConfirmDialog;
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
@@ -49,12 +53,12 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
 
         dbTransaction = new DBTransaction( this );
 
-        groupList = dbTransaction.getCatalogItemList();
+        catalogList = dbTransaction.getCatalogItemList();
 
         listAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_checked,
-                groupList);
+                catalogList);
         setListAdapter(listAdapter);
 
         getListView().setOnItemClickListener( this );
@@ -68,6 +72,14 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
         newCreatureDialog = CreatureEditDialog.newInstance("New Creature", null, Key.Val.CATALOG_ACTIVITY);
 
         numPickDialog = new NumPickDialog();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Remove all")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setMessage("Are you sure you want to remove all creatures from the catalog?")
+                .setNegativeButton("No", this)
+                .setPositiveButton("Yes", this);
+        deleteConfirmDialog = builder.create();
     }
 
     @Override
@@ -89,15 +101,15 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
     {
         ArrayList<String> filterList = new ArrayList<String>();
 
-        for (int i = 0; i < groupList.size(); i++) {
+        for (int i = 0; i < catalogList.size(); i++) {
             if (query.length() > 3) {
-                if (groupList.get(i).toLowerCase().startsWith(query) || groupList.get(i).toLowerCase().contains(query)) {
-                    filterList.add(groupList.get(i));
+                if (catalogList.get(i).toLowerCase().startsWith(query) || catalogList.get(i).toLowerCase().contains(query)) {
+                    filterList.add(catalogList.get(i));
                 }
             }
             else if (query.length() > 0 && query.length() <= 3) {
-                if (groupList.get(i).toLowerCase().startsWith(query)) {
-                    filterList.add(groupList.get(i));
+                if (catalogList.get(i).toLowerCase().startsWith(query)) {
+                    filterList.add(catalogList.get(i));
                 }
             }
         }
@@ -141,6 +153,9 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
             case R.id.action_new:
                 newCreatureDialog.show(getFragmentManager(), "newCatalogCreature");
                 break;
+            case R.id.action_remove_all:
+                deleteConfirmDialog.show();
+                break;
             case R.id.action_help:
                 Toast.makeText(this, "Long-click to delete an item. Tap an item to edit or select.", Toast.LENGTH_LONG).show();
                 break;
@@ -162,8 +177,8 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
                     return;
                 }
 
-                critter.setCreatureName( NameModifier.makeNameUnique( groupList, critter.getCreatureName() ) );
-                groupList.add(critter.getCreatureName());
+                critter.setCreatureName( NameModifier.makeNameUnique(catalogList, critter.getCreatureName() ) );
+                catalogList.add(critter.getCreatureName());
                 dbTransaction.insertNewCreatureIntoCatalog(critter);
                 listAdapter.sort( nameComparator() );
                 listAdapter.notifyDataSetChanged();
@@ -181,12 +196,12 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
                     return;
                 }
 
-                String oldName = groupList.get( indexOfItemToEdit );
+                String oldName = catalogList.get( indexOfItemToEdit );
 
                 if ( !oldName.equals( thing.getCreatureName() ) )
-                    thing.setCreatureName( NameModifier.makeNameUnique( groupList, thing.getCreatureName() ) );
+                    thing.setCreatureName( NameModifier.makeNameUnique(catalogList, thing.getCreatureName() ) );
 
-                groupList.set( indexOfItemToEdit, thing.getCreatureName() );
+                catalogList.set(indexOfItemToEdit, thing.getCreatureName());
                 dbTransaction.updateCatalogCreature( thing, oldName );
                 listAdapter.sort( nameComparator() );
                 listAdapter.notifyDataSetChanged();
@@ -319,16 +334,29 @@ public class CatalogActivity extends ListActivity implements AdapterView.OnItemC
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem menuItem) {
-        groupList.clear();
-        groupList = dbTransaction.getCatalogItemList();
+        catalogList.clear();
+        catalogList = dbTransaction.getCatalogItemList();
         listAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_checked,
-                groupList);
+                catalogList);
         setListAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
 
         Toast.makeText(this, "Filters cleared", Toast.LENGTH_SHORT).show();
         return true;
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int choice) {
+        if (dialogInterface == deleteConfirmDialog) {
+            if (choice == Dialog.BUTTON_POSITIVE) {
+                dbTransaction.deleteAllCatalogCreatures();
+            }
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+            settings.edit().putString("pref_catalogEdition", "-1").commit();
+            catalogList.clear();
+            listAdapter.notifyDataSetChanged();
+        }
     }
 }
