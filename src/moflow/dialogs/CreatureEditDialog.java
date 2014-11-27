@@ -90,6 +90,10 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         title = bundle.getString(Key.DIALOG_TITLE);
         critter = bundle.getParcelable(Key.CREATURE_OBJECT);
         usage = bundle.getString(Key.EDIT_CREATURE_DIALOG_USAGE);
+//
+//        if (savedInstanceState != null) {
+//            critter = savedInstanceState.getParcelable("editCreature");
+//        }
 
         if (usage.equals(Key.Val.EDITGROUP_ACTIVITY)) {
             usedForGroupEditActivity = true;
@@ -269,7 +273,12 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             String initMod = critter.getInitMod();
             int initSum = Integer.valueOf(init) + Integer.valueOf(initMod);
             String initString = String.valueOf(initSum);
-            thing.setInitiative(initString);
+
+            // we want to avoid setting initiative if it is equal to 0, since modifying any other
+            // stats will set the initiative to 0 + mod. We only want to set initiative if it is
+            // greater than or equal to 1.
+            if (!init.equals("0"))
+                thing.setInitiative(initString);
 
             // Change the current hit point value if a life gain/loss value was supplied
             String curHP = this.critter.getCurrentHitPoints();
@@ -295,6 +304,11 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             } else {
                 thing.setAsMonster(false);
             }
+        }
+
+        if (usedForInitEditCreature) {
+            thing.setAsMonster(critter.isMonster());
+            thing.setHasInit(critter.hasInit());
         }
 
         boolean hasHitDie = HitDie.isHitDieExpression(hp);

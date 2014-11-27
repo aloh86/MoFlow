@@ -121,6 +121,11 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
             holder.willScore.setText(creature.getWill());
         } else
             holder.savingThrowsLayout.setVisibility(View.GONE);
+
+        if (creature.hasInit()) {
+            holder.itemLayout.setBackgroundColor(Color.argb(77, 135, 164, 232));
+        } else
+            holder.itemLayout.setBackgroundColor(Color.TRANSPARENT);
     }
 
     private String modToString(String modVal)
@@ -154,6 +159,8 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         // static labels
         public TextView initLabel;
 
+        public LinearLayout itemLayout;
+
         public ViewHolder(View convertView)
         {
             creatureName = (TextView) convertView.findViewById(R.id.display_creatureName);
@@ -175,6 +182,8 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
             willScore = ( TextView ) convertView.findViewById( R.id.display_willScore );
 
             initLabel = (TextView) convertView.findViewById(R.id.display_static_initBonusLabel);
+
+            itemLayout = (LinearLayout) convertView.findViewById(R.id.display_groupItemLayout);
         }
     }
 }

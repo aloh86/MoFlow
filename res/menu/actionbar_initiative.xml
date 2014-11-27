@@ -4,7 +4,7 @@
     <item android:id="@+id/action_new"
           android:icon="@drawable/ic_action_new"
           android:title="@string/actbar_add"
-          android:showAsAction="always"/>
+          android:showAsAction="never"/>
 
     <item android:id="@+id/action_nextItem"
           android:icon="@drawable/ic_action_expand"
@@ -34,6 +34,10 @@
     <item android:id="@+id/action_group_delete"
           android:icon="@drawable/ic_action_discard"
           android:title="@string/actbar_grpdelete"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/action_reset_init"
+          android:title="Reset"
           android:showAsAction="never"/>
 
     <item android:id="@+id/action_help"

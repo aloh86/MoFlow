@@ -584,6 +584,7 @@ public class MoFlowDB {
         String [] whereArgs = {nameOfOldCreature};
 
         ContentValues initVal = new ContentValues();
+        initVal.put(Init_Table.COL_Init, updated.getInitiative());
         initVal.put( Init_Table.COL_CreatureName, updated.getCreatureName() );
         initVal.put( Init_Table.COL_InitBonus, updated.getInitMod() );
         initVal.put( Init_Table.COL_ArmorClass, updated.getArmorClass() );

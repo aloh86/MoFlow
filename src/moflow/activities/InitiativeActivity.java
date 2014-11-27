@@ -7,6 +7,8 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
 import moflow.adapters.DisplayItemAdapter;
@@ -15,10 +17,7 @@ import moflow.dialogs.SimpleDialogListener;
 import moflow.utility.*;
 import moflow.wolfpup.Creature;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by alex on 10/19/14.
@@ -30,10 +29,14 @@ public class InitiativeActivity extends ListActivity
     private DBTransaction dbTransaction;
     private ArrayList< Creature > initList;
     private ArrayList< Creature > deleteList;
+    private ArrayList<Creature> waitList;
     private ArrayList<String> partyList;
     private ArrayList<String> encounterList;
     private ArrayAdapter< Creature > listAdapter;
     private int indexOfItemToEdit;
+    private int indexOfItemToHold;
+    private int indexOfHasInit;
+    private int initRound;
     private CreatureEditDialog newCreatureDialog;
     private CreatureEditDialog editCreatureDialog;
     private Dialog newCreatureChoiceDialog;
@@ -42,11 +45,13 @@ public class InitiativeActivity extends ListActivity
     private Dialog encounterChoiceDialog;
     private Dialog rollChoiceDialog;
     private Dialog sortChoiceDialog;
-    final int PCs = 0;
-    final int MONSTERS = 1;
-    final int ALL = 2;
-    final int DESCENDING = 0;
-    final int ASCENDING = 1;
+    private Dialog waitItemsDialog;
+    private Dialog surpriseDialog;
+    private final int PCs = 0;
+    private final int MONSTERS = 1;
+    private final int ALL = 2;
+    private final int DESCENDING = 0;
+    private final int ASCENDING = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +111,98 @@ public class InitiativeActivity extends ListActivity
         builder.setTitle("Sort")
                 .setItems(R.array.sortChoiceArray, this);
         sortChoiceDialog = builder.create();
+
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Surprise Round")
+                .setMessage("Start with surprise round?")
+                .setNegativeButton("No", this)
+                .setPositiveButton("Yes", this);
+        surpriseDialog = builder.create();
+
+        waitList = new ArrayList<Creature>();
+
+        indexOfHasInit = -1;
+        initRound = -1;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (!initList.isEmpty()) {
+            Parcelable [] initCreatures = new Parcelable[initList.size()];
+            for (int i = 0; i < initList.size(); i++) {
+                initCreatures[i] = initList.get(i);
+            }
+            outState.putParcelableArray("initList", initCreatures);
+        }
+
+        if (!deleteList.isEmpty()) {
+            Parcelable [] deleteCreatures = new Parcelable[deleteList.size()];
+            for (int i = 0; i < deleteList.size(); i++) {
+                deleteCreatures[i] = deleteList.get(i);
+            }
+            outState.putParcelableArray("deleteList", deleteCreatures);
+        }
+
+        if (!waitList.isEmpty()) {
+            Parcelable [] waitCreatures = new Parcelable[waitList.size()];
+            for (int i = 0; i < waitList.size(); i++) {
+                waitCreatures[i] = waitList.get(i);
+            }
+            outState.putParcelableArray("waitList", waitCreatures);
+        }
+
+        outState.putInt("hasInitIndex", indexOfHasInit);
+        outState.putInt("editIndex", indexOfItemToEdit);
+        outState.putInt("holdIndex", indexOfItemToHold);
+        outState.putInt("round", initRound);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle inState) {
+        super.onRestoreInstanceState(inState);
+        editCreatureDialog = (CreatureEditDialog) getFragmentManager().findFragmentByTag("editCreatureDialog");
+
+        if (inState.containsKey("initList")) {
+            initList.clear();
+            Parcelable [] initCreatureList = inState.getParcelableArray("initList");
+            for (int i = 0; i < initCreatureList.length; i++) {
+                initList.add((Creature)initCreatureList[i]);
+            }
+        }
+
+        if (inState.containsKey("deleteList")) {
+            deleteList.clear();
+            Parcelable [] initCreatureDeleteList = inState.getParcelableArray("deleteList");
+
+            for (int j = 0; j < initCreatureDeleteList.length; j++) {
+                int indexToCheck = getItemPosition((Creature)initCreatureDeleteList[j]);
+                if (indexToCheck != -1) {
+                    getListView().setItemChecked(indexToCheck, true);
+                }
+            }
+        }
+
+        if (inState.containsKey("waitList")) {
+            waitList.clear();
+            Parcelable [] initCreatureWaitList = inState.getParcelableArray("waitList");
+            for (int i = 0; i < initCreatureWaitList.length; i++) {
+                waitList.add((Creature)initCreatureWaitList[i]);
+            }
+        }
+
+        indexOfHasInit = inState.getInt("hasInitIndex");
+        indexOfItemToEdit = inState.getInt("editIndex");
+        indexOfItemToHold = inState.getInt("holdIndex");
+        initRound = inState.getInt("round");
+        updateRoundTitle();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveInitList();
     }
 
     // Inflates the action bar.
@@ -126,8 +223,10 @@ public class InitiativeActivity extends ListActivity
                 newCreatureChoiceDialog.show();
                 break;
             case R.id.action_nextItem:
+                giveNextCreatureInit();
                 break;
             case R.id.action_prevItem:
+                givePrevCreatureInit();
                 break;
             case R.id.action_rollInit:
                 rollChoiceDialog.show();
@@ -136,9 +235,24 @@ public class InitiativeActivity extends ListActivity
                 sortChoiceDialog.show();
                 break;
             case R.id.action_waitList:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                String [] wList = getWaitListNameArray(waitList);
+                builder.setTitle("Wait List")
+                        .setItems(wList, this);
+                waitItemsDialog = builder.create();
+                waitItemsDialog.show();
                 break;
             case R.id.action_group_delete:
                 deleteCreatureChoiceDialog.show();
+                break;
+            case R.id.action_reset_init:
+                initRound = -1;
+                indexOfItemToEdit = -1;
+                indexOfItemToHold = -1;
+                initList.get(indexOfHasInit).setHasInit(false);
+                indexOfHasInit = -1;
+                updateRoundTitle();
+                listAdapter.notifyDataSetChanged();
                 break;
             case R.id.action_help:
                 Toast.makeText(this, getString(R.string.initHelpMsg), Toast.LENGTH_LONG).show();
@@ -165,6 +279,23 @@ public class InitiativeActivity extends ListActivity
             deleteList.add(listAdapter.getItem(position));
         else
             deleteList.remove(listAdapter.getItem(position));
+
+        MenuItem item = actionMode.getMenu().findItem( R.id.action_hold );
+
+        if (deleteList.size() == 1 && deleteList.get(0).hasInit()) {
+            SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
+            for (int i = 0; i < checkedItems.size(); i++) {
+                if (checkedItems.valueAt(i)) {
+                    Creature c = initList.get(checkedItems.keyAt(i));
+                    if (c == deleteList.get(0)) {
+                        item.setEnabled(true);
+                        indexOfItemToHold = indexOfHasInit;
+                    }
+                }
+            }
+        } else {
+            item.setEnabled(false);
+        }
     }
 
     // Contextual action mode: setup the list adapter and inflate the view.
@@ -195,6 +326,11 @@ public class InitiativeActivity extends ListActivity
         switch ( menuItem.getItemId() ) {
             case R.id.action_discard:
                 deleteSelectedItems();
+                listAdapter.notifyDataSetChanged();
+                actionMode.finish();
+                return true;
+            case R.id.action_hold:
+                holdCreature();
                 listAdapter.notifyDataSetChanged();
                 actionMode.finish();
                 return true;
@@ -240,7 +376,7 @@ public class InitiativeActivity extends ListActivity
                 partyChoiceDialog.show();
             } else if (choiceIndex == IMPORT_ENCOUNTER) {
                 encounterChoiceDialog.show();
-            } else { // else if IMPORT_CATALOG
+            } else if (choiceIndex == IMPORT_CATALOG) {
                 Intent intent = new Intent("moflow.activities.CatalogActivity");
                 intent.putExtra(Key.PARENT_ACTIVITY, Key.Val.INITIATIVE_ACTIVITY);
                 startActivityForResult(intent, Key.PICK_CREATURE);
@@ -296,6 +432,7 @@ public class InitiativeActivity extends ListActivity
             } else if (choiceIndex == ALL) {
                 rollInit(ALL);
             }
+
         }
 
         if (dialogInterface == sortChoiceDialog) {
@@ -305,6 +442,37 @@ public class InitiativeActivity extends ListActivity
                 sortInitiative(ASCENDING);
             }
         }
+
+        if (dialogInterface == waitItemsDialog) {
+            Creature creature = waitList.get(choiceIndex);
+            Creature creatureWithInit = getCreatureWithInit();
+
+            if (null == creatureWithInit && initRound < 0) {
+                Toast.makeText(this, "Begin initiative first.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            initList.add(indexOfHasInit, creature);
+            creature.setHasInit(true);
+
+            if (creatureWithInit != null) {
+                creatureWithInit.setHasInit(false);
+            }
+
+            waitList.remove(choiceIndex);
+        }
+
+        if (dialogInterface == surpriseDialog) {
+            if (choiceIndex == Dialog.BUTTON_POSITIVE) {
+                initRound = 0;
+            } else if (choiceIndex == Dialog.BUTTON_NEGATIVE) {
+                initRound = 1;
+            }
+            indexOfHasInit = 0;
+            initList.get(indexOfHasInit).setHasInit(true);
+            updateRoundTitle();
+        }
+
         listAdapter.notifyDataSetChanged();
     }
 
@@ -428,8 +596,7 @@ public class InitiativeActivity extends ListActivity
     private String hitDieExpToInt(String hitDieExpression) {
         if (HitDie.isHitDieExpression(hitDieExpression)) {
             HitDie die = new HitDie(hitDieExpression);
-            String roll = String.valueOf(die.rollHitDie());
-            return roll;
+            return String.valueOf(die.rollHitDie());
         }
 
         return null;
@@ -469,5 +636,116 @@ public class InitiativeActivity extends ListActivity
         if (sortType == ASCENDING) {
             Collections.sort(initList);
         }
+    }
+
+    private Creature getCreatureWithInit() {
+        for (Creature c : initList) {
+            if (c.hasInit()) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    private void giveNextCreatureInit() {
+        if (initList.isEmpty()) {
+            return;
+        }
+
+        if (initRound < 0) {
+            surpriseDialog.show();
+            return;
+        }
+
+        initList.get(indexOfHasInit).setHasInit(false);
+
+        // if we haven't reached the end of the list, give initiative to next item.
+        if (indexOfHasInit != initList.size() - 1) {
+            ++indexOfHasInit;
+            initList.get(indexOfHasInit).setHasInit(true);
+        } else {
+            indexOfHasInit = 0;
+            initList.get(indexOfHasInit).setHasInit(true);
+            ++initRound;
+            updateRoundTitle();
+        }
+
+        getListView().smoothScrollToPosition(indexOfHasInit);
+        listAdapter.notifyDataSetChanged();
+    }
+
+    private void givePrevCreatureInit() {
+        if (initList.isEmpty() || initRound < 0) {
+            return;
+        }
+
+        if (!initList.isEmpty() && indexOfHasInit == 0 && initRound <= 0) {
+            return;
+        }
+
+        initList.get(indexOfHasInit).setHasInit(false);
+
+        if (indexOfHasInit == 0 && initRound > 0) {
+            indexOfHasInit = initList.size() - 1;
+            initList.get(indexOfHasInit).setHasInit(true);
+            --initRound;
+            updateRoundTitle();
+        } else {
+            --indexOfHasInit;
+            initList.get(indexOfHasInit).setHasInit(true);
+        }
+
+        getListView().smoothScrollToPosition(indexOfHasInit);
+        listAdapter.notifyDataSetChanged();
+    }
+
+    private String [] getWaitListNameArray(ArrayList<Creature> list) {
+        String [] names = new String[list.size()];
+        for (int i = 0; i < names.length; i++) {
+            names[i] = list.get(i).getCreatureName();
+        }
+        return names;
+    }
+
+    private void updateRoundTitle() {
+        String round = "";
+        if (initRound < 0) round = "";
+        if (initRound == 0) round = "Surprise";
+        if (initRound > 0) round = String.valueOf(initRound);
+
+        this.setTitle("Round: " + round);
+    }
+
+    private void holdCreature() {
+        Creature tmp = initList.get(indexOfItemToHold);
+
+        if (tmp.hasInit()) {
+            if (indexOfItemToHold != initList.size() - 1) {
+                tmp.setHasInit(false);
+                initList.get(indexOfHasInit + 1).setHasInit(true);
+            } else {
+                indexOfHasInit = 0;
+                initList.get(indexOfHasInit).setHasInit(true);
+                ++initRound;
+                updateRoundTitle();
+            }
+        }
+        waitList.add(tmp);
+        initList.remove(indexOfItemToHold);
+    }
+
+    private void saveInitList() {
+        for (Creature c : initList) {
+            dbTransaction.updateCreatureInInit(c, c.getCreatureName());
+        }
+    }
+
+    private int getItemPosition(Creature c) {
+        for (int pos = 0; pos < initList.size(); pos++) {
+            if (c == initList.get(pos)) {
+                return pos;
+            }
+        }
+        return -1;
     }
 }
