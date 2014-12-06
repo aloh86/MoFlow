@@ -3,6 +3,7 @@ package moflow.activities;
 import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.util.SparseBooleanArray;
 import android.view.*;
 
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import moflow.dialogs.SimpleDialogListener;
 import moflow.utility.Key;
 import moflow.utility.DBTransaction;
 import moflow.utility.NameModifier;
+import moflow.wolfpup.Creature;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -197,11 +199,19 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         if ( deleteList.size() > 1 ) {
             indexOfItemToEdit = -1;
             item.setEnabled(false);
-            item.getIcon().setAlpha( 128 );
+            item.getIcon().setAlpha(128);
         } else if ( deleteList.size() == 1 ) {
-            indexOfItemToEdit = position;
-            item.setEnabled( true );
-            item.getIcon().setAlpha( 255 );
+            SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
+            for (int i = 0; i < checkedItems.size(); i++) {
+                if (checkedItems.valueAt(i)) {
+                    String s = groupList.get(checkedItems.keyAt(i));
+                    if (s.equals(deleteList.get(0))) {
+                        indexOfItemToEdit = checkedItems.keyAt(i);
+                        item.setEnabled( true );
+                        item.getIcon().setAlpha(255);
+                    }
+                }
+            }
         }
     }
 
