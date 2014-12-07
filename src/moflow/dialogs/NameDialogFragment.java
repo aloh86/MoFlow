@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import moflow.activities.R;
+import moflow.utility.Key;
 
 /**
  * Created by Alex on 5/28/14.
@@ -15,9 +16,24 @@ public class NameDialogFragment extends DialogFragment implements DialogInterfac
     private SimpleDialogListener simpleDialogListener;
     private String title;
 
-    public NameDialogFragment( String dialogTitle ) {
-        title = dialogTitle;
+    public static NameDialogFragment newInstance(String dialogTitle)
+    {
+        NameDialogFragment ced = new NameDialogFragment();
+        Bundle args = new Bundle();
+        args.putString(Key.DIALOG_TITLE, dialogTitle);
+        ced.setArguments(args);
+
+        return ced;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        title = bundle.getString(Key.DIALOG_TITLE);
+    }
+
 
     @Override
     public Dialog onCreateDialog( Bundle savedInstanceState ) {

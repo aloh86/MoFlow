@@ -52,7 +52,6 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
 
         groupList = dbTransaction.getGroupList(groupType);
 
-        // fill the list with parties from database
         listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, groupList);
         setListAdapter(listAdapter);
 
@@ -67,8 +66,53 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
 
         indexOfItemToEdit = -1;
 
-        renameDialog = new NameDialogFragment("Rename");
-        newGroupDialog = new NameDialogFragment("Name");
+        renameDialog = NameDialogFragment.newInstance("Rename");
+        newGroupDialog = NameDialogFragment.newInstance("Name");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        if (!groupList.isEmpty())
+            outState.putStringArrayList("groupList", groupList);
+
+        if (!deleteList.isEmpty())
+            outState.putStringArrayList("deleteList", deleteList);
+
+        outState.putInt("editIndex", indexOfItemToEdit);
+        outState.putString("groupType", groupType);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle inState)
+    {
+        super.onRestoreInstanceState(inState);
+
+        renameDialog = (NameDialogFragment) getFragmentManager().findFragmentByTag("renameDialog");
+
+        if (inState.containsKey("groupList")) {
+            groupList.clear();
+            groupList  = inState.getStringArrayList("groupList");
+            listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, groupList);
+            setListAdapter(listAdapter);
+        }
+
+        if (inState.containsKey("deleteList")) {
+            deleteList.clear();
+            ArrayList<String> dList = inState.getStringArrayList("deleteList");
+
+            for (int i = 0; i < dList.size(); i++) {
+                int indexToCheck = getItemPosition(dList.get(i));
+                if (indexToCheck != -1) {
+                    getListView().setItemChecked(indexToCheck, true);
+                }
+            }
+        }
+
+        indexOfItemToEdit = inState.getInt("editIndex");
+        groupType = inState.getString("groupType");
     }
 
     /**
@@ -267,5 +311,14 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         for (String s : deleteList) {
             listAdapter.remove(s);
         }
+    }
+
+    private int getItemPosition(String s) {
+        for (int pos = 0; pos < groupList.size(); pos++) {
+            if (s == groupList.get(pos)) {
+                return pos;
+            }
+        }
+        return -1;
     }
 }
