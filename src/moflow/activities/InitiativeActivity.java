@@ -252,13 +252,7 @@ public class InitiativeActivity extends ListActivity
                 deleteCreatureChoiceDialog.show();
                 break;
             case R.id.action_reset_init:
-                initRound = -1;
-                indexOfItemToEdit = -1;
-                indexOfItemToHold = -1;
-                initList.get(indexOfHasInit).setHasInit(false);
-                indexOfHasInit = -1;
-                updateRoundTitle();
-                listAdapter.notifyDataSetChanged();
+                resetInitiative();
                 break;
             case R.id.action_help:
                 Toast.makeText(this, getString(R.string.initHelpMsg), Toast.LENGTH_LONG).show();
@@ -771,5 +765,19 @@ public class InitiativeActivity extends ListActivity
             }
         }
         return -1;
+    }
+
+    private void resetInitiative()
+    {
+        if (initList.isEmpty() || indexOfHasInit < 0)
+            return;
+
+        initRound = -1;
+        indexOfItemToEdit = -1;
+        indexOfItemToHold = -1;
+        initList.get(indexOfHasInit).setHasInit(false);
+        indexOfHasInit = -1;
+        updateRoundTitle();
+        listAdapter.notifyDataSetChanged();
     }
 }
