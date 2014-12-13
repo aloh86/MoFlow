@@ -271,6 +271,7 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
             String init = initiative.getText().toString();
             String initMod = critter.getInitMod();
+            thing.setInitMod(critter.getInitMod());
             int initSum = Integer.valueOf(init) + Integer.valueOf(initMod);
             String initString = String.valueOf(initSum);
 
@@ -348,7 +349,7 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         boolean valid = false;
 
         if (usedForGroupEditActivity || usedForCatalogActivity || usedForInitNewCreature ) {
-            if (creatureName.getText().toString().isEmpty())
+            if (creatureName.getText().toString().trim().isEmpty())
                 valid = true;
         }
 
