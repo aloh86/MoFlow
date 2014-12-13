@@ -253,6 +253,8 @@ public class InitiativeActivity extends ListActivity
                 break;
             case R.id.action_reset_init:
                 resetInitiative();
+                deleteList.clear();
+                waitList.clear();
                 break;
             case R.id.action_help:
                 Toast.makeText(this, getString(R.string.initHelpMsg), Toast.LENGTH_LONG).show();
@@ -423,6 +425,8 @@ public class InitiativeActivity extends ListActivity
             } else if (choiceIndex == ALL) {
                 dbTransaction.deleteAllFromInitiative();
                 initList.clear();
+                deleteList.clear();
+                waitList.clear();
             }
         }
 
@@ -449,17 +453,16 @@ public class InitiativeActivity extends ListActivity
             Creature creature = waitList.get(choiceIndex);
             Creature creatureWithInit = getCreatureWithInit();
 
-            if (null == creatureWithInit && initRound < 0) {
-                Toast.makeText(this, "Begin initiative first.", Toast.LENGTH_LONG).show();
+            if (null == creatureWithInit) {
+                Toast.makeText(this, "Start initiative first.", Toast.LENGTH_LONG).show();
                 return;
             }
 
             initList.add(indexOfHasInit, creature);
             creature.setHasInit(true);
 
-            if (creatureWithInit != null) {
+            if (creatureWithInit != null)
                 creatureWithInit.setHasInit(false);
-            }
 
             waitList.remove(choiceIndex);
         }
@@ -769,13 +772,15 @@ public class InitiativeActivity extends ListActivity
 
     private void resetInitiative()
     {
-        if (initList.isEmpty() || indexOfHasInit < 0)
+        if (initList.isEmpty() && indexOfHasInit < 0)
             return;
+
+        if (!initList.isEmpty() && indexOfHasInit >= 0)
+            initList.get(indexOfHasInit).setHasInit(false);
 
         initRound = -1;
         indexOfItemToEdit = -1;
         indexOfItemToHold = -1;
-        initList.get(indexOfHasInit).setHasInit(false);
         indexOfHasInit = -1;
         updateRoundTitle();
         listAdapter.notifyDataSetChanged();
