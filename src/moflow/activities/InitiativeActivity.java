@@ -1,9 +1,6 @@
 package moflow.activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.ListActivity;
+import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,20 +51,17 @@ public class InitiativeActivity extends ListActivity
     private final int ASCENDING = 1;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         this.setTitle("Round: ");
 
-        dbTransaction = new DBTransaction( this );
+        dbTransaction = new DBTransaction(this);
         initList = dbTransaction.getInitiativeItems();
 
         // fill the list with parties from database
-        listAdapter = new DisplayItemAdapter(
-                this,
-                R.layout.groupitemdisplay,
-                initList,
-                true );
+        listAdapter = new DisplayItemAdapter(this, R.layout.groupitemdisplay, initList, true);
         setListAdapter(listAdapter);
 
         getListView().setOnItemClickListener(this);
@@ -126,7 +120,8 @@ public class InitiativeActivity extends ListActivity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState)
+    {
         super.onSaveInstanceState(outState);
 
         if (!initList.isEmpty()) {
@@ -160,9 +155,17 @@ public class InitiativeActivity extends ListActivity
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle inState) {
+    protected void onRestoreInstanceState(Bundle inState)
+    {
         super.onRestoreInstanceState(inState);
-        editCreatureDialog = (CreatureEditDialog) getFragmentManager().findFragmentByTag("editCreatureDialog");
+
+        FragmentManager fm = getFragmentManager();
+
+        if (null != fm.findFragmentByTag("editCreatureDialog"))
+            editCreatureDialog = (CreatureEditDialog) fm.findFragmentByTag("editCreatureDialog");
+
+        if (null != fm.findFragmentByTag("newCreatureDialog"))
+            newCreatureDialog = (CreatureEditDialog) fm.findFragmentByTag("newCreatureDialog");
 
         if (inState.containsKey("initList")) {
             initList.clear();
@@ -200,25 +203,28 @@ public class InitiativeActivity extends ListActivity
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
         super.onPause();
         saveInitList();
     }
 
     // Inflates the action bar.
     @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate( R.menu.actionbar_initiative, menu );
-        return super.onCreateOptionsMenu( menu );
+        inflater.inflate(R.menu.actionbar_initiative, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     // Handles action bar menu item selection.
     @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle presses on the action bar items
-        switch ( item.getItemId() ) {
+        switch (item.getItemId()) {
             case R.id.action_new:
                 newCreatureChoiceDialog.show();
                 break;
@@ -258,14 +264,15 @@ public class InitiativeActivity extends ListActivity
                 Toast.makeText(this, getString(R.string.initHelpMsg), Toast.LENGTH_LONG).show();
                 break;
             default:
-                return super.onOptionsItemSelected( item );
+                return super.onOptionsItemSelected(item);
         }
         return false;
     }
 
     // Handle listview item clicks.
     @Override
-    public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> listView, View view, int position, long id)
+    {
         String nameAsTitle = initList.get(position).getCreatureName();
         editCreatureDialog = CreatureEditDialog.newInstance(nameAsTitle, initList.get(position), Key.Val.USAGE_INIT_EDIT_CREATURE);
         editCreatureDialog.show(getFragmentManager(), "editCreatureDialog");
@@ -274,8 +281,9 @@ public class InitiativeActivity extends ListActivity
 
     // Contextual action mode: checked state changed.
     @Override
-    public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked) {
-        if ( checked )
+    public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked)
+    {
+        if (checked)
             deleteList.add(listAdapter.getItem(position));
         else
             deleteList.remove(listAdapter.getItem(position));
@@ -300,15 +308,16 @@ public class InitiativeActivity extends ListActivity
 
     // Contextual action mode: setup the list adapter and inflate the view.
     @Override
-    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
+    {
         listAdapter = null;
         listAdapter = new ArrayAdapter<Creature>(
                 this,
                 android.R.layout.simple_list_item_checked,
                 initList);
-        setListAdapter( listAdapter );
+        setListAdapter(listAdapter);
         MenuInflater inflater = actionMode.getMenuInflater();
-        inflater.inflate( R.menu.context_actionbar_initiative, menu );
+        inflater.inflate(R.menu.context_actionbar_initiative, menu);
 
         return true;
     }
@@ -322,8 +331,9 @@ public class InitiativeActivity extends ListActivity
 
     // Contextual action mode: handle menu items.
     @Override
-    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-        switch ( menuItem.getItemId() ) {
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
+    {
+        switch (menuItem.getItemId()) {
             case R.id.action_discard:
                 deleteSelectedItems();
                 listAdapter.notifyDataSetChanged();
@@ -340,29 +350,27 @@ public class InitiativeActivity extends ListActivity
 
     // Contextual action mode: restore list.
     @Override
-    public void onDestroyActionMode(ActionMode actionMode) {
+    public void onDestroyActionMode(ActionMode actionMode)
+    {
         deleteList.clear();
 
         listAdapter = null;
-        listAdapter = new DisplayItemAdapter(
-                this,
-                R.layout.groupitemdisplay,
-                initList,
-                true );
+        listAdapter = new DisplayItemAdapter(this, R.layout.groupitemdisplay, initList, true );
         setListAdapter(listAdapter);
     }
 
-    private void deleteSelectedItems() {
+    private void deleteSelectedItems()
+    {
         dbTransaction.deleteCreatureFromInitiative(deleteList);
-
-        for ( Creature c : deleteList ) {
+        for (Creature c : deleteList) {
             listAdapter.remove( c );
         }
     }
 
     // Handle contextual menu selection.
     @Override
-    public void onClick(DialogInterface dialogInterface, int choiceIndex) {
+    public void onClick(DialogInterface dialogInterface, int choiceIndex)
+    {
         final int NEW_CREATURE = 0;
         final int IMPORT_PARTY = 1;
         final int IMPORT_ENCOUNTER = 2;
@@ -476,7 +484,8 @@ public class InitiativeActivity extends ListActivity
         listAdapter.notifyDataSetChanged();
     }
 
-    private void prepForInitList(Creature c, boolean isMonster, boolean randomHitDie) {
+    private void prepForInitList(Creature c, boolean isMonster, boolean randomHitDie)
+    {
         c.setAsMonster(isMonster);
         String hitDie = c.getHitDie();
         if (HitDie.isHitDieExpression(hitDie)) {
@@ -497,7 +506,8 @@ public class InitiativeActivity extends ListActivity
 
     // Handle positive click for dialog fragments.
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogPositiveClick(DialogFragment dialog)
+    {
         if (dialog == newCreatureDialog) {
             if ( !newCreatureDialog.hasEmptyFields() ) {
                 Creature critter = newCreatureDialog.getCritter();
@@ -551,12 +561,14 @@ public class InitiativeActivity extends ListActivity
 
     // Handle negative click for dialog fragments.
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogNegativeClick(DialogFragment dialog)
+    {
 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Key.PICK_CREATURE) {
             if (resultCode == RESULT_OK) {
@@ -593,7 +605,8 @@ public class InitiativeActivity extends ListActivity
      * @param hitDieExpression hit die expression (ex. 3d4).
      * @return A string representing an integer value. If an integer was already
      */
-    private String hitDieExpToInt(String hitDieExpression) {
+    private String hitDieExpToInt(String hitDieExpression)
+    {
         if (HitDie.isHitDieExpression(hitDieExpression)) {
             HitDie die = new HitDie(hitDieExpression);
             return String.valueOf(die.rollHitDie());
@@ -603,7 +616,8 @@ public class InitiativeActivity extends ListActivity
     }
 
 
-    private void rollInit(int choice) {
+    private void rollInit(int choice)
+    {
         for (int i = 0; i < initList.size(); i++) {
             Creature c = initList.get(i);
             int mod = Integer.valueOf(c.getInitMod());
@@ -622,6 +636,7 @@ public class InitiativeActivity extends ListActivity
     }
 
     private int rollInitiative() {
+
         Random r = new Random();
         int result = 0;
         int min = 1;
@@ -630,7 +645,8 @@ public class InitiativeActivity extends ListActivity
         return result = r.nextInt(range) + min;
     }
 
-    private void sortInitiative(int sortType) {
+    private void sortInitiative(int sortType)
+    {
         Collections.sort(initList, Collections.reverseOrder());
 
         if (sortType == ASCENDING) {
@@ -638,7 +654,8 @@ public class InitiativeActivity extends ListActivity
         }
     }
 
-    private Creature getCreatureWithInit() {
+    private Creature getCreatureWithInit()
+    {
         for (Creature c : initList) {
             if (c.hasInit()) {
                 return c;
@@ -647,7 +664,8 @@ public class InitiativeActivity extends ListActivity
         return null;
     }
 
-    private void giveNextCreatureInit() {
+    private void giveNextCreatureInit()
+    {
         if (initList.isEmpty()) {
             return;
         }
@@ -674,7 +692,8 @@ public class InitiativeActivity extends ListActivity
         listAdapter.notifyDataSetChanged();
     }
 
-    private void givePrevCreatureInit() {
+    private void givePrevCreatureInit()
+    {
         if (initList.isEmpty() || initRound < 0) {
             return;
         }
@@ -699,7 +718,8 @@ public class InitiativeActivity extends ListActivity
         listAdapter.notifyDataSetChanged();
     }
 
-    private String [] getWaitListNameArray(ArrayList<Creature> list) {
+    private String [] getWaitListNameArray(ArrayList<Creature> list)
+    {
         String [] names = new String[list.size()];
         for (int i = 0; i < names.length; i++) {
             names[i] = list.get(i).getCreatureName();
@@ -707,7 +727,8 @@ public class InitiativeActivity extends ListActivity
         return names;
     }
 
-    private void updateRoundTitle() {
+    private void updateRoundTitle()
+    {
         String round = "";
         if (initRound < 0) round = "";
         if (initRound == 0) round = "Surprise";
@@ -716,7 +737,8 @@ public class InitiativeActivity extends ListActivity
         this.setTitle("Round: " + round);
     }
 
-    private void holdCreature() {
+    private void holdCreature()
+    {
         Creature tmp = initList.get(indexOfItemToHold);
 
         if (tmp.hasInit()) {
@@ -734,13 +756,15 @@ public class InitiativeActivity extends ListActivity
         initList.remove(indexOfItemToHold);
     }
 
-    private void saveInitList() {
+    private void saveInitList()
+    {
         for (Creature c : initList) {
             dbTransaction.updateCreatureInInit(c, c.getCreatureName());
         }
     }
 
-    private int getItemPosition(Creature c) {
+    private int getItemPosition(Creature c)
+    {
         for (int pos = 0; pos < initList.size(); pos++) {
             if (c == initList.get(pos)) {
                 return pos;

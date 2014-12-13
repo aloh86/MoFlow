@@ -83,6 +83,58 @@ public class CatalogActivity extends ListActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        if (!catalogList.isEmpty())
+            outState.putStringArrayList("catalogList", catalogList);
+
+        if (!deleteList.isEmpty())
+            outState.putStringArrayList("deleteList", deleteList);
+
+        outState.putInt("editIndex", indexOfItemToEdit);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle inState)
+    {
+        super.onRestoreInstanceState(inState);
+
+        FragmentManager fm = getFragmentManager();
+
+        if (null != fm.findFragmentByTag("editCreatureDialog"))
+            editCreatureDialog = (CreatureEditDialog) fm.findFragmentByTag("editCreatureDialog");
+
+        if (null != fm.findFragmentByTag("newCreatureDialog"))
+            newCreatureDialog = (CreatureEditDialog) fm.findFragmentByTag("newCreatureDialog");
+
+        if (null != fm.findFragmentByTag("numPickDialog"))
+            numPickDialog = (NumPickDialog) fm.findFragmentByTag("numPickDialog");
+
+        if (inState.containsKey("catalogList")) {
+            catalogList.clear();
+            catalogList  = inState.getStringArrayList("catalogList");
+            listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, catalogList);
+            setListAdapter(listAdapter);
+        }
+
+        if (inState.containsKey("deleteList")) {
+            deleteList.clear();
+            ArrayList<String> dList = inState.getStringArrayList("deleteList");
+
+            for (int i = 0; i < dList.size(); i++) {
+                int indexToCheck = getItemPosition(dList.get(i));
+                if (indexToCheck != -1) {
+                    getListView().setItemChecked(indexToCheck, true);
+                }
+            }
+        }
+
+        indexOfItemToEdit = inState.getInt("editIndex");
+    }
+
+    @Override
     protected void onNewIntent(Intent intent)
     {
         handleIntent(intent);
@@ -151,7 +203,7 @@ public class CatalogActivity extends ListActivity
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_new:
-                newCreatureDialog.show(getFragmentManager(), "newCatalogCreature");
+                newCreatureDialog.show(getFragmentManager(), "newCreatureDialog");
                 break;
             case R.id.action_remove_all:
                 deleteConfirmDialog.show();
@@ -333,7 +385,8 @@ public class CatalogActivity extends ListActivity
     }
 
     @Override
-    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+    public boolean onMenuItemActionCollapse(MenuItem menuItem)
+    {
         catalogList.clear();
         catalogList = dbTransaction.getCatalogItemList();
         listAdapter = new ArrayAdapter<String>(
@@ -348,7 +401,8 @@ public class CatalogActivity extends ListActivity
     }
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int choice) {
+    public void onClick(DialogInterface dialogInterface, int choice)
+    {
         if (dialogInterface == deleteConfirmDialog) {
             if (choice == Dialog.BUTTON_POSITIVE) {
                 dbTransaction.deleteAllCatalogCreatures();
@@ -358,5 +412,15 @@ public class CatalogActivity extends ListActivity
             catalogList.clear();
             listAdapter.notifyDataSetChanged();
         }
+    }
+
+    private int getItemPosition(String s)
+    {
+        for (int pos = 0; pos < catalogList.size(); pos++) {
+            if (s == catalogList.get(pos)) {
+                return pos;
+            }
+        }
+        return -1;
     }
 }

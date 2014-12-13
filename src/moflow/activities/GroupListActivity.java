@@ -1,6 +1,7 @@
 package moflow.activities;
 
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.util.SparseBooleanArray;
@@ -90,7 +91,13 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
     {
         super.onRestoreInstanceState(inState);
 
-        renameDialog = (NameDialogFragment) getFragmentManager().findFragmentByTag("renameDialog");
+        FragmentManager fm = getFragmentManager();
+
+        if (null != fm.findFragmentByTag("renameDialog"))
+            renameDialog = (NameDialogFragment) fm.findFragmentByTag("renameDialog");
+
+        if (null != fm.findFragmentByTag("newGroupDialog"))
+            newGroupDialog = (NameDialogFragment) fm.findFragmentByTag("newGroupDialog");
 
         if (inState.containsKey("groupList")) {
             groupList.clear();
