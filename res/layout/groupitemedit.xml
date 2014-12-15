@@ -67,14 +67,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textOff="@string/hitPointSwitchOff"
-                                android:textOn="@string/hitPointSwitchOn"/>
+                                android:textOn="@string/hitPointSwitchOn"
+                                android:focusable="false"/>
                     </LinearLayout>
                     <EditText
                             android:id="@+id/creatureHitPointModEditText"
                             style="@style/statEntry"
                             android:numeric="integer"
                             android:hint="@string/hpGainLossHint"
-                            android:nextFocusDown="@+id/creatureInitiativeEditText"/>
+                            android:nextFocusForward="@+id/creatureMaxHitPointsEditText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -94,7 +95,7 @@
                             android:selectAllOnFocus="true"
                             android:gravity="center"
                             android:hint="@string/maxHPHint"
-                            android:nextFocusDown="@+id/creatureInitiativeEditText"/>
+                            android:nextFocusForward="@+id/creatureArmorClassEditText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -107,7 +108,7 @@
                             android:id="@+id/creatureArmorClassEditText"
                             style="@style/statEntry"
                             android:hint="@string/armorClassHint"
-                            android:nextFocusRight="@+id/creatureMaxHitPointsEditText"/>
+                            android:nextFocusForward="@+id/creatureInitiativeEditText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -121,7 +122,7 @@
                             android:id="@+id/creatureInitiativeEditText"
                             style="@style/statEntry"
                             android:hint="@string/initBonusHint"
-                            android:nextFocusDown="@+id/creatureStrEditText"/>
+                            android:nextFocusForward="@+id/creatureStrEditText"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -152,7 +153,7 @@
                                 android:id="@+id/creatureStrEditText"
                                 style="@style/statEntry"
                                 android:hint="@string/strHint"
-                                android:nextFocusDown="@+id/creatureDexEditText"/>
+                                android:nextFocusForward="@+id/creatureDexEditText"/>
                     </LinearLayout>
                     <LinearLayout
                             android:layout_width="fill_parent"
@@ -164,7 +165,7 @@
                                 android:id="@+id/creatureDexEditText"
                                 style="@style/statEntry"
                                 android:hint="@string/dexHint"
-                                android:nextFocusDown="@+id/creatureConEditText"/>
+                                android:nextFocusForward="@+id/creatureConEditText"/>
                     </LinearLayout>
                     <LinearLayout
                             android:layout_width="fill_parent"
@@ -176,7 +177,7 @@
                                 android:id="@+id/creatureConEditText"
                                 style="@style/statEntry"
                                 android:hint="@string/conHint"
-                                android:nextFocusDown="@+id/creatureIntEditText"/>
+                                android:nextFocusForward="@+id/creatureIntEditText"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -189,7 +190,7 @@
                                 android:id="@+id/creatureIntEditText"
                                 style="@style/statEntry"
                                 android:hint="@string/intHint"
-                                android:nextFocusDown="@+id/creatureWisEditText"/>
+                                android:nextFocusForward="@+id/creatureWisEditText"/>
                     </LinearLayout>
                     <LinearLayout
                             android:layout_width="fill_parent"
@@ -201,8 +202,7 @@
                                 android:id="@+id/creatureWisEditText"
                                 style="@style/statEntry"
                                 android:hint="@string/wisHint"
-                                android:nextFocusDown="@+id/creatureChaEditText"
-                                android:nextFocusLeft="@+id/creatureDexEditText"/>
+                                android:nextFocusForward="@+id/creatureChaEditText"/>
                     </LinearLayout>
                     <LinearLayout
                             android:layout_width="fill_parent"
@@ -214,7 +214,7 @@
                                 android:id="@+id/creatureChaEditText"
                                 style="@style/statEntry"
                                 android:hint="@string/chaHint"
-                                android:nextFocusDown="@+id/creatureFortEditText"/>
+                                android:nextFocusForward="@+id/creatureFortEditText"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -242,8 +242,7 @@
                             style="@style/statEntry"
                             android:layout_weight="1"
                             android:hint="@string/fortHint"
-                            android:nextFocusDown="@+id/creatureRefEditText"
-                            android:nextFocusRight="@+id/creatureRefEditText"/>
+                            android:nextFocusForward="@+id/creatureRefEditText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -257,8 +256,7 @@
                             style="@style/statEntry"
                             android:layout_weight="1"
                             android:hint="@string/refHint"
-                            android:nextFocusDown="@+id/creatureWillEditText"
-                            android:nextFocusRight="@+id/creatureWillEditText"/>
+                            android:nextFocusForward="@+id/creatureWillEditText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -271,8 +269,7 @@
                             android:id="@+id/creatureWillEditText"
                             style="@style/statEntry"
                             android:layout_weight="1"
-                            android:hint="@string/willHint"
-                            android:nextFocusLeft="@+id/creatureRefEditText"/>
+                            android:hint="@string/willHint"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
