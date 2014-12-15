@@ -9,13 +9,6 @@ import moflow.activities.R;
  * Created by Alex on 8/4/14.
  */
 public class SettingsFragment extends PreferenceFragment {
-
-    Context mContext;
-
-    public SettingsFragment( Context ctx ) {
-        mContext = ctx;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

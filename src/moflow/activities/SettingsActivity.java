@@ -25,10 +25,10 @@ public class SettingsActivity extends Activity implements SharedPreferences.OnSh
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment( this ))
+                .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        openSrcDialog = new SimpleMsgDialog( getString( R.string.openSourceHelpCatalog ) );
+        openSrcDialog = SimpleMsgDialog.newInstance( getString( R.string.openSourceHelpCatalog ) );
 
         sp = PreferenceManager.getDefaultSharedPreferences( this );
         sp.registerOnSharedPreferenceChangeListener( this );

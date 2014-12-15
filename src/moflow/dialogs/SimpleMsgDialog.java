@@ -12,8 +12,22 @@ import moflow.activities.R;
 public class SimpleMsgDialog extends DialogFragment {
     String message;
 
-    public SimpleMsgDialog( String msg ) {
-        message = msg;
+    public static SimpleMsgDialog newInstance(String msg)
+    {
+        SimpleMsgDialog smd = new SimpleMsgDialog();
+        Bundle args = new Bundle();
+        args.putString("messageKey", msg);
+        smd.setArguments(args);
+
+        return smd;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        message = args.getString("messageKey");
     }
 
     @Override
