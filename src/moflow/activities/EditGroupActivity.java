@@ -73,6 +73,13 @@ public class EditGroupActivity extends ListActivity
     }
 
     @Override
+    protected void onStop()
+    {
+        super.onStop();
+        newCreatureChoiceDialog.dismiss();
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
