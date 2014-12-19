@@ -88,4 +88,13 @@ public class HitDieTest extends TestCase {
     {
         assertTrue( HitDie.isDigit( "45" ) );
     }
+
+    @Test
+    public void test_hitDieLessThanZero() throws AssertionError
+    {
+        String expression = "0d0";
+        HitDie die = new HitDie(expression);
+        int result = die.rollHitDie();
+        assertEquals(1, result);
+    }
 }

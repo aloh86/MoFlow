@@ -34,6 +34,9 @@ public class HitDie
 
         result += modifier;
 
+        if (result <= 0)
+            result = 1;
+
         return result;
     }
 
