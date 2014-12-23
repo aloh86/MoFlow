@@ -43,7 +43,8 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	/**
 	 * Creates "Blank" PC with all scores set to zero and no name.
 	 */
-	public Creature() {
+	public Creature()
+    {
         creatureName = "";
 		armorClass = "0";
 		initMod = "0";
@@ -71,7 +72,8 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	/**
 	 * Deep copy a Creature object.
 	 */
-	public Creature clone() {
+	public Creature clone()
+    {
 		Creature twin;
 		try {
 			twin = (Creature) super.clone();
@@ -96,10 +98,9 @@ public class Creature implements Parcelable, Cloneable, Comparable {
             twin.initiative = initiative;
             twin.isMonster = isMonster;
             twin.hasInit = hasInit;
-		} catch ( CloneNotSupportedException e ) {
+		} catch (CloneNotSupportedException e) {
 			throw new Error();
 		}
-		
 		return twin;
 	}
 	
@@ -109,24 +110,24 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	=========================================================================
 	*/
     public String getCreatureName() { return creatureName; }
-    public String    getArmorClass() { return armorClass; }
-    public String    getInitMod() { return initMod; }
-    public String    getMaxHitPoints() { return maxHitPoints; }
-    public String    getHitDie() { return hitDie; }
+    public String getArmorClass() { return armorClass; }
+    public String getInitMod() { return initMod; }
+    public String getMaxHitPoints() { return maxHitPoints; }
+    public String getHitDie() { return hitDie; }
 
-    public String    getStrength() { return strength; }
-    public String    getDexterity() { return dexterity; }
-    public String    getConstitution() { return constitution; }
-    public String    getIntelligence() { return intelligence; }
-    public String    getWisdom() { return wisdom; }
-    public String    getCharisma() { return charisma; }
+    public String getStrength() { return strength; }
+    public String getDexterity() { return dexterity; }
+    public String getConstitution() { return constitution; }
+    public String getIntelligence() { return intelligence; }
+    public String getWisdom() { return wisdom; }
+    public String getCharisma() { return charisma; }
 
-    public String    getFortitude() { return fort; }
-    public String    getReflex() { return reflex; }
-    public String    getWill() { return will; }
+    public String getFortitude() { return fort; }
+    public String getReflex() { return reflex; }
+    public String getWill() { return will; }
 
-    public String    getCurrentHitPoints() { return currentHitPoints; }
-    public String    getInitiative() { return initiative; }
+    public String getCurrentHitPoints() { return currentHitPoints; }
+    public String getInitiative() { return initiative; }
     public boolean isMonster() { return isMonster; }
     public boolean hasInit() { return hasInit; }
 
@@ -135,40 +136,42 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	Mutator
 	=========================================================================
 	*/
-    public void setCreatureName( String name ) {
+    public void setCreatureName(String name)
+    {
         name.trim();
 
-        if ( name.length() > 50 ) {
-            creatureName = name.substring( 0, 50 );
+        if (name.length() > 50) {
+            creatureName = name.substring(0, 50);
         } else
             creatureName = name;
     }
 
-    public void setArmorClass( String AC ) { armorClass = AC; }
-    public void setInitMod( String mod ) { initMod = mod; }
-    public void setMaxHitPoints( String points ) { maxHitPoints = points; }
+    public void setArmorClass(String AC) { armorClass = AC; }
+    public void setInitMod(String mod) { initMod = mod; }
+    public void setMaxHitPoints(String points) { maxHitPoints = points; }
     public void setHitDie(String dieExpression) { hitDie = dieExpression; }
 
-    public void setStrength( String score ) { strength = validateScore( score ); }
-    public void setDexterity( String score ) { dexterity = validateScore( score ); }
-    public void setConstitution( String score ) { constitution = validateScore( score ); }
-    public void setIntelligence( String score ) { intelligence = validateScore( score ); }
-    public void setWisdom( String score ) { wisdom = validateScore( score ); }
-    public void setCharisma( String score ) { charisma = validateScore( score ); }
+    public void setStrength(String score) { strength = validateScore(score); }
+    public void setDexterity(String score) { dexterity = validateScore(score); }
+    public void setConstitution(String score) { constitution = validateScore(score); }
+    public void setIntelligence(String score) { intelligence = validateScore(score); }
+    public void setWisdom(String score) { wisdom = validateScore(score); }
+    public void setCharisma(String score) { charisma = validateScore(score); }
 
-    public void setFortitude( String mod ) { fort = mod; }
-    public void setReflex( String mod ) { reflex = mod; }
-    public void setWill( String mod ) { will = mod; }
+    public void setFortitude(String mod) { fort = mod; }
+    public void setReflex(String mod) { reflex = mod; }
+    public void setWill(String mod) { will = mod; }
 
-    public void setCurrentHitPoints( String hp ) { currentHitPoints = hp; }
-    public void setInitiative( String init ) { initiative = init; }
-    public void setAsMonster( boolean val ) { isMonster = val; }
-    public void setHasInit( boolean hasInitiative ) { hasInit = hasInitiative; }
+    public void setCurrentHitPoints(String hp) { currentHitPoints = hp; }
+    public void setInitiative(String init) { initiative = init; }
+    public void setAsMonster(boolean val) { isMonster = val; }
+    public void setHasInit(boolean hasInitiative) { hasInit = hasInitiative; }
 	
-	private String validateScore( String score ) {
-        int scoreNum = Integer.valueOf( score );
+	private String validateScore(String score)
+    {
+        int scoreNum = Integer.valueOf(score);
         if (scoreNum >= 0)
-            return String.valueOf( scoreNum );
+            return String.valueOf(scoreNum);
 
         return "0";
     }
@@ -184,14 +187,14 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	public static final Parcelable.Creator<Creature> CREATOR =
 		new Parcelable.Creator<Creature>()
 		{
-			public Creature createFromParcel( Parcel in )
+			public Creature createFromParcel(Parcel in)
 			{
-				return new Creature( in );
+				return new Creature(in);
 			}
 			
-			public Creature[] newArray( int size )
+			public Creature[] newArray(int size)
 			{
-				return new Creature[ size ];
+				return new Creature[size];
 			}
 		};
 		
@@ -199,7 +202,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	 * Constructor for reconstructing a Creature object from a Parcel
 	 * @param in the parcel to read from
 	 */
-	protected Creature( Parcel in )
+	protected Creature(Parcel in)
 	{
         creatureName = in.readString();
 		armorClass = in.readString();
@@ -238,7 +241,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	 * @param dest The Parcel in which the object should be written.
 	 * @param flags Additional flags about how the object should be written.
 	 */
-	public void writeToParcel( Parcel dest, int flags )
+	public void writeToParcel(Parcel dest, int flags)
 	{
         dest.writeString(creatureName);
 		dest.writeString(armorClass);
@@ -273,10 +276,11 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	}
 
     @Override
-    public boolean equals( Object o ) {
-        Creature c = ( Creature )o;
+    public boolean equals(Object o)
+    {
+        Creature c = (Creature)o;
 
-        if ( this.creatureName == c.creatureName &&
+        if (this.creatureName == c.creatureName &&
                 this.armorClass == c.armorClass &&
                 this.maxHitPoints == c.maxHitPoints &&
                 this.hitDie == c.hitDie &&
@@ -293,7 +297,7 @@ public class Creature implements Parcelable, Cloneable, Comparable {
                 this.currentHitPoints == c.currentHitPoints &&
                 this.initiative == c.initiative &&
                 this.isMonster == c.isMonster &&
-                this.hasInit == c.hasInit )
+                this.hasInit == c.hasInit)
             return true;
 
         return false;
@@ -304,21 +308,23 @@ public class Creature implements Parcelable, Cloneable, Comparable {
 	 * If greater than, return 1.
 	 */
 	@Override
-	public int compareTo( Object obj ) {
+	public int compareTo(Object obj)
+    {
 		Creature creature = (Creature) obj;
 
-        int thisInit = Integer.valueOf( this.initiative );
-        int creatureInit = Integer.valueOf( creature.initiative );
+        int thisInit = Integer.valueOf(this.initiative);
+        int creatureInit = Integer.valueOf(creature.initiative);
 		
-		if ( this.initiative == creature.initiative )
+		if (this.initiative == creature.initiative)
 			return 0;
-		else if ( thisInit < creatureInit )
+		else if (thisInit < creatureInit)
 			return -1;
 		else
 			return 1;
 	}
 
-    public static Comparator< Creature > nameComparator() {
+    public static Comparator< Creature > nameComparator()
+    {
         return new Comparator<Creature>() {
             @Override
             public int compare(Creature lhs, Creature rhs) {

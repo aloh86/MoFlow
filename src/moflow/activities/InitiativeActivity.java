@@ -615,31 +615,28 @@ public class InitiativeActivity extends ListActivity
 
     private void rollInit(int choice)
     {
-        for (int i = 0; i < initList.size(); i++) {
-            Creature c = initList.get(i);
+        for (Creature c : initList) {
             int mod = Integer.valueOf(c.getInitMod());
             int roll = rollInitiative();
             int result = roll + mod;
             String resultStr = String.valueOf(result);
 
-            if (choice == ALL) {
+            if (choice == ALL)
                 c.setInitiative(resultStr);
-            } else if (choice == PCs && !c.isMonster()) {
+            else if (choice == PCs && !c.isMonster())
                 c.setInitiative(resultStr);
-            } else if (choice == MONSTERS && c.isMonster()) {
+            else if (choice == MONSTERS && c.isMonster())
                 c.setInitiative(resultStr);
-            }
         }
     }
 
-    private int rollInitiative() {
-
+    private int rollInitiative()
+    {
         Random r = new Random();
-        int result = 0;
         int min = 1;
         int range = 20;
 
-        return result = r.nextInt(range) + min;
+        return r.nextInt(range) + min;
     }
 
     private void sortInitiative(int sortType)

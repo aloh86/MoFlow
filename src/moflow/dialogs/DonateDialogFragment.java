@@ -19,11 +19,11 @@ import java.util.regex.Pattern;
 public class DonateDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
 
     @Override
-    public Dialog onCreateDialog( Bundle savedInstanceState )
+    public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        TextView msg = new TextView( getActivity() );
-        msg.setText( R.string.actbar_donateMsg );
-        msg.setGravity( Gravity.CENTER );
+        TextView msg = new TextView(getActivity());
+        msg.setText(R.string.actbar_donateMsg);
+        msg.setGravity(Gravity.CENTER);
 
         Linkify.TransformFilter siteURL = new Linkify.TransformFilter()
         {
@@ -32,18 +32,19 @@ public class DonateDialogFragment extends DialogFragment implements DialogInterf
             }
         };
 
-        Pattern pattern = Pattern.compile( "One Day's Wages" );
-        Linkify.addLinks( msg, pattern, "", null, siteURL );
+        Pattern pattern = Pattern.compile("One Day's Wages");
+        Linkify.addLinks(msg, pattern, "", null, siteURL);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
-        builder.setView( msg );
-        builder.setPositiveButton( "Ok", this );
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(msg);
+        builder.setPositiveButton("Ok", this);
 
         return builder.create();
     }
 
     @Override
-    public void onClick( DialogInterface dialogInterface, int i ) {
+    public void onClick(DialogInterface dialogInterface, int i)
+    {
         // DO NOTHING
     }
 }

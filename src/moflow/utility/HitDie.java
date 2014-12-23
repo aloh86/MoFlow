@@ -13,7 +13,7 @@ public class HitDie
     private int range;
     private int modifier;
 
-    public HitDie( String die )
+    public HitDie(String die)
     {
         repetitions = -1;
         range = -1;
@@ -40,7 +40,8 @@ public class HitDie
         return result;
     }
 
-    public int getMaxVal() {
+    public int getMaxVal()
+    {
         int result = 0;
 
         for (int i = 0; i < repetitions; i++) {
@@ -65,22 +66,18 @@ public class HitDie
         else
             repetitions = 1;
 
-        int rangePosition = -1;
         int modSignPosition = -1;
-
         boolean isNegative = false;
+
         if (expression.contains("+"))
-        {
             modSignPosition = expression.indexOf("+");
-        }
-        if (expression.contains("-"))
-        {
+
+        if (expression.contains("-")) {
             modSignPosition = expression.indexOf("-");
             isNegative = true;
         }
 
-        if (modSignPosition == -1)
-        {
+        if (modSignPosition == -1) {
             String tempRange = expression.substring(dPosition + 1, expression.length());
             range = Integer.valueOf( tempRange );
             return;
@@ -91,13 +88,10 @@ public class HitDie
 
         String tempModifier;
         if (isNegative)
-        {
             tempModifier = expression.substring(modSignPosition, expression.length());
-        }
         else
-        {
             tempModifier = expression.substring(modSignPosition + 1, expression.length());
-        }
+
         modifier = Integer.valueOf(tempModifier);
     }
 

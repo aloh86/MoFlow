@@ -40,30 +40,28 @@ public class CatalogActivity extends ListActivity
     private Dialog deleteConfirmDialog;
 
     @Override
-    public void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
-        setTitle( "Catalog" );
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setTitle("Catalog");
 
         try {
-            parentActivity = getIntent().getExtras().getString( Key.PARENT_ACTIVITY);
-        } catch ( NullPointerException npe ) {
+            parentActivity = getIntent().getExtras().getString(Key.PARENT_ACTIVITY);
+        } catch (NullPointerException npe) {
             Toast.makeText(this, "onCreate: intent extras could not be extracted.", Toast.LENGTH_LONG).show();
             finish();
         }
 
-        dbTransaction = new DBTransaction( this );
+        dbTransaction = new DBTransaction(this);
 
         catalogList = dbTransaction.getCatalogItemList();
 
-        listAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_checked,
-                catalogList);
+        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, catalogList);
         setListAdapter(listAdapter);
 
-        getListView().setOnItemClickListener( this );
-        getListView().setChoiceMode( ListView.CHOICE_MODE_MULTIPLE_MODAL );
-        getListView().setMultiChoiceModeListener( this );
+        getListView().setOnItemClickListener(this);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        getListView().setMultiChoiceModeListener(this);
 
         deleteList = new ArrayList<String>();
 
@@ -220,8 +218,8 @@ public class CatalogActivity extends ListActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialog)
     {
-        if ( dialog == newCreatureDialog ) {
-            if ( !newCreatureDialog.hasEmptyFields() ) {
+        if (dialog == newCreatureDialog) {
+            if (!newCreatureDialog.hasEmptyFields()) {
                 Creature critter = newCreatureDialog.getCritter();
 
                 if (critter == null) {
@@ -229,18 +227,18 @@ public class CatalogActivity extends ListActivity
                     return;
                 }
 
-                critter.setCreatureName( NameModifier.makeNameUnique(catalogList, critter.getCreatureName() ) );
+                critter.setCreatureName(NameModifier.makeNameUnique(catalogList, critter.getCreatureName()));
                 catalogList.add(critter.getCreatureName());
                 dbTransaction.insertNewCreatureIntoCatalog(critter);
-                listAdapter.sort( nameComparator() );
+                listAdapter.sort(nameComparator());
                 listAdapter.notifyDataSetChanged();
             } else {
                 CommonToast.invalidFieldToast(this);
             }
         }
 
-        if ( dialog == editCreatureDialog ) {
-            if ( !editCreatureDialog.hasEmptyFields() ) {
+        if (dialog == editCreatureDialog) {
+            if (!editCreatureDialog.hasEmptyFields()) {
                 Creature thing = editCreatureDialog.getCritter();
 
                 if (thing == null) {
@@ -248,20 +246,20 @@ public class CatalogActivity extends ListActivity
                     return;
                 }
 
-                String oldName = catalogList.get( indexOfItemToEdit );
+                String oldName = catalogList.get(indexOfItemToEdit);
 
-                if ( !oldName.equals( thing.getCreatureName() ) )
-                    thing.setCreatureName( NameModifier.makeNameUnique(catalogList, thing.getCreatureName() ) );
+                if (!oldName.equals(thing.getCreatureName()))
+                    thing.setCreatureName(NameModifier.makeNameUnique(catalogList, thing.getCreatureName()));
 
                 catalogList.set(indexOfItemToEdit, thing.getCreatureName());
                 dbTransaction.updateCatalogCreature( thing, oldName );
-                listAdapter.sort( nameComparator() );
+                listAdapter.sort(nameComparator());
                 listAdapter.notifyDataSetChanged();
             } else
                 CommonToast.invalidFieldToast(this);
         }
 
-        if ( dialog == numPickDialog ) {
+        if (dialog == numPickDialog) {
             String name = listAdapter.getItem(indexOfItemToEdit);
             Creature creature = dbTransaction.getCreatureFromCatalog(name);
 
@@ -335,7 +333,7 @@ public class CatalogActivity extends ListActivity
     @Override
     public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
     {
-        switch ( menuItem.getItemId() ) {
+        switch (menuItem.getItemId()) {
             case R.id.action_discard:
                 deleteSelectedItems();
                 listAdapter.notifyDataSetChanged();
@@ -368,8 +366,8 @@ public class CatalogActivity extends ListActivity
     {
         return new Comparator<String>() {
             @Override
-            public int compare( String lhs, String rhs ) {
-                return lhs.compareToIgnoreCase( rhs );
+            public int compare(String lhs, String rhs) {
+                return lhs.compareToIgnoreCase(rhs);
             }
         };
     }

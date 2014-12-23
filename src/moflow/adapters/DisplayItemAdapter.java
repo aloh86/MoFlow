@@ -21,39 +21,41 @@ import java.util.List;
 /**
  * Created by Alex on 8/8/14.
  */
-public class DisplayItemAdapter extends ArrayAdapter<Creature> {
-
+public class DisplayItemAdapter extends ArrayAdapter<Creature>
+{
     private Context mContext;
     private List<Creature> groupList;
     private boolean isInitiativeScreen;
     LayoutInflater inflater;
 
-    public DisplayItemAdapter(Context context, int resource, List<Creature> objects, boolean isInitScreen) {
+    public DisplayItemAdapter(Context context, int resource, List<Creature> objects, boolean isInitScreen)
+    {
         super(context, resource, objects);
         mContext = context;
         groupList = objects;
         isInitiativeScreen = isInitScreen;
-        inflater = ( LayoutInflater ) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public View getView( int position, View convertView, ViewGroup parent ) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         ViewHolder holder = null;
 
-        if ( convertView == null ) {
-            convertView = inflater.inflate( R.layout.groupitemdisplay, null );
-            holder = new ViewHolder( convertView );
-            convertView.setTag( holder );
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.groupitemdisplay, null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
         } else {
-            holder = ( ViewHolder ) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        fillData( getItem( position ), holder );
+        fillData(getItem(position), holder);
 
         return convertView;
     }
 
-    private void fillData( Creature creature, ViewHolder holder ) {
-        holder.creatureName.setText( creature.getCreatureName() );
+    private void fillData(Creature creature, ViewHolder holder) {
+        holder.creatureName.setText( creature.getCreatureName());
         if (creature.isMonster()) {
             holder.creatureName.setTextColor(Color.RED);
         } else
@@ -72,11 +74,10 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
             holder.initScore.setText(creature.getInitMod());
             holder.initLabel.setText("Init Bonus: ");
 
-            if (HitDie.isDigit(maxHP)) {
+            if (HitDie.isDigit(maxHP))
                 holder.maxHitPoints.setText(creature.getMaxHitPoints());
-            } else if (HitDie.isHitDieExpression(dieExp)) {
+            else if (HitDie.isHitDieExpression(dieExp))
                 holder.maxHitPoints.setText(creature.getHitDie());
-            }
         } else {
             holder.initScore.setText(creature.getInitiative());
             holder.initLabel.setText("Initiative: ");
@@ -91,23 +92,23 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
             mod = modToString(mod);
             holder.strScore.setText(creature.getStrength() + " (" + mod + ")");
 
-            mod = AbilityScoreMod.get345AbilityScoreMod( creature.getDexterity() );
+            mod = AbilityScoreMod.get345AbilityScoreMod(creature.getDexterity());
             mod = modToString(mod);
             holder.dexScore.setText(creature.getDexterity() + " (" + mod + ")");
 
-            mod = AbilityScoreMod.get345AbilityScoreMod( creature.getConstitution() );
+            mod = AbilityScoreMod.get345AbilityScoreMod(creature.getConstitution());
             mod = modToString(mod);
             holder.conScore.setText(creature.getConstitution() + " (" + mod + ")");
 
-            mod = AbilityScoreMod.get345AbilityScoreMod( creature.getIntelligence() );
+            mod = AbilityScoreMod.get345AbilityScoreMod(creature.getIntelligence());
             mod = modToString(mod);
             holder.intScore.setText(creature.getIntelligence() + " (" + mod + ")");
 
-            mod = AbilityScoreMod.get345AbilityScoreMod( creature.getWisdom() );
+            mod = AbilityScoreMod.get345AbilityScoreMod(creature.getWisdom());
             mod = modToString(mod);
             holder.wisScore.setText(creature.getWisdom() + " (" + mod + ")");
 
-            mod = AbilityScoreMod.get345AbilityScoreMod( creature.getCharisma() );
+            mod = AbilityScoreMod.get345AbilityScoreMod(creature.getCharisma());
             mod = modToString(mod);
             holder.chaScore.setText(creature.getCharisma() + " (" + mod + ")");
         } else
@@ -115,7 +116,7 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
 
         boolean showSavingThrows = sharedPref.getBoolean(Key.PREF_SAVETHROW, false);
 
-        if ( showSavingThrows ) {
+        if (showSavingThrows) {
             holder.fortScore.setText(creature.getFortitude());
             holder.refScore.setText(creature.getReflex());
             holder.willScore.setText(creature.getWill());
@@ -164,22 +165,22 @@ public class DisplayItemAdapter extends ArrayAdapter<Creature> {
         public ViewHolder(View convertView)
         {
             creatureName = (TextView) convertView.findViewById(R.id.display_creatureName);
-            armorClass = (TextView) convertView.findViewById(R.id.display_armorClassLabel);
+            armorClass   = (TextView) convertView.findViewById(R.id.display_armorClassLabel);
             maxHitPoints = (TextView) convertView.findViewById(R.id.display_maxHPLabel);
-            initScore = (TextView) convertView.findViewById(R.id.display_initBonusLabel);
+            initScore    = (TextView) convertView.findViewById(R.id.display_initBonusLabel);
 
             abilityScoresLayout = (LinearLayout) convertView.findViewById(R.id.display_abilityScoresLayout);
             strScore = (TextView) convertView.findViewById(R.id.display_strScore);
-            dexScore = ( TextView ) convertView.findViewById( R.id.display_dexScore );
-            conScore = ( TextView ) convertView.findViewById( R.id.display_conScore );
-            intScore = ( TextView ) convertView.findViewById( R.id.display_intScore );
-            wisScore = ( TextView ) convertView.findViewById( R.id.display_wisScore );
-            chaScore = ( TextView ) convertView.findViewById( R.id.display_chaScore );
+            dexScore = (TextView) convertView.findViewById(R.id.display_dexScore);
+            conScore = (TextView) convertView.findViewById(R.id.display_conScore);
+            intScore = (TextView) convertView.findViewById(R.id.display_intScore);
+            wisScore = (TextView) convertView.findViewById(R.id.display_wisScore);
+            chaScore = (TextView) convertView.findViewById(R.id.display_chaScore);
 
-            savingThrowsLayout = ( LinearLayout ) convertView.findViewById( R.id.display_savingThrowLayout );
-            fortScore = ( TextView ) convertView.findViewById( R.id.display_fortScore );
-            refScore = ( TextView ) convertView.findViewById( R.id.display_refScore );
-            willScore = ( TextView ) convertView.findViewById( R.id.display_willScore );
+            savingThrowsLayout = (LinearLayout) convertView.findViewById(R.id.display_savingThrowLayout);
+            fortScore = (TextView) convertView.findViewById(R.id.display_fortScore);
+            refScore  = (TextView) convertView.findViewById(R.id.display_refScore);
+            willScore = (TextView) convertView.findViewById(R.id.display_willScore);
 
             initLabel = (TextView) convertView.findViewById(R.id.display_static_initBonusLabel);
 

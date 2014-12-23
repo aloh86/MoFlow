@@ -11,7 +11,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public DatabaseHelper(Context context, String DBName, CursorFactory factory,
 			int version) {
 		super( context, DBName, factory, version );
-       // udb = new UpgradeDB();
 	}
 	
 	@Override

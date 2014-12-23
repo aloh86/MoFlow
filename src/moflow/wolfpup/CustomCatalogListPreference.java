@@ -19,25 +19,29 @@ public class CustomCatalogListPreference extends ListPreference {
 
     Context mContext;
 
-    public CustomCatalogListPreference( Context context, AttributeSet attrs ) {
-        super( context, attrs );
+    public CustomCatalogListPreference(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
         mContext = context;
     }
 
-    public CustomCatalogListPreference( Context context ) {
+    public CustomCatalogListPreference(Context context)
+    {
         super(context);
         mContext = context;
     }
 
     @Override
-    public View onCreateView( ViewGroup parent ) {
-        super.onCreateView( parent );
-        LayoutInflater inflater = ( LayoutInflater ) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        return inflater.inflate( R.layout.custpref_catalog_list, null );
+    public View onCreateView(ViewGroup parent)
+    {
+        super.onCreateView(parent);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        return inflater.inflate(R.layout.custpref_catalog_list, null);
     }
 
     @Override
-    protected void onBindView( View view ) {
-        super.onBindView( view );
+    protected void onBindView(View view)
+    {
+        super.onBindView(view);
     }
 }

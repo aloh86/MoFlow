@@ -320,7 +320,8 @@ public class GroupListActivity extends ListActivity implements AdapterView.OnIte
         }
     }
 
-    private int getItemPosition(String s) {
+    private int getItemPosition(String s)
+    {
         for (int pos = 0; pos < groupList.size(); pos++) {
             if (s == groupList.get(pos)) {
                 return pos;

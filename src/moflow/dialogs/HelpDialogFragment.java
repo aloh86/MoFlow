@@ -21,9 +21,10 @@ public class HelpDialogFragment extends DialogFragment implements DialogInterfac
     private View layout;
 
      @Override
-    public Dialog onCreateDialog( Bundle savedInstanceState ) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+     {
          LayoutInflater inflater = getActivity().getLayoutInflater();
-         layout = inflater.inflate( R.layout.dialog_help, null );
+         layout = inflater.inflate(R.layout.dialog_help, null);
 
          Linkify.TransformFilter tubeURL = new Linkify.TransformFilter() {
              public final String transformUrl(final Matcher match, String url) {
@@ -31,9 +32,9 @@ public class HelpDialogFragment extends DialogFragment implements DialogInterfac
              }
          };
 
-         TextView tubeLink = ( TextView ) layout.findViewById( R.id.dlg_main_helpYoutubeTV );
-         Pattern pattern = Pattern.compile( "Wolfpup YouTube Channel" );
-         Linkify.addLinks( tubeLink, pattern, "", null, tubeURL );
+         TextView tubeLink = (TextView) layout.findViewById(R.id.dlg_main_helpYoutubeTV);
+         Pattern pattern = Pattern.compile("Wolfpup YouTube Channel");
+         Linkify.addLinks(tubeLink, pattern, "", null, tubeURL);
 
          Linkify.TransformFilter siteURL = new Linkify.TransformFilter() {
              public final String transformUrl(final Matcher match, String url) {
@@ -41,19 +42,20 @@ public class HelpDialogFragment extends DialogFragment implements DialogInterfac
              }
          };
 
-         TextView webLink = ( TextView ) layout.findViewById( R.id.dlg_main_helpSiteLinkTV );
-         pattern = Pattern.compile( "Wolfpup Software Website" );
-         Linkify.addLinks( webLink, pattern, "", null, siteURL );
+         TextView webLink = (TextView) layout.findViewById(R.id.dlg_main_helpSiteLinkTV);
+         pattern = Pattern.compile("Wolfpup Software Website");
+         Linkify.addLinks(webLink, pattern, "", null, siteURL);
 
-         AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
-         builder.setView( layout );
-         builder.setPositiveButton( "Ok", this );
+         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+         builder.setView(layout);
+         builder.setPositiveButton("Ok", this);
 
          return builder.create();
     }
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
+    public void onClick(DialogInterface dialogInterface, int i)
+    {
         // DO NOTHING
     }
 }

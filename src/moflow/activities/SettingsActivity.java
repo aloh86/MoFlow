@@ -14,13 +14,15 @@ import moflow.threads.LoadCatalogTask;
 /**
  * Created by Alex on 8/4/14.
  */
-public class SettingsActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class SettingsActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener
+{
     SimpleMsgDialog openSrcDialog;
     ProgressBar progressBar;
     SharedPreferences sp;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
@@ -28,21 +30,23 @@ public class SettingsActivity extends Activity implements SharedPreferences.OnSh
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        openSrcDialog = SimpleMsgDialog.newInstance( getString( R.string.openSourceHelpCatalog ) );
+        openSrcDialog = SimpleMsgDialog.newInstance(getString( R.string.openSourceHelpCatalog ));
 
-        sp = PreferenceManager.getDefaultSharedPreferences( this );
-        sp.registerOnSharedPreferenceChangeListener( this );
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
-        sp.unregisterOnSharedPreferenceChangeListener( this );
+        sp.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        progressBar = ( ProgressBar ) findViewById( R.id.catalogLoadProgressBar );
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+    {
+        progressBar = (ProgressBar) findViewById(R.id.catalogLoadProgressBar);
 
         // onSharedPreferenceChanged will be called the very first time SettingsActivity
         // is accessed and before view is created. progressBar will be null, resulting in a crash
@@ -54,9 +58,8 @@ public class SettingsActivity extends Activity implements SharedPreferences.OnSh
                 LoadCatalogTask catalogTask = new LoadCatalogTask(this, progressBar, catalogVersion);
                 catalogTask.execute();
 
-                if (catalogVersion == 3 || catalogVersion == 4) {
+                if (catalogVersion == 3 || catalogVersion == 4)
                     openSrcDialog.show(getFragmentManager(), "openSourceHelpDialog");
-                }
             }
         }
     }

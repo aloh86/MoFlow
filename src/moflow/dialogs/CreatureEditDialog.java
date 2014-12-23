@@ -34,7 +34,6 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     private SimpleDialogListener simpleDialogListener;
 
     private String title;
-    private String usage;
 
     private EditText creatureName;
     private EditText armorClass;
@@ -51,15 +50,8 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     private EditText will;
     private EditText hitPointMod;
 
-    private TextView initiativeLabel;
-
     private Switch creatureTypeSwitch;
     private Switch hitPointModTypeSwitch;
-
-    private LinearLayout abilityScoresLayout;
-    private LinearLayout savingThrowsLayout;
-    private LinearLayout creatureTypeLayout;
-    private LinearLayout hitPointModLayout;
 
     private boolean showAbilityScores;
     private boolean showSavingThrows;
@@ -70,44 +62,39 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
     private Creature critter;
 
-    private View view;
-
-    public static CreatureEditDialog newInstance(String dialogTitle, Creature critter, String usageVal) {
+    public static CreatureEditDialog newInstance(String dialogTitle, Creature critter, String usageVal)
+    {
         CreatureEditDialog ced = new CreatureEditDialog();
         Bundle args = new Bundle();
         args.putString(Key.DIALOG_TITLE, dialogTitle);
         args.putParcelable(Key.CREATURE_OBJECT, critter);
         args.putString(Key.EDIT_CREATURE_DIALOG_USAGE, usageVal);
         ced.setArguments(args);
-
         return ced;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         title = bundle.getString(Key.DIALOG_TITLE);
         critter = bundle.getParcelable(Key.CREATURE_OBJECT);
-        usage = bundle.getString(Key.EDIT_CREATURE_DIALOG_USAGE);
-//
-//        if (savedInstanceState != null) {
-//            critter = savedInstanceState.getParcelable("editCreature");
-//        }
+        String usage = bundle.getString(Key.EDIT_CREATURE_DIALOG_USAGE);
 
-        if (usage.equals(Key.Val.EDITGROUP_ACTIVITY)) {
+        if (usage.equals(Key.Val.EDITGROUP_ACTIVITY))
             usedForGroupEditActivity = true;
-        } else if (usage.equals(Key.Val.CATALOG_ACTIVITY)) {
+        else if (usage.equals(Key.Val.CATALOG_ACTIVITY))
             usedForCatalogActivity = true;
-        } else if (usage.equals(Key.Val.USAGE_INIT_NEW_CREATURE)) {
+        else if (usage.equals(Key.Val.USAGE_INIT_NEW_CREATURE))
             usedForInitNewCreature = true;
-        } else if (usage.equals(Key.Val.USAGE_INIT_EDIT_CREATURE)) {
+        else if (usage.equals(Key.Val.USAGE_INIT_EDIT_CREATURE))
             usedForInitEditCreature = true;
-        }
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(createView());
         builder.setTitle(title);
@@ -121,7 +108,8 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         // Verify that the host activity implements the callback interface
         try {
@@ -136,15 +124,17 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
 
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int choice) {
+    public void onClick(DialogInterface dialogInterface, int choice)
+    {
         if (choice == DialogInterface.BUTTON_POSITIVE)
             simpleDialogListener.onDialogPositiveClick(this);
         else
             simpleDialogListener.onDialogNegativeClick(this);
     }
 
-    private View createView() {
-        view = getActivity().getLayoutInflater().inflate(R.layout.groupitemedit, null);
+    private View createView()
+    {
+        View view = getActivity().getLayoutInflater().inflate(R.layout.groupitemedit, null);
 
         creatureName = (EditText) view.findViewById(R.id.creatureNameEditText);
         armorClass = (EditText) view.findViewById(R.id.creatureArmorClassEditText);
@@ -152,40 +142,39 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
         hitPointMod = (EditText) view.findViewById(R.id.creatureHitPointModEditText);
         maxHP = (EditText) view.findViewById(R.id.creatureMaxHitPointsEditText);
 
-        initiativeLabel = (TextView) view.findViewById(R.id.initiativeLabel);
-        initiative = ( EditText ) view.findViewById( R.id.creatureInitiativeEditText);
+        TextView initiativeLabel = (TextView) view.findViewById(R.id.initiativeLabel);
+        initiative = (EditText) view.findViewById(R.id.creatureInitiativeEditText);
 
         creatureTypeSwitch = (Switch) view.findViewById(R.id.creatureTypeSwitch);
         hitPointModTypeSwitch = (Switch) view.findViewById(R.id.hitPointModTypeSwitch);
 
-        strength = ( EditText ) view.findViewById( R.id.creatureStrEditText );
-        dexterity = ( EditText ) view.findViewById( R.id.creatureDexEditText );
-        constitution = ( EditText ) view.findViewById( R.id.creatureConEditText );
-        intelligence = ( EditText ) view.findViewById( R.id.creatureIntEditText );
-        wisdom = ( EditText ) view.findViewById( R.id.creatureWisEditText );
-        charisma = ( EditText ) view.findViewById(  R.id.creatureChaEditText );
+        strength     = (EditText) view.findViewById(R.id.creatureStrEditText);
+        dexterity    = (EditText) view.findViewById(R.id.creatureDexEditText);
+        constitution = (EditText) view.findViewById(R.id.creatureConEditText);
+        intelligence = (EditText) view.findViewById(R.id.creatureIntEditText);
+        wisdom       = (EditText) view.findViewById(R.id.creatureWisEditText);
+        charisma     = (EditText) view.findViewById(R.id.creatureChaEditText);
 
-        fort = ( EditText ) view.findViewById( R.id.creatureFortEditText );
-        ref = ( EditText ) view.findViewById( R.id.creatureRefEditText );
-        will = ( EditText ) view.findViewById( R.id.creatureWillEditText );
+        fort = (EditText) view.findViewById(R.id.creatureFortEditText);
+        ref  = (EditText) view.findViewById(R.id.creatureRefEditText);
+        will = (EditText) view.findViewById(R.id.creatureWillEditText);
 
-        abilityScoresLayout = ( LinearLayout ) view.findViewById( R.id.edit_abilityScoresLayout );
-        savingThrowsLayout = ( LinearLayout ) view.findViewById( R.id.edit_savingThrowsLayout );
-        creatureTypeLayout = (LinearLayout) view.findViewById(R.id.creatureTypeLayout);
-        hitPointModLayout = (LinearLayout) view.findViewById(R.id.hitPointModLayout);
+        LinearLayout abilityScoresLayout = (LinearLayout) view.findViewById(R.id.edit_abilityScoresLayout);
+        LinearLayout savingThrowsLayout  = (LinearLayout) view.findViewById(R.id.edit_savingThrowsLayout);
+        LinearLayout creatureTypeLayout  = (LinearLayout) view.findViewById(R.id.creatureTypeLayout);
+        LinearLayout hitPointModLayout   = (LinearLayout) view.findViewById(R.id.hitPointModLayout);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( getActivity().getApplicationContext() );
-        showAbilityScores = sharedPref.getBoolean( Key.PREF_SCORE, false  );
-        showSavingThrows = sharedPref.getBoolean( Key.PREF_SAVETHROW, false );
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        showAbilityScores = sharedPref.getBoolean(Key.PREF_SCORE, false);
+        showSavingThrows = sharedPref.getBoolean(Key.PREF_SAVETHROW, false);
 
-        if ( !showAbilityScores )
-            abilityScoresLayout.setVisibility( View.GONE );
-        if ( !showSavingThrows )
-            savingThrowsLayout.setVisibility( View.GONE );
+        if (!showAbilityScores)
+            abilityScoresLayout.setVisibility(View.GONE);
+        if (!showSavingThrows)
+            savingThrowsLayout.setVisibility(View.GONE);
 
-        if ( critter != null ) {
+        if (critter != null)
             setFields();
-        }
 
         // Change or Hide some of the views depending on the usage
         // (e.g. from catalog, party/encounter manager, initiative)
@@ -198,13 +187,11 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
             creatureName.setVisibility(View.GONE);
             creatureTypeLayout.setVisibility(View.GONE);
             initiativeLabel.setText(getString(R.string.initiativeLabel));
-            //maxHitPointLayout.setVisibility(View.GONE);
         }
 
         if (usedForInitEditCreature) {
             maxHP.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
         } else {
-            //maxHP.setKeyListener(DigitsKeyListener.getInstance("0123456789d+-"));
             HitDieInputFilter hdFilter = new HitDieInputFilter();
             maxHP.setFilters(new InputFilter[]{hdFilter});
             maxHP.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -214,21 +201,21 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     }
 
     // Set the fields if being used for editing an existing creature.
-    private void setFields() {
+    private void setFields()
+    {
         armorClass.setText(critter.getArmorClass());
 
         if (usedForGroupEditActivity || usedForCatalogActivity) {
             initiative.setText(critter.getInitMod());
             creatureName.setText(critter.getCreatureName());
-        } else if (usedForInitEditCreature) {
+        } else if (usedForInitEditCreature)
             initiative.setText(critter.getInitiative());
-        }
 
         if (!usedForInitEditCreature) {
             boolean hasHitDie = HitDie.isHitDieExpression(critter.getHitDie());
-            if (hasHitDie) {
+            if (hasHitDie)
                 maxHP.setText(critter.getHitDie());
-            } else
+            else
                 maxHP.setText(critter.getMaxHitPoints());
         } else {
             maxHP.setText(critter.getMaxHitPoints());
@@ -247,22 +234,22 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
     }
 
     // Gets the new stats for the creature when positive dialog button is pressed.
-    public Creature getCritter() {
+    public Creature getCritter()
+    {
         Creature thing = new Creature();
 
-        if (usedForInitEditCreature) {
+        if (usedForInitEditCreature)
             thing.setCreatureName(critter.getCreatureName());
-        } else {
+        else
             thing.setCreatureName(creatureName.getText().toString().trim());
-        }
 
         thing.setArmorClass(armorClass.getText().toString());
 
         String hp = maxHP.getText().toString();
         if (usedForGroupEditActivity || usedForCatalogActivity || usedForInitNewCreature) {
-            if (!HitDie.isHitDieExpression(hp) && !HitDie.isDigit(hp)) {
+            if (!HitDie.isHitDieExpression(hp) && !HitDie.isDigit(hp))
                 return null;
-            }
+
             thing.setInitMod(initiative.getText().toString());
         } else if (usedForInitEditCreature) {
             if (!HitDie.isDigit(hp)) {
@@ -345,7 +332,8 @@ public class CreatureEditDialog extends DialogFragment implements DialogInterfac
      * Make sure fields are not empty.
      * @return true if any fields are empty, false otherwise
      */
-    public boolean hasEmptyFields() {
+    public boolean hasEmptyFields()
+    {
         boolean valid = false;
 
         if (usedForGroupEditActivity || usedForCatalogActivity || usedForInitNewCreature ) {

@@ -19,10 +19,10 @@ public class NumPickDialog extends DialogFragment implements DialogInterface.OnC
     private NumberPicker numPicker;
 
     @Override
-    public Dialog onCreateDialog( Bundle savedInstanceState )
+    public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        view = getActivity().getLayoutInflater().inflate(R.layout.creature_pick, null );
+        view = getActivity().getLayoutInflater().inflate(R.layout.creature_pick, null);
         numPicker = (NumberPicker)view.findViewById(R.id.creatureCatalogNumPicker);
         String [] pickerRange = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
                 "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
@@ -42,7 +42,7 @@ public class NumPickDialog extends DialogFragment implements DialogInterface.OnC
     @Override
     public void onClick(DialogInterface dialogInterface, int choice)
     {
-        if ( choice == DialogInterface.BUTTON_POSITIVE )
+        if (choice == DialogInterface.BUTTON_POSITIVE)
             simpleDialogListener.onDialogPositiveClick(this);
         else
             simpleDialogListener.onDialogNegativeClick(this);

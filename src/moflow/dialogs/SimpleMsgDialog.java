@@ -31,11 +31,12 @@ public class SimpleMsgDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog( Bundle savedInstanceState ) {
-        AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
-        builder.setTitle( "Help Out" );
-        builder.setMessage( message );
-        builder.setPositiveButton( "Ok", null );
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Help Out");
+        builder.setMessage(message);
+        builder.setPositiveButton("Ok", null);
         Dialog dialog = builder.create();
 
         return dialog;

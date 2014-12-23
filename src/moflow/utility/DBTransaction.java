@@ -16,13 +16,14 @@ public class DBTransaction {
     private MoFlowDB db;
     private Cursor cur;
 
-    public DBTransaction(Context ctx) {
-        db = new MoFlowDB( ctx );
+    public DBTransaction(Context ctx)
+    {
+        db = new MoFlowDB(ctx);
 
         try {
             db.open();
-        } catch ( SQLiteException e ) {
-            Toast.makeText( ctx, "Database could not be opened!", Toast.LENGTH_LONG );
+        } catch (SQLiteException e) {
+            Toast.makeText(ctx, "Database could not be opened!", Toast.LENGTH_LONG);
         }
     }
 
@@ -31,17 +32,18 @@ public class DBTransaction {
         db.close();
     }
 
-    // Retrieval
+// Retrieval
 
-    public ArrayList< String > getGroupList( String groupType ) {
-        if ( groupType.equals( Key.Val.PARTY) )
+    public ArrayList< String > getGroupList(String groupType)
+    {
+        if (groupType.equals( Key.Val.PARTY))
             cur = db.getAllParties();
         else
             cur = db.getAllEncounters();
 
         ArrayList< String > groupList = new ArrayList<String>();
 
-        while ( cur.moveToNext() ) {
+        while (cur.moveToNext()) {
             // there is only 1 column in the parties table, hence 0 for getString
             groupList.add(cur.getString(0));
         }
@@ -50,11 +52,12 @@ public class DBTransaction {
         return groupList;
     }
 
-    public ArrayList< Creature > getGroupItemList( String groupType, String groupName ) {
-        if ( groupType.equals( Key.Val.PARTY) )
-            cur = db.getPCForGroup( groupName );
+    public ArrayList< Creature > getGroupItemList(String groupType, String groupName)
+    {
+        if ( groupType.equals(Key.Val.PARTY))
+            cur = db.getPCForGroup(groupName);
         else
-            cur = db.getCreaturesForEncounter( groupName );
+            cur = db.getCreaturesForEncounter(groupName);
 
         ArrayList< Creature > creatureList = new ArrayList();
 
@@ -63,7 +66,7 @@ public class DBTransaction {
         // COLUMN ORDER, pc
         // PCName = 0, init = 1, etc...
 
-        while ( cur.moveToNext() ) {
+        while (cur.moveToNext()) {
             Creature critter = new Creature();
             critter.setCreatureName(cur.getString(0));
             critter.setInitMod(cur.getString(1));
@@ -86,24 +89,26 @@ public class DBTransaction {
         return creatureList;
     }
 
-    public ArrayList<String> getCatalogItemList() {
+    public ArrayList<String> getCatalogItemList()
+    {
         cur = db.getCatalog();
         ArrayList<String> list = new ArrayList<String>();
 
-        while ( cur.moveToNext() ) {
-            list.add( cur.getString( 0 ) );
+        while (cur.moveToNext()) {
+            list.add(cur.getString(0));
         }
 
         return list;
     }
 
-    public Creature getCreatureFromCatalog( String creatureName ) {
-        cur = db.getCreatureFromCatalog( creatureName );
+    public Creature getCreatureFromCatalog(String creatureName)
+    {
+        cur = db.getCreatureFromCatalog(creatureName);
         Creature critter = new Creature();
 
         final int ADJUST = -1;
 
-        while ( cur.moveToNext() ) {
+        while (cur.moveToNext()) {
             critter.setCreatureName(cur.getString(0));
             critter.setInitMod(cur.getString(1));
             critter.setArmorClass(cur.getString(2));
@@ -122,14 +127,15 @@ public class DBTransaction {
         return critter;
     }
 
-    public ArrayList<Creature> getInitiativeItems() {
+    public ArrayList<Creature> getInitiativeItems()
+    {
         cur = db.getInitListFromDB();
 
         ArrayList< Creature > creatureList = new ArrayList();
 
         final int ADJUST = 1;
 
-        while ( cur.moveToNext() ) {
+        while (cur.moveToNext()) {
             Creature critter = new Creature();
             critter.setInitiative(cur.getString(1));
             critter.setCreatureName(cur.getString(2));
@@ -149,28 +155,29 @@ public class DBTransaction {
             critter.setReflex(cur.getString(16));
             critter.setWill(cur.getString(17));
 
-            creatureList.add( critter );
+            creatureList.add(critter);
         }
-
         return creatureList;
     }
 
-    // Insertion
+// Insertion
 
     // for new parties or encounters
-    public void insertNewGroup( String groupName, String groupType ) {
-        if ( groupType.equals( Key.Val.PARTY) )
-            db.insertParty( groupName );
+    public void insertNewGroup(String groupName, String groupType)
+    {
+        if ( groupType.equals(Key.Val.PARTY))
+            db.insertParty(groupName);
         else
-            db.insertEncounter( groupName );
+            db.insertEncounter(groupName);
     }
 
     // for new player characters or monsters
-    public void insertNewCreature( String groupName, Creature critter, String groupType ) {
-        if ( groupType.equals( Key.Val.PARTY) )
-            db.insertPlayer( groupName, critter );
+    public void insertNewCreature(String groupName, Creature critter, String groupType)
+    {
+        if (groupType.equals( Key.Val.PARTY))
+            db.insertPlayer(groupName, critter);
         else
-            db.insertCreature( groupName, critter );
+            db.insertCreature(groupName, critter);
     }
 
     public void insertNewCreatureIntoCatalog(Creature critter)
@@ -179,10 +186,11 @@ public class DBTransaction {
     }
 
     // catalog creatures from raw file
-    public void insertCreaturesFromFile( ArrayList<String []> creatures, int version ) {
-        if ( version == 5 ) {
-            for ( String [] s : creatures )
-                db.insertFileCreatureInCatalog5e( s );
+    public void insertCreaturesFromFile(ArrayList<String []> creatures, int version)
+    {
+        if (version == 5) {
+            for (String [] s : creatures)
+                db.insertFileCreatureInCatalog5e(s);
         }
     }
 
@@ -192,31 +200,35 @@ public class DBTransaction {
 
     // Deletion
 
-    public void deleteGroup( final ArrayList< String > toDelete, String groupType ) {
-        for ( int i = 0; i < toDelete.size(); i++ ) {
-            if ( groupType.equals( Key.Val.PARTY) )
-                db.deletePartyRecord( toDelete.get( i ) );
+    public void deleteGroup(final ArrayList< String > toDelete, String groupType)
+    {
+        for (int i = 0; i < toDelete.size(); i++) {
+            if (groupType.equals(Key.Val.PARTY))
+                db.deletePartyRecord(toDelete.get(i));
             else
-                db.deleteEncounterRecord( toDelete.get( i ) );
+                db.deleteEncounterRecord(toDelete.get(i));
         }
     }
 
-    public void deleteCreatureFromGroup( final ArrayList< Creature > toDelete, String groupName, String groupType ) {
-        for ( int i = 0; i < toDelete.size(); i++ ) {
-            if ( groupType.equals( Key.Val.PARTY) )
-                db.deletePC( groupName, toDelete.get( i ).getCreatureName() );
+    public void deleteCreatureFromGroup(final ArrayList< Creature > toDelete, String groupName, String groupType)
+    {
+        for (int i = 0; i < toDelete.size(); i++) {
+            if (groupType.equals(Key.Val.PARTY))
+                db.deletePC(groupName, toDelete.get(i).getCreatureName());
             else
-                db.deleteCreature( groupName, toDelete.get( i ).getCreatureName() );
+                db.deleteCreature(groupName, toDelete.get(i).getCreatureName());
         }
     }
 
-    public void deleteCreatureFromInitiative(final ArrayList<Creature> toDelete) {
+    public void deleteCreatureFromInitiative(final ArrayList<Creature> toDelete)
+    {
         for (int i = 0; i < toDelete.size(); i++) {
             db.deleteCreatureFromInit(toDelete.get(i).getCreatureName());
         }
     }
 
-    public void deleteCreatureFromCatalog(ArrayList<String> toDelete) {
+    public void deleteCreatureFromCatalog(ArrayList<String> toDelete)
+    {
         for (int i = 0; i < toDelete.size(); i++) {
             db.deleteCreatureFromCatalog(toDelete.get(i));
         }
@@ -235,27 +247,31 @@ public class DBTransaction {
 
     public void deleteMonstersFromInitiative() { db.deleteInitListMonsters(); }
 
-    // Modification
+// Modification
 
-    public void renameGroup( String newName, String oldName, String groupType ) {
-        if ( groupType.equals( Key.Val.PARTY) )
-            db.updatePartyRecord( newName, oldName );
+    public void renameGroup(String newName, String oldName, String groupType)
+    {
+        if (groupType.equals(Key.Val.PARTY))
+            db.updatePartyRecord(newName, oldName);
         else
-            db.updateEncounterRecord( newName, oldName );
+            db.updateEncounterRecord(newName, oldName);
     }
 
-    public void updateExistingCreature( Creature critter, String groupName, String creatureNamePreChange, String groupType ) {
-        if ( groupType.equals( Key.Val.PARTY) )
-            db.updatePlayerRecord( critter, groupName, creatureNamePreChange );
+    public void updateExistingCreature(Creature critter, String groupName, String creatureNamePreChange, String groupType)
+    {
+        if (groupType.equals(Key.Val.PARTY))
+            db.updatePlayerRecord(critter, groupName, creatureNamePreChange);
         else
-            db.updateCreatureRecord( critter, groupName, creatureNamePreChange );
+            db.updateCreatureRecord(critter, groupName, creatureNamePreChange);
     }
     
-    public void updateCatalogCreature( Creature updated, String oldName ) {
+    public void updateCatalogCreature(Creature updated, String oldName)
+    {
         db.updateCreatureInCatalog(updated, oldName);
     }
 
-    public void updateCreatureInInit(Creature updated, String oldCreatureName) {
+    public void updateCreatureInInit(Creature updated, String oldCreatureName)
+    {
         db.updateCreatureInInitiative(updated, oldCreatureName);
     }
 }

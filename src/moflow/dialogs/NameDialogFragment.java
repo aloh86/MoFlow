@@ -36,21 +36,23 @@ public class NameDialogFragment extends DialogFragment implements DialogInterfac
 
 
     @Override
-    public Dialog onCreateDialog( Bundle savedInstanceState ) {
-        AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
-        builder.setView( getActivity().getLayoutInflater().inflate( R.layout.single_edittext, null ) );
-        builder.setTitle( title );
-        builder.setPositiveButton( "Ok", this );
-        builder.setNegativeButton( "Cancel", this );
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(getActivity().getLayoutInflater().inflate(R.layout.single_edittext, null));
+        builder.setTitle(title);
+        builder.setPositiveButton("Ok", this);
+        builder.setNegativeButton("Cancel", this);
         Dialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside( false );
+        dialog.setCanceledOnTouchOutside(false);
 
         return dialog;
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         // Verify that the host activity implements the callback interface
         try {
@@ -65,10 +67,11 @@ public class NameDialogFragment extends DialogFragment implements DialogInterfac
 
 
     @Override
-    public void onClick( DialogInterface dialogInterface, int choice ) {
-        if ( choice == DialogInterface.BUTTON_POSITIVE )
-            simpleDialogListener.onDialogPositiveClick( this );
+    public void onClick(DialogInterface dialogInterface, int choice)
+    {
+        if (choice == DialogInterface.BUTTON_POSITIVE)
+            simpleDialogListener.onDialogPositiveClick(this);
         else
-            simpleDialogListener.onDialogNegativeClick( this );
+            simpleDialogListener.onDialogNegativeClick(this);
     }
 }

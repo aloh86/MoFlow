@@ -8,11 +8,13 @@ import android.widget.Toast;
  */
 public class CommonToast {
 
-    public static void invalidFieldToast(Context ctx) {
+    public static void invalidFieldToast(Context ctx)
+    {
         Toast.makeText(ctx, "All fields must be filled.", Toast.LENGTH_LONG).show();
     }
 
-    public static void invalidDieToast(Context ctx) {
+    public static void invalidDieToast(Context ctx)
+    {
         Toast.makeText(ctx, "Please enter valid hit point value or hit die expression.", Toast.LENGTH_LONG).show();
     }
 }
