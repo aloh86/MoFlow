@@ -524,7 +524,6 @@ public class InitiativeActivity extends ListActivity
                 critter.setCreatureName(NameModifier.makeNameUnique2(initList, critter.getCreatureName()));
                 initList.add(critter);
                 dbTransaction.insertNewCreatureIntoInitiative(critter);
-                listAdapter.sort(Creature.nameComparator());
                 listAdapter.notifyDataSetChanged();
             } else
                 CommonToast.invalidFieldToast(this);
