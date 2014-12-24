@@ -120,6 +120,23 @@ public class InitiativeActivity extends ListActivity
     }
 
     @Override
+    protected void onStop()
+    {
+        super.onStop();
+        newCreatureChoiceDialog.dismiss();
+        deleteCreatureChoiceDialog.dismiss();
+        partyChoiceDialog.dismiss();
+        encounterChoiceDialog.dismiss();
+        rollChoiceDialog.dismiss();
+        sortChoiceDialog.dismiss();
+
+        if (null != waitItemsDialog)
+            waitItemsDialog.dismiss();
+
+        surpriseDialog.dismiss();
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
