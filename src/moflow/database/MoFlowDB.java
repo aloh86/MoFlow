@@ -29,7 +29,7 @@ public class MoFlowDB
 	public MoFlowDB(Context ctx)
     {
 		context = ctx;
-		DBHelper = new DatabaseHelper( context, DB_NAME, null, DB_VERSION );
+		DBHelper = DatabaseHelper.getInstance( context, DB_NAME, null, DB_VERSION );
 	}
 	
 	/**

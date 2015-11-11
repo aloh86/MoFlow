@@ -8,11 +8,20 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private static DatabaseHelper mInstance = null;
 	public DatabaseHelper(Context context, String DBName, CursorFactory factory,
 			int version) {
 		super( context, DBName, factory, version );
 	}
-	
+
+    public static DatabaseHelper getInstance(Context ctx, String DBName, CursorFactory factory,
+                                             int version) {
+        if (mInstance == null)
+            mInstance = new DatabaseHelper(ctx.getApplicationContext(), DBName, factory, version);
+
+        return mInstance;
+    }
+
 	@Override
 	public void onCreate( SQLiteDatabase db ) {
 		try {
