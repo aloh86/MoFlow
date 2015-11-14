@@ -52,15 +52,15 @@ public class SettingsActivity extends Activity implements SharedPreferences.OnSh
         // is accessed and before view is created. progressBar will be null, resulting in a crash
         // if passed to the LoadCatalogTask, thus the check. This method is called only if a
         // default value for the preference is set.
-        if (progressBar != null) {
-            if (key.equals("pref_catalogEdition")) {
-                int catalogVersion = Integer.parseInt(sharedPreferences.getString("pref_catalogEdition", "-1"));
-                LoadCatalogTask catalogTask = new LoadCatalogTask(this, progressBar, catalogVersion);
-                catalogTask.execute();
-
-                if (catalogVersion == 3 || catalogVersion == 4)
-                    openSrcDialog.show(getFragmentManager(), "openSourceHelpDialog");
-            }
-        }
+//        if (progressBar != null) {
+//            if (key.equals("pref_catalogEdition")) {
+//                int catalogVersion = Integer.parseInt(sharedPreferences.getString("pref_catalogEdition", "-1"));
+//                LoadCatalogTask catalogTask = new LoadCatalogTask(this, progressBar, catalogVersion);
+//                catalogTask.execute();
+//
+//                if (catalogVersion == 3 || catalogVersion == 4)
+//                    openSrcDialog.show(getFragmentManager(), "openSourceHelpDialog");
+//            }
+//        }
     }
 }
